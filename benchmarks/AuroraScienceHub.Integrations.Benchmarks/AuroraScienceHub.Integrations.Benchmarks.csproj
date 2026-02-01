@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>AuroraScienceHub.Integrations.Benchmarks</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Disable entry point generation as this project has it's own entry point -->
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Noaa\Ace\Samples\AceMagnetometerSample.txt" />
+    <EmbeddedResource Include="Noaa\Ace\Samples\AceSwepamSample.txt" />
+    <EmbeddedResource Include="Noaa\Dscovr\Samples\DscovrMagnetometerSample.json" />
+    <EmbeddedResource Include="Noaa\Dscovr\Samples\DscovrSolarWindPlasmaSample.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Noaa\Noaa.csproj" />
+  </ItemGroup>
+
+</Project>

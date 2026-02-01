@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>AuroraScienceHub.SWeather.PreliminaryDataImport.ExternalResources</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AuroraScienceHub.Framework.Utilities" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="AuroraScienceHub.Framework.Http" />
+    <PackageReference Include="AuroraScienceHub.Framework.Json" />
+  </ItemGroup>
+
+</Project>
