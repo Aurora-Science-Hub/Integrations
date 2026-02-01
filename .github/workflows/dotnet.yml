@@ -55,6 +55,34 @@ jobs:
                   echo "MinVer: ${MINVER_VERSION}"
                   echo "Package: ${PKG_VERSION}"
 
+            - name: Prepare NuGet.config
+              run: |
+                  cat > NuGet.config <<EOF
+                  <?xml version="1.0" encoding="utf-8"?>
+                  <configuration>
+                    <packageSources>
+                      <clear />
+                      <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+                      <add key="AuroraScienceHub" value="https://nuget.pkg.github.com/Aurora-Science-Hub/index.json" />
+                    </packageSources>
+                    <packageSourceMapping>
+                      <packageSource key="nuget.org">
+                        <package pattern="AuroraScienceHub.*" />
+                        <package pattern="*" />
+                      </packageSource>
+                      <packageSource key="AuroraScienceHub">
+                        <package pattern="AuroraScienceHub.*" />
+                      </packageSource>
+                    </packageSourceMapping>
+                    <packageSourceCredentials>
+                      <AuroraScienceHub>
+                        <add key="Username" value="aurora-science-hub" />
+                        <add key="ClearTextPassword" value="${{ secrets.GH_PACKAGES_NUGET_API_KEY }}" />
+                      </AuroraScienceHub>
+                    </packageSourceCredentials>
+                  </configuration>
+                  EOF
+
             - name: Restore
               run: dotnet restore
 
