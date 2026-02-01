@@ -29,7 +29,7 @@
 
 ## Getting Started
 
-All packages are distributed via NuGet and target **.NET 9.0**. Install individual packages as needed:
+All packages are distributed via NuGet and target **.NET 10.0**. Install individual packages as needed:
 
 ```bash
 dotnet add package AuroraScienceHub.Integrations.Noaa
@@ -54,30 +54,13 @@ This repository provides HTTP clients for external space weather data sources:
 - **Type-Safe Clients** - Strongly-typed HTTP clients with dependency injection support
 - **Response Models** - Well-defined DTOs for all API responses
 - **Configuration** - Options pattern for configuring API endpoints
-- **Modern .NET** - Built on .NET 9 with latest C# features
+- **Modern .NET** - Built on .NET 10 with latest C# features
 
 ## Development
 
 ### Prerequisites
 
-- .NET 9.0 SDK or later
-- IDE with C# support (Rider, Visual Studio, VS Code)
-
-### Building the Solution
-
-```bash
-# Restore dependencies
-dotnet restore
-
-# Build all projects
-dotnet build
-
-# Run tests
-dotnet test
-
-# Create NuGet packages
-dotnet pack
-```
+- .NET 10.0 SDK or later
 
 ## Code Style
 
@@ -106,7 +89,6 @@ dotnet format --verify-no-changes
 Unit tests are located in the `tests/UnitTests/` directory. The framework uses:
 
 - xUnit for test execution
-- AutoFixture with AutoMoq for test data generation
 - Moq for mocking
 
 ## License
@@ -125,4 +107,4 @@ When contributing to this repository:
 
 ---
 
-**Note**: This project provides data source integrations for the SWeather (Space Weather) monitoring application.
+**Note**: This project provides data source integrations for space weather monitoring application.
