@@ -6,20 +6,18 @@
       <img src="docs/logo/logo-black.png" style="width:400px;">
     </picture>
     <br>
-    Aurora Science Hub Framework
+    Aurora Science Hub Integrations
     <br>
 </h1>
 <div align="center">
-    A comprehensive collection of reusable infrastructure packages for building modern .NET 9 applications.
+    External data source integrations for space weather monitoring applications.
     <br><br>
 
-[![](https://img.shields.io/badge/.NET-9.0-512BD4)](https://dotnet.microsoft.com/)
-[![](https://img.shields.io/badge/C%23-13.0-239120)](https://learn.microsoft.com/en-us/dotnet/csharp/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Aurora-Science-Hub/Framework/blob/main/LICENSE)
-[![Build & test](https://github.com/Aurora-Science-Hub/Framework/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Aurora-Science-Hub/Framework/actions/workflows/dotnet.yml)
+[![](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build & test](https://github.com/Aurora-Science-Hub/Integrations/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Aurora-Science-Hub/Integrations/actions/workflows/dotnet.yml)
 
 <a href="#available-packages">Available Packages</a> •
-<a href="#architecture">Architecture</a> •
 <a href="#development">Development</a> •
 <a href="#code-style">Code Style</a> •
 <a href="#testing">Testing</a> •
@@ -34,62 +32,29 @@
 All packages are distributed via NuGet and target **.NET 9.0**. Install individual packages as needed:
 
 ```bash
-dotnet add package AuroraScienceHub.Framework.Composition
-dotnet add package AuroraScienceHub.Framework.AspNetCore
-dotnet add package AuroraScienceHub.Framework.EntityFramework
+dotnet add package AuroraScienceHub.Integrations.Noaa
 # ... other packages
 ```
 
-Each package includes its own README with detailed usage instructions and examples.
+Each package provides HTTP clients for accessing external data sources with strongly-typed response models.
 
 ## Available Packages
 
-### Core Infrastructure
+### NOAA Integrations
 
-- **[Composition](src/Composition/)** - Modular architecture framework with service and application modules
-- **[Configuration](src/Configuration/)** - Type-safe configuration loading with validation
-- **[Diagnostics](src/Diagnostics/)** - Health checks, application descriptors, and monitoring utilities
-- **[Exceptions](src/Exceptions/)** - Common exception types and error handling patterns
-- **[Utilities](src/Utilities/)** - General-purpose utility classes and extension methods
-
-### Web & API
-
-- **[AspNetCore](src/AspNetCore/)** - ASP.NET Core extensions, problem details, security, and routing
-- **[Http](src/Http/)** - HTTP client utilities and extensions
-
-### Data Access
-
-- **[Entities](src/Entities/)** - Domain entity interfaces, strong-typed IDs, and DDD patterns
-- **[EntityFramework](src/EntityFramework/)** - EF Core extensions with auditing, soft deletes, and migrations
-- **[EntityFramework.NpgSql](src/EntityFramework.NpgSql/)** - PostgreSQL-specific DbContext factories and conventions
-- **[ClickHouse](src/ClickHouse/)** - ClickHouse database integration
-
-### Caching & Performance
-
-- **[Caching](src/Caching/)** - Hybrid cache extensions and utilities
-
-### Logging & Observability
-
-- **[Logging.OpenTelemetry](src/Logging.OpenTelemetry/)** - OpenTelemetry integration for distributed tracing
-
-### AI & Machine Learning
-
-- **[Ai](src/Ai/)** - OpenAI GPT and DeepL translation service integrations
-- **[Ocr](src/Ocr/)** - Optical Character Recognition utilities
-
-### Serialization
-
-- **[Json](src/Json/)** - JSON serialization extensions and converters
+- **[Noaa](src/Noaa/)** - NOAA Space Weather data source clients
+  - **ACE** - Advanced Composition Explorer satellite data
+  - **DSCOVR** - Deep Space Climate Observatory satellite data
+  - **Kp Index** - Geomagnetic activity index data
 
 ## Architecture
 
-The framework follows these principles:
+This repository provides HTTP clients for external space weather data sources:
 
-- **Modular Design** - Each package is self-contained and can be used independently
-- **Clean Architecture** - Clear separation of concerns with minimal coupling
-- **Domain-Driven Design** - Support for DDD patterns and practices
-- **Type Safety** - Strong typing with nullable reference types enabled
-- **Modern .NET** - Leverages latest .NET 9 features and patterns
+- **Type-Safe Clients** - Strongly-typed HTTP clients with dependency injection support
+- **Response Models** - Well-defined DTOs for all API responses
+- **Configuration** - Options pattern for configuring API endpoints
+- **Modern .NET** - Built on .NET 9 with latest C# features
 
 ## Development
 
@@ -160,4 +125,4 @@ When contributing to this repository:
 
 ---
 
-**Note**: This framework is designed for Aurora Science Hub applications but can be used in any modern .NET project requiring robust infrastructure components.
+**Note**: This project provides data source integrations for the SWeather (Space Weather) monitoring application.
