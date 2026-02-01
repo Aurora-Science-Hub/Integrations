@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using AuroraScienceHub.Framework.Utilities.System;
 using AuroraScienceHub.Integrations.Noaa.KpIndex.Responses;
 
@@ -64,7 +65,7 @@ internal static class KpIndex27DayDataParser
         var dayString = trimmedLine[fieldsRange[2]];
 
         var dateString = string.Concat(yearString, monthString, dayString);
-        if (!DateOnly.TryParse(dateString, out var date))
+        if (!DateOnly.TryParseExact(dateString, "yyyyMMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
             response = null;
             return false;

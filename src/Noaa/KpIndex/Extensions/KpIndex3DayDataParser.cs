@@ -28,8 +28,13 @@ internal static class KpIndex3DayDataParser
         using var jsonDocument = JsonDocument.Parse(text);
         var rootElement = jsonDocument.RootElement;
 
+        if (rootElement.ValueKind != JsonValueKind.Array)
+        {
+            return Array.Empty<KpIndex3DayResponse>();
+        }
+
         var arrayLength = rootElement.GetArrayLength();
-        if (rootElement.ValueKind != JsonValueKind.Array || arrayLength < 2)
+        if (arrayLength < 2)
         {
             return Array.Empty<KpIndex3DayResponse>();
         }
@@ -56,7 +61,7 @@ internal static class KpIndex3DayDataParser
         }
 
         var dateTimeString = jsonElement[0].GetString();
-        if (!DateTime.TryParse(dateTimeString, out var dateTime))
+        if (!DateTime.TryParse(dateTimeString, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var dateTime))
         {
             response = null;
             return false;

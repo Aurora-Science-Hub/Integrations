@@ -34,8 +34,13 @@ internal static class MagnetometerDataParser
         using var jsonDoc = JsonDocument.Parse(text);
         var rootElement = jsonDoc.RootElement;
 
+        if (rootElement.ValueKind != JsonValueKind.Array)
+        {
+            return Array.Empty<MagnetometerRecord>();
+        }
+
         var arrayLength = rootElement.GetArrayLength();
-        if (rootElement.ValueKind != JsonValueKind.Array || rootElement.GetArrayLength() < 2)
+        if (rootElement.GetArrayLength() < 2)
         {
             return Array.Empty<MagnetometerRecord>();
         }
