@@ -1,62 +1,49 @@
 # NOAA Client Sample
 
-Консольное приложение для демонстрации работы с NOAA API клиентами с использованием System.CommandLine.
+An interactive console application demonstrating the NOAA API clients using Spectre.Console.
 
-## Описание
+## Overview
 
-Это приложение демонстрирует использование всех доступных методов клиентов NOAA через мощный CLI интерфейс:
+This sample demonstrates all available NOAA client methods through an interactive menu-driven interface:
 
 ### ACE (Advanced Composition Explorer) Spacecraft
-- **Magnetometer Data** - данные магнитометра (1-минутное усреднение)
-- **SWEPAM Data** - данные Solar Wind Electron Proton Alpha Monitor
+- **Magnetometer Data** - 1-minute averaged magnetic field measurements
+- **SWEPAM Data** - Solar Wind Electron Proton Alpha Monitor measurements
 
 ### DSCOVR (Deep Space Climate Observatory) Spacecraft
-- **Magnetometer Data** - данные магнитометра с различными временными диапазонами:
-  - 2 часа
-  - 1 день
-  - 3 дня
-  - 7 дней
-- **Solar Wind Plasma Data** - данные солнечного ветра с различными временными диапазонами:
-  - 2 часа
-  - 1 день
-  - 3 дня
-  - 7 дней
+- **Magnetometer Data** - Magnetic field measurements (2-hour window)
+- **Solar Wind Plasma Data** - Solar wind measurements (2-hour window)
 
 ### KP Index
-- **27-Day Forecast** - прогноз KP-индекса на 27 дней
-- **3-Day Forecast** - прогноз KP-индекса на 3 дня
-- **Nowcast** - текущие данные KP-индекса
+- **27-Day Forecast** - Extended KP index forecast
+- **3-Day Forecast** - Short-term KP index forecast
+- **Nowcast** - Real-time KP index measurements
 
-## Возможности
+## Features
 
-✨ **Команды CLI** - мощный интерфейс командной строки с использованием System.CommandLine
+✨ **Interactive Menu** - Easy-to-use selection interface powered by Spectre.Console
 
-📊 **Табличный вывод** - форматированное отображение данных в виде таблиц
+📊 **Formatted Tables** - Beautiful table output with colors and borders
 
-🎨 **Уровни активности** - KP-индекс отображается с текстовыми метками уровня активности:
-- Низкая (0-2)
-- Умеренная (3-4)
-- Повышенная (5-6)
-- Высокая (7-8)
-- Экстремальная (9+)
+🎨 **Activity Levels** - KP index displayed with color-coded activity levels:
+- Low (0-2) - Green
+- Moderate (3-4) - Yellow
+- Elevated (5-6) - Orange
+- High (7-8) - Red
+- Extreme (9+) - Bold Red
 
-⚙️ **Опции командной строки**:
-- `--limit` / `-l` - количество записей для отображения
-- `--verbose` / `-v` - полный вывод всех данных
-- `--period` / `-p` - временной диапазон для DSCOVR (2h, 1d, 3d, 7d)
+⚡ **Bulk Execution** - Execute all API requests with a single menu option
 
-⚡ **Массовое выполнение** - команда `all` для выполнения всех запросов последовательно
+🔄 **Loading Indicators** - Visual feedback with spinners and progress bars
 
-🔍 **Встроенная справка** - используйте `--help` для любой команды
+## Requirements
 
-## Требования
+- .NET 8.0 or higher
+- Internet connection (for NOAA API access)
 
-- .NET 8.0 или выше
-- Доступ к интернету (для подключения к NOAA API)
+## Configuration
 
-## Конфигурация
-
-Приложение использует файл `appsettings.json` для настройки:
+The application uses `appsettings.json` for configuration:
 
 ```json
 {
@@ -66,173 +53,81 @@
 }
 ```
 
-## Запуск
+## Usage
 
-### Общая справка
-
-```bash
-dotnet run -- --help
-```
-
-### ACE Commands
-
-Получить данные магнитометра ACE:
-```bash
-dotnet run -- ace magnetometer
-dotnet run -- ace magnetometer --limit 20
-dotnet run -- ace magnetometer --verbose
-```
-
-Получить данные SWEPAM ACE:
-```bash
-dotnet run -- ace swepam
-dotnet run -- ace swepam -l 15
-```
-
-### DSCOVR Commands
-
-Получить данные магнитометра DSCOVR:
-```bash
-dotnet run -- dscovr magnetometer --period 2h
-dotnet run -- dscovr magnetometer -p 1d
-dotnet run -- dscovr magnetometer -p 7d --verbose
-```
-
-Получить данные солнечного ветра DSCOVR:
-```bash
-dotnet run -- dscovr plasma --period 2h
-dotnet run -- dscovr plasma -p 3d
-```
-
-### KP Index Commands
-
-Получить 27-дневный прогноз:
-```bash
-dotnet run -- kp 27day
-dotnet run -- kp 27day --limit 15
-```
-
-Получить 3-дневный прогноз:
-```bash
-dotnet run -- kp 3day
-dotnet run -- kp 3day -v
-```
-
-Получить текущие данные (nowcast):
-```bash
-dotnet run -- kp nowcast
-dotnet run -- kp nowcast -l 20
-```
-
-### Выполнить все запросы
+Run the application:
 
 ```bash
-dotnet run -- all
+dotnet run
 ```
 
-## Примеры использования
+You'll see an interactive menu with the following options:
 
-### Быстрый старт
+1. **ACE Magnetometer** - Fetch ACE spacecraft magnetometer data
+2. **ACE SWEPAM** - Fetch ACE solar wind plasma data
+3. **DSCOVR Magnetometer** - Fetch DSCOVR magnetometer data
+4. **DSCOVR Solar Wind Plasma** - Fetch DSCOVR plasma data
+5. **KP Index 27-Day Forecast** - View extended KP forecast
+6. **KP Index 3-Day Forecast** - View short-term KP forecast
+7. **KP Index Nowcast** - View current KP measurements
+8. **Execute All Requests** - Run all queries sequentially with progress tracking
+9. **Exit** - Quit the application
 
-```bash
-# Получить последние данные ACE
-dotnet run -- ace magnetometer
+Simply use arrow keys to navigate and press Enter to select an option.
 
-# Получить данные DSCOVR за последний день
-dotnet run -- dscovr magnetometer -p 1d
+## Architecture
 
-# Посмотреть текущий KP-индекс
-dotnet run -- kp nowcast
-```
+The application follows best practices:
 
-### Подробный анализ
+- **Dependency Injection** - Uses Microsoft.Extensions.DependencyInjection
+- **Configuration Management** - Leverages Microsoft.Extensions.Configuration
+- **Typed HTTP Clients** - Registered via AddHttpClient
+- **Async/Await** - All API calls are asynchronous
+- **Error Handling** - Graceful error handling with user-friendly messages
+- **Separation of Concerns** - UI formatting separated in OutputFormatter class
 
-```bash
-# Посмотреть все данные магнитометра ACE
-dotnet run -- ace magnetometer --verbose
-
-# Получить последние 30 записей прогноза KP
-dotnet run -- kp 3day --limit 30
-
-# Выполнить все запросы сразу
-dotnet run -- all
-```
-
-## Структура команд
+## Project Structure
 
 ```
-noaa-client-sample
-├── ace
-│   ├── magnetometer [--limit] [--verbose]
-│   └── swepam [--limit] [--verbose]
-├── dscovr
-│   ├── magnetometer --period {2h|1d|3d|7d} [--verbose]
-│   └── plasma --period {2h|1d|3d|7d} [--verbose]
-├── kp
-│   ├── 27day [--limit] [--verbose]
-│   ├── 3day [--limit] [--verbose]
-│   └── nowcast [--limit] [--verbose]
-└── all
+NoaaClientSample/
+├── Program.cs              # Main application with interactive menu
+├── OutputFormatter.cs      # Table formatting utilities
+├── appsettings.json        # Application configuration
+└── NoaaClientSample.csproj # Project file
 ```
 
-## Архитектура
+## Dependencies
 
-Приложение построено с использованием лучших практик:
+- **AuroraScienceHub.Integrations.Noaa** - NOAA API client library
+- **Microsoft.Extensions.Hosting** - For DI and configuration
+- **Spectre.Console** - For beautiful console UI
 
-- **System.CommandLine** - современная библиотека для создания CLI приложений
-- **Dependency Injection** - использование Microsoft.Extensions.DependencyInjection
-- **Configuration Management** - использование Microsoft.Extensions.Configuration
-- **Typed HTTP Clients** - регистрация через AddHttpClient
-- **Clean Architecture** - разделение на слои и использование интерфейсов
-- **Async/Await** - асинхронная работа с API
-- **Error Handling** - обработка ошибок и информативные сообщения
-
-## Преимущества System.CommandLine
-
-✅ **Автоматическая генерация справки** - встроенная поддержка `--help`
-
-✅ **Валидация аргументов** - автоматическая проверка типов и значений
-
-✅ **Автодополнение** - поддержка shell completion для bash, zsh, powershell
-
-✅ **Иерархия команд** - логическая структура команд и подкоманд
-
-✅ **Парсинг опций** - мощный парсер с поддержкой алиасов и значений по умолчанию
-
-✅ **Расширяемость** - легко добавлять новые команды и опции
-
-## Зависимости
-
-- **AuroraScienceHub.Integrations.Noaa** - основная библиотека клиентов NOAA
-- **Microsoft.Extensions.Hosting** - для DI и конфигурации
-- **System.CommandLine** - для создания CLI интерфейса
-
-## Формат вывода
-
-Все данные выводятся в виде текстовых таблиц с выравниванием колонок:
+## Sample Output
 
 ```
-ACE Magnetometer Data (всего записей: 120)
-------------------------------------------------------------------------------------------------------------------------
-DateTime             Status   Bx (nT)    By (nT)    Bz (nT)    Bt (nT)    Lat        Lon
-------------------------------------------------------------------------------------------------------------------------
-2026-02-02 10:00:00  0        2.30       -1.45      3.20       4.12       -0.50      1.20
-2026-02-02 10:01:00  0        2.35       -1.40      3.25       4.15       -0.48      1.22
-...
+  _   _  ___    _    _        ____ _ _            _
+ | \ | |/ _ \  / \  / \      / ___| (_) ___ _ __ | |_
+ |  \| | | | |/ _ \/ _ \    | |   | | |/ _ \ '_ \| __|
+ | |\  | |_| / ___ \ ___ \   | |___| | |  __/ | | | |_
+ |_| \_|\___/_/   \_\   \_\  \____|_|_|\___|_| |_|\__|
+
+Interactive sample application for NOAA API clients
+
+? Select an option: ›
+❯ ACE Magnetometer
+  ACE SWEPAM
+  DSCOVR Magnetometer
+  DSCOVR Solar Wind Plasma
+  KP Index 27-Day Forecast
+  KP Index 3-Day Forecast
+  KP Index Nowcast
+  ──────────────────────────────
+  Execute All Requests
+  Exit
 ```
 
-## Обработка ошибок
+## License
 
-Приложение корректно обрабатывает:
-- Ошибки сети (HttpRequestException)
-- Ошибки конфигурации
-- Неверные параметры команд
-- Общие исключения
-
-Все ошибки выводятся красным цветом с понятными сообщениями.
-
-## Лицензия
-
-См. файл LICENSE в корне репозитория.
+See LICENSE file in the repository root.
 
 
