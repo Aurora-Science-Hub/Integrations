@@ -11,6 +11,9 @@
   <Folder Name="/GitHub/Workflows/">
     <File Path=".github\workflows\dotnet.yml" />
   </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/NoaaClientSample/NoaaClientSample.csproj" />
+  </Folder>
   <Folder Name="/Solution items/">
     <File Path=".dockerignore" />
     <File Path=".editorconfig" />
