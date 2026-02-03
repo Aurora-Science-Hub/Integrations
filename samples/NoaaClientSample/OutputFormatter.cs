@@ -1,9 +1,9 @@
-using AuroraScienceHub.Integrations.Noaa.KpIndex.Responses;
+using AuroraScienceHub.Integrations.NoaaClient.KpIndex.Responses;
 using Spectre.Console;
-using AceMagnetometerRecord = AuroraScienceHub.Integrations.Noaa.Ace.Responses.MagnetometerRecord;
-using DscovrMagnetometerRecord = AuroraScienceHub.Integrations.Noaa.Dscovr.Responses.MagnetometerRecord;
-using AceSolarWindPlasmaRecord = AuroraScienceHub.Integrations.Noaa.Ace.Responses.SolarWindPlasmaRecord;
-using DscovrSolarWindPlasmaRecord = AuroraScienceHub.Integrations.Noaa.Dscovr.Responses.SolarWindPlasmaRecord;
+using AceMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Ace.Responses.MagnetometerRecord;
+using DscovrMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses.MagnetometerRecord;
+using AceSolarWindPlasmaRecord = AuroraScienceHub.Integrations.NoaaClient.Ace.Responses.SolarWindPlasmaRecord;
+using DscovrSolarWindPlasmaRecord = AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses.SolarWindPlasmaRecord;
 
 namespace AuroraScienceHub.Integrations.Samples.NoaaClientSample;
 

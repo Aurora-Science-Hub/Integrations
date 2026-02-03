@@ -9,10 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Noaa\Ace\Samples\AceMagnetometerSample.txt" />
-    <EmbeddedResource Include="Noaa\Ace\Samples\AceSwepamSample.txt" />
-    <EmbeddedResource Include="Noaa\Dscovr\Samples\DscovrMagnetometerSample.json" />
-    <EmbeddedResource Include="Noaa\Dscovr\Samples\DscovrSolarWindPlasmaSample.json" />
+    <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\Dscovr\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Noaa\Noaa.csproj" />
+    <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>
 
 </Project>

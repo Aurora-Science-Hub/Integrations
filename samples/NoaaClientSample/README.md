@@ -21,20 +21,20 @@ This sample demonstrates all available NOAA client methods through an interactiv
 
 ## Features
 
-✨ **Interactive Menu** - Easy-to-use selection interface powered by Spectre.Console
+**Interactive Menu** - Easy-to-use selection interface powered by Spectre.Console
 
-📊 **Formatted Tables** - Beautiful table output with colors and borders
+**Formatted Tables** - Beautiful table output with colors and borders
 
-🎨 **Activity Levels** - KP index displayed with color-coded activity levels:
+**Activity Levels** - KP index displayed with color-coded activity levels:
 - Low (0-2) - Green
 - Moderate (3-4) - Yellow
 - Elevated (5-6) - Orange
 - High (7-8) - Red
 - Extreme (9+) - Bold Red
 
-⚡ **Bulk Execution** - Execute all API requests with a single menu option
+**Bulk Execution** - Execute all API requests with a single menu option
 
-🔄 **Loading Indicators** - Visual feedback with spinners and progress bars
+**Loading Indicators** - Visual feedback with spinners and progress bars
 
 ## Requirements
 

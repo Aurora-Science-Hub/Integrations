@@ -1,7 +1,7 @@
-﻿using AuroraScienceHub.Integrations.Noaa;
-using AuroraScienceHub.Integrations.Noaa.Ace;
-using AuroraScienceHub.Integrations.Noaa.Dscovr;
-using AuroraScienceHub.Integrations.Noaa.KpIndex;
+﻿using AuroraScienceHub.Integrations.NoaaClient;
+using AuroraScienceHub.Integrations.NoaaClient.Ace;
+using AuroraScienceHub.Integrations.NoaaClient.Dscovr;
+using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 using AuroraScienceHub.Integrations.Samples.NoaaClientSample;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

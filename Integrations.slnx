@@ -28,7 +28,7 @@
   </Folder>
   <Folder Name="/src/">
     <File Path="src\Directory.Build.props" />
-    <Project Path="src/Noaa/Noaa.csproj" />
+    <Project Path="src\NoaaClient\NoaaClient.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests\UnitTests\UnitTests.csproj">

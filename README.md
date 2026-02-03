@@ -21,7 +21,7 @@
 <a href="#development">Development</a> •
 <a href="#code-style">Code Style</a> •
 <a href="#testing">Testing</a> •
-<a href="#licence">Licence</a> •
+<a href="#license">License</a> •
 <a href="#contributing">Contributing</a>
 
 </div>

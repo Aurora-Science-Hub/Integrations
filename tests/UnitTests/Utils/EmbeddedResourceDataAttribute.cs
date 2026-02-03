@@ -35,7 +35,7 @@ public sealed class EmbeddedResourceDataAttribute : DataAttribute
         using var stream = assembly.GetManifestResourceStream(resourceName);
         if (stream == null)
         {
-            throw new InvalidOperationException("Could not load manifest resource stream.");
+            throw new InvalidOperationException($"Could not load manifest resource stream: {resourceName}");
         }
 
         using var reader = new StreamReader(stream);

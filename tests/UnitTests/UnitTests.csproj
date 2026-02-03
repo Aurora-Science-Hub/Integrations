@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Noaa\Noaa.csproj" />
+    <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="Noaa\Ace\Samples\**" />
-    <EmbeddedResource Include="Noaa\Dscovr\Samples\**" />
-    <EmbeddedResource Include="Noaa\KpIndex\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\Dscovr\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
   </ItemGroup>
 
 </Project>

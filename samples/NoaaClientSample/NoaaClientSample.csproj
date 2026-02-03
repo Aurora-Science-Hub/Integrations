@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Noaa\Noaa.csproj" />
+    <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>
 
 </Project>
