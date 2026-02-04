@@ -16,7 +16,7 @@ public class AceSolarWindPlasmaDataParserBenchmark
     [GlobalSetup]
     public async Task Setup()
     {
-        await using var stream = typeof(AceSolarWindPlasmaDataParserBenchmark).Assembly
+        await using var stream = typeof(IBenchmarksMarker).Assembly
                                      .GetManifestResourceStream(ResourceName)
                                  ?? throw new FileNotFoundException($"Resource '{ResourceName}' not found.");
         using var reader = new StreamReader(stream);

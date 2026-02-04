@@ -16,7 +16,7 @@ public class DscovrMagnetometerDataParserBenchmark
     [GlobalSetup]
     public async Task Setup()
     {
-        await using var stream = typeof(DscovrMagnetometerDataParserBenchmark).Assembly
+        await using var stream = typeof(IBenchmarksMarker).Assembly
                                      .GetManifestResourceStream(ResourceName)
                                  ?? throw new FileNotFoundException($"Resource '{ResourceName}' not found.");
         using var reader = new StreamReader(stream);
