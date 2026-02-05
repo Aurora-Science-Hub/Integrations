@@ -3,6 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="docs/logo/In_white.png">
       <source media="(prefers-color-scheme: light)" srcset="docs/logo/In_black.png">
+      <img src="docs/logo/logo-black.png" style="width:400px;">
     </picture>
     <br>
     Aurora Science Hub Integrations
