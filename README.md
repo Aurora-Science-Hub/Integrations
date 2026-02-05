@@ -74,13 +74,13 @@ Each package provides HTTP clients for accessing external data sources with stro
 
 **[AuroraScienceHub.Integrations.NoaaClient](src/NoaaClient/)** - Comprehensive NOAA Space Weather data access
 
-| Component | Description |
-|-----------|-------------|
-| **ACE Client** | Advanced Composition Explorer satellite data - magnetometer and SWEPAM measurements |
-| **DSCOVR Client** | Deep Space Climate Observatory data - solar wind and magnetic field measurements with multiple time ranges (2H, 1D, 3D, 7D) |
-| **KP-Index Client** | Geomagnetic activity indices - nowcast and forecast data (3-day and 27-day) |
+| Component           | Description                                                                                                                 |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| **ACE Client**      | Advanced Composition Explorer satellite data - magnetometer and SWEPAM measurements                                         |
+| **DSCOVR Client**   | Deep Space Climate Observatory data - solar wind and magnetic field measurements with multiple time ranges (2H, 1D, 3D, 7D) |
+| **KP-Index Client** | Geomagnetic activity indices - nowcast and forecast data (3-day and 27-day)                                                 |
 
-📖 See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.
+See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.
 
 ## Architecture
 
@@ -162,9 +162,6 @@ Unit tests are located in the `tests/UnitTests/` directory.
 # Run all tests
 dotnet test
 
-# Run tests with code coverage
-dotnet test --collect:"XPlat Code Coverage"
-
 # Run tests in watch mode
 dotnet watch test --project tests/UnitTests/UnitTests.csproj
 ```
@@ -198,7 +195,7 @@ Please report bugs and feature requests on the [GitHub Issues](https://github.co
 - **Source Code**: [GitHub Repository](https://github.com/Aurora-Science-Hub/Integrations)
 - **Issue Tracker**: [GitHub Issues](https://github.com/Aurora-Science-Hub/Integrations/issues)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
-- **Release Notes**: [RELEASE_NOTES.md](RELEASE_NOTES.md)
+- **Release Notes**: [RELEASE_NOTES.md](docs/ReleaseNotes_Integrations_v1.md)
 
 ## Acknowledgments
 
