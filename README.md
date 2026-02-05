@@ -200,7 +200,3 @@ Please report bugs and feature requests on the [GitHub Issues](https://github.co
 ## Acknowledgments
 
 This project integrates data from the **NOAA Space Weather Prediction Center**. We thank NOAA and NASA for providing free and open access to space weather data.
-
----
-
-**Note**: This project provides data source integrations for space weather monitoring applications.
