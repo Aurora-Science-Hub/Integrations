@@ -16,9 +16,6 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIcon>In_icon.png</PackageIcon>
     <Copyright>Copyright 2024-$([System.DateTime]::Now.ToString(yyyy)) Aurora Science Hub</Copyright>
-    <DevelopmentDependency>false</DevelopmentDependency>
-    <Language>en-US</Language>
-    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

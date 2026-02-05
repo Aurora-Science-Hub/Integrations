@@ -25,20 +25,6 @@
     <Copyright>Copyright $(CurrentYear) © $(CompanyName). All rights reserved</Copyright>
     <Authors>$(CompanyName)</Authors>
     <Company>$(CompanyName)</Company>
-    <Product>Aurora Science Hub Integrations</Product>
-    <PackageProjectUrl>https://github.com/Aurora-Science-Hub/Integrations</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Aurora-Science-Hub/Integrations.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-  </PropertyGroup>
-
-  <PropertyGroup Label="Package Metadata">
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>https://github.com/Aurora-Science-Hub/Integrations/blob/main/RELEASE_NOTES.md</PackageReleaseNotes>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup>
