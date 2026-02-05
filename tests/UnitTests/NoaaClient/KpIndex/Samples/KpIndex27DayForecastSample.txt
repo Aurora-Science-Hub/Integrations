@@ -1,0 +1,18 @@
+:Product: 27-day Space Weather Outlook Table 27DO.txt
+:Issued: 2025 Jan 20 0136 UTC
+# Prepared by the US Dept. of Commerce, NOAA, Space Weather Prediction Center
+# Product description and SWPC contact on the Web
+# https://www.swpc.noaa.gov/content/subscription-services
+#
+#      27-day Space Weather Outlook Table
+#                Issued 2025-01-20
+#
+#   UTC      Radio Flux   Planetary   Largest
+#  Date       10.7 cm      A Index    Kp Index
+2025 Jan 20     235          12          4
+2025 Jan 21     235           8          3
+2025 Jan 22     235           5          2
+2025 Jan 23     230           5          2
+2025 Jan 24     230           5          2
+
+

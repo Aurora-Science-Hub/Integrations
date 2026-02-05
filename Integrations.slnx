@@ -1,0 +1,45 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/AuroraScienceHub.Integrations.Benchmarks/AuroraScienceHub.Integrations.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs\ReleaseNotes_Integrations_v1.md" />
+  </Folder>
+  <Folder Name="/GitHub/" />
+  <Folder Name="/GitHub/Workflows/">
+    <File Path=".github\workflows\dotnet.yml" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/NoaaClientSample/NoaaClientSample.csproj" />
+  </Folder>
+  <Folder Name="/Solution items/">
+    <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="NuGet.Config" />
+    <File Path="README.md" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src\Directory.Build.props" />
+    <Project Path="src\NoaaClient\NoaaClient.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\UnitTests\UnitTests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <File Path="tests\Directory.Build.props" />
+  </Folder>
+</Solution>

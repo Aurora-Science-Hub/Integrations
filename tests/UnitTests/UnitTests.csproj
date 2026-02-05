@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AuroraScienceHub.Integrations.UnitTests</AssemblyName>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\Dscovr\Samples\**" />
+    <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
+  </ItemGroup>
+
+</Project>
