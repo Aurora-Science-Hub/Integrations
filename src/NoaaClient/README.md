@@ -1,6 +1,6 @@
 # AuroraScienceHub.Integrations.Noaa
 
-NOAA space weather data integration with support for ACE, DSCOVR spacecraft and KP-index data.
+NOAA space weather data integration with support for ACE, RTSW and KP-index data.
 
 ## Overview
 
@@ -9,7 +9,7 @@ Provides unified interfaces for accessing NOAA space weather data including sola
 ## Key Features
 
 - **ACE Spacecraft** - Access to Magnetometer and SWEPAM (Solar Wind) data
-- **DSCOVR Spacecraft** - Magnetometer and Solar Wind Plasma data with multiple time ranges
+- **RTSW Feed** - 1-minute real-time magnetometer and solar wind plasma data
 - **KP-Index** - Geomagnetic activity forecasts and nowcast data
 - **Unified Interfaces** - Consistent API across all NOAA data sources
 
@@ -35,12 +35,11 @@ var magnetometerData = await aceClient.GetMagnetometerDataAsync(cancellationToke
 var solarWindData = await aceClient.GetSwepamDataAsync(cancellationToken);
 ```
 
-### DSCOVR Client
+### RTSW Client
 
 ```csharp
-// Available time ranges: 2H, 1D, 3D, 7D
-var magnetometerData = await dscovrClient.GetMagnetometerData1DAsync(cancellationToken);
-var solarWindData = await dscovrClient.GetSolarWindPlasmaData1DAsync(cancellationToken);
+var magnetometerData = await rtswClient.GetMagnetometerDataAsync(cancellationToken);
+var solarWindData = await rtswClient.GetSolarWindPlasmaDataAsync(cancellationToken);
 ```
 
 ### KP-Index Client

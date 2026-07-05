@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+#### NoaaClient Package
+- **RTSW Client** - NOAA real-time solar wind integration
+  - `IRtswClient` with 1-minute magnetometer and plasma feeds
+  - Object-array JSON parsers for `rtsw_mag_1m.json` and `rtsw_wind_1m.json`
+  - Response records include `active` and `source` metadata
+
+### Removed
+
+#### NoaaClient Package
+- **DSCOVR Client Surface** (breaking change)
+  - Removed `IDscovrClient`, related implementations, models, tests, and benchmarks
+  - Removed DSCOVR sample app menu entries
+
+### Changed
+
+#### Dependency Injection
+- `AddNoaaClients()` now registers `IRtswClient` instead of `IDscovrClient`
+
 ## [1.0.0] - 2026-02-05
 
 ### Added
@@ -48,4 +70,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI/CD pipeline for build and test
 
 [1.0.0]: https://github.com/Aurora-Science-Hub/Integrations/releases/tag/1.0.0
+[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.0.0...HEAD
 

@@ -10,9 +10,9 @@ This sample demonstrates all available NOAA client methods through an interactiv
 - **Magnetometer Data** - 1-minute averaged magnetic field measurements
 - **SWEPAM Data** - Solar Wind Electron Proton Alpha Monitor measurements
 
-### DSCOVR (Deep Space Climate Observatory) Spacecraft
-- **Magnetometer Data** - Magnetic field measurements (2-hour window)
-- **Solar Wind Plasma Data** - Solar wind measurements (2-hour window)
+### RTSW (Real-Time Solar Wind) Feeds
+- **Magnetometer Data** - 1-minute real-time magnetic field measurements
+- **Solar Wind Plasma Data** - 1-minute real-time solar wind measurements
 
 ### KP Index
 - **27-Day Forecast** - Extended KP index forecast
@@ -65,8 +65,8 @@ You'll see an interactive menu with the following options:
 
 1. **ACE Magnetometer** - Fetch ACE spacecraft magnetometer data
 2. **ACE SWEPAM** - Fetch ACE solar wind plasma data
-3. **DSCOVR Magnetometer** - Fetch DSCOVR magnetometer data
-4. **DSCOVR Solar Wind Plasma** - Fetch DSCOVR plasma data
+3. **RTSW Magnetometer** - Fetch RTSW magnetometer data
+4. **RTSW Solar Wind Plasma** - Fetch RTSW plasma data
 5. **KP Index 27-Day Forecast** - View extended KP forecast
 6. **KP Index 3-Day Forecast** - View short-term KP forecast
 7. **KP Index Nowcast** - View current KP measurements
@@ -116,8 +116,8 @@ Interactive sample application for NOAA API clients
 ? Select an option: ›
 ❯ ACE Magnetometer
   ACE SWEPAM
-  DSCOVR Magnetometer
-  DSCOVR Solar Wind Plasma
+  RTSW Magnetometer
+  RTSW Solar Wind Plasma
   KP Index 27-Day Forecast
   KP Index 3-Day Forecast
   KP Index Nowcast

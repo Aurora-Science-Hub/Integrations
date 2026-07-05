@@ -1,0 +1,18 @@
+[
+  {
+    "time_tag": "2024-05-19T05:51:00Z",
+    "density": 2.18,
+    "speed": 393.9,
+    "temperature": 36967,
+    "active": true,
+    "source": "ACE"
+  },
+  {
+    "time_tag": "2024-05-19T05:52:00Z",
+    "density": null,
+    "speed": 397.4,
+    "temperature": 44618,
+    "active": false,
+    "source": "ACE"
+  }
+]

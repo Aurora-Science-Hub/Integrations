@@ -1,5 +1,6 @@
 using AuroraScienceHub.Framework.Utilities.System;
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
+using AuroraScienceHub.Integrations.NoaaClient.Utilities;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
 
@@ -47,21 +48,16 @@ internal static class MagnetometerDataParser
                     second: 0,
                     DateTimeKind.Utc),
                 Status: trimmedLine[fieldsRange[6]].ParseIntInvariant(),
-                Bx: GetFloatOrNull(trimmedLine[fieldsRange[7]]),
-                By: GetFloatOrNull(trimmedLine[fieldsRange[8]]),
-                Bz: GetFloatOrNull(trimmedLine[fieldsRange[9]]),
-                Bt: GetFloatOrNull(trimmedLine[fieldsRange[10]]),
-                Latitude: GetFloatOrNull(trimmedLine[fieldsRange[11]]),
-                Longitude: GetFloatOrNull(trimmedLine[fieldsRange[12]])
+                Bx: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[7]], MissingDataValue),
+                By: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[8]], MissingDataValue),
+                Bz: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[9]], MissingDataValue),
+                Bt: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[10]], MissingDataValue),
+                Latitude: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[11]], MissingDataValue),
+                Longitude: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[12]], MissingDataValue)
             );
             records.Add(record);
         }
 
         return records;
     }
-
-    private static float? GetFloatOrNull(ReadOnlySpan<char> value)
-        => value.SequenceEqual(MissingDataValue)
-            ? null
-            : value.ParseFloatInvariant();
 }

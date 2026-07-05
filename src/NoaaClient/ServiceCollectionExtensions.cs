@@ -1,6 +1,6 @@
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
-using AuroraScienceHub.Integrations.NoaaClient.Dscovr;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
+using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AuroraScienceHub.Integrations.NoaaClient;
@@ -19,8 +19,8 @@ public static class ServiceCollectionExtensions
             .BindConfiguration(NoaaClientOptions.OptionKey);
 
         services.AddHttpClient<IAceClient, AceClient>();
-        services.AddHttpClient<IDscovrClient, DscovrClient>();
         services.AddHttpClient<IKpIndexClient, KpIndexClient>();
+        services.AddHttpClient<IRtswClient, RtswClient>();
 
         return services;
     }

@@ -1,5 +1,6 @@
 using AuroraScienceHub.Framework.Utilities.System;
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
+using AuroraScienceHub.Integrations.NoaaClient.Utilities;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
 
@@ -48,23 +49,13 @@ internal static class SolarWindPlasmaDataParser
                     second: 0,
                     DateTimeKind.Utc),
                 Status: trimmedLine[fieldsRange[6]].ParseIntInvariant(),
-                ProtonDensity: GetFloatOrNull(trimmedLine[fieldsRange[7]]),
-                BulkSpeed: GetFloatOrNull(trimmedLine[fieldsRange[8]]),
-                IonTemperature: GetTemperatureOrNull(trimmedLine[fieldsRange[9]])
+                ProtonDensity: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[7]], MissingDataValue),
+                BulkSpeed: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[8]], MissingDataValue),
+                IonTemperature: NoaaNumericParser.ParseNullableFloat(trimmedLine[fieldsRange[9]], MissingTemperatureValue)
             );
             records.Add(record);
         }
 
         return records;
     }
-
-    private static float? GetFloatOrNull(ReadOnlySpan<char> value)
-        => value.SequenceEqual(MissingDataValue)
-            ? null
-            : value.ParseFloatInvariant();
-
-    private static float? GetTemperatureOrNull(ReadOnlySpan<char> value)
-        => value.SequenceEqual(MissingTemperatureValue)
-            ? null
-            : value.ParseFloatInvariant();
 }

@@ -1,16 +1,19 @@
-using AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
-using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
+using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Extensions;
+using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 using Microsoft.Extensions.Options;
 
-namespace AuroraScienceHub.Integrations.NoaaClient.Ace;
+namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 
 /// <inheritdoc />
-internal sealed class AceClient : IAceClient
+internal sealed class RtswClient : IRtswClient
 {
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
 
-    public AceClient(
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RtswClient"/> class.
+    /// </summary>
+    public RtswClient(
         HttpClient httpClient,
         IOptions<NoaaClientOptions> options)
     {
@@ -20,7 +23,7 @@ internal sealed class AceClient : IAceClient
 
     public async Task<IReadOnlyList<MagnetometerRecord>> GetMagnetometerDataAsync(CancellationToken cancellationToken)
     {
-        var url = new Uri(_baseUrl, "text/ace-magnetometer.txt");
+        var url = new Uri(_baseUrl, "json/rtsw/rtsw_mag_1m.json");
         var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -28,9 +31,9 @@ internal sealed class AceClient : IAceClient
         return MagnetometerDataParser.Parse(text);
     }
 
-    public async Task<IReadOnlyList<SolarWindPlasmaRecord>> GetSwepamDataAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<SolarWindPlasmaRecord>> GetSolarWindPlasmaDataAsync(CancellationToken cancellationToken)
     {
-        var url = new Uri(_baseUrl, "text/ace-swepam.txt");
+        var url = new Uri(_baseUrl, "json/rtsw/rtsw_wind_1m.json");
         var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);

@@ -19,11 +19,11 @@ Access real-time data from the Advanced Composition Explorer satellite positione
 - **Magnetometer Data** - Interplanetary magnetic field measurements (Bx, By, Bz components)
 - **Solar Wind Plasma Data** - Comprehensive particle measurements including density, speed, and temperature
 
-### DSCOVR Spacecraft Integration
-Retrieve data from the Deep Space Climate Observatory with flexible time ranges:
-- **Multiple Time Windows** - 2-hour, 1-day, 3-day, and 7-day data access
-- **Magnetometer Measurements** - High-precision magnetic field data
-- **Solar Wind Parameters** - Critical inputs for space weather forecasting
+### RTSW Integration
+Retrieve data from NOAA real-time solar wind feeds:
+- **1-minute Magnetometer Data** - Real-time interplanetary magnetic field data
+- **1-minute Plasma Data** - Real-time bulk solar wind parameters
+- **Source Metadata** - Includes `active` and `source` fields in contracts
 
 ### KP-Index Data Access
 Monitor and forecast geomagnetic activity with three specialized endpoints:
@@ -33,6 +33,7 @@ Monitor and forecast geomagnetic activity with three specialized endpoints:
 
 ## Technical Highlights
 
+- **Breaking Change Notice** - `IDscovrClient` and DSCOVR response models are removed in favor of RTSW-only client surface
 - **Built on .NET 10.0** - Leveraging the latest .NET features and performance improvements
 - **Strongly-Typed APIs** - Compile-time safety with comprehensive response models
 - **Dependency Injection** - Native support for ASP.NET Core and modern .NET applications
@@ -57,16 +58,16 @@ Start accessing space weather data:
 public class SpaceWeatherService
 {
     private readonly IAceClient _aceClient;
-    private readonly IDscovrClient _dscovrClient;
+    private readonly IRtswClient _rtswClient;
     private readonly IKpIndexClient _kpIndexClient;
 
     public SpaceWeatherService(
         IAceClient aceClient,
-        IDscovrClient dscovrClient,
+        IRtswClient rtswClient,
         IKpIndexClient kpIndexClient)
     {
         _aceClient = aceClient;
-        _dscovrClient = dscovrClient;
+        _rtswClient = rtswClient;
         _kpIndexClient = kpIndexClient;
     }
 

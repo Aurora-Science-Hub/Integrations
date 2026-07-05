@@ -77,7 +77,7 @@ Each package provides HTTP clients for accessing external data sources with stro
 | Component           | Description                                                                                                                 |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------|
 | **ACE Client**      | Advanced Composition Explorer satellite data - magnetometer and SWEPAM measurements                                         |
-| **DSCOVR Client**   | Deep Space Climate Observatory data - solar wind and magnetic field measurements with multiple time ranges (2H, 1D, 3D, 7D) |
+| **RTSW Client**     | NOAA real-time solar wind feeds - 1-minute magnetometer and plasma data with `active` and `source` metadata               |
 | **KP-Index Client** | Geomagnetic activity indices - nowcast and forecast data (3-day and 27-day)                                                 |
 
 See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.

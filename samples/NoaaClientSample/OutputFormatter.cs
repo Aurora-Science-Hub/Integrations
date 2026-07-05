@@ -1,9 +1,9 @@
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex.Responses;
 using Spectre.Console;
 using AceMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Ace.Responses.MagnetometerRecord;
-using DscovrMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses.MagnetometerRecord;
 using AceSolarWindPlasmaRecord = AuroraScienceHub.Integrations.NoaaClient.Ace.Responses.SolarWindPlasmaRecord;
-using DscovrSolarWindPlasmaRecord = AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses.SolarWindPlasmaRecord;
+using RtswMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses.MagnetometerRecord;
+using RtswSolarWindPlasmaRecord = AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses.SolarWindPlasmaRecord;
 
 namespace AuroraScienceHub.Integrations.Samples.NoaaClientSample;
 
@@ -73,20 +73,22 @@ internal static class OutputFormatter
     }
 
     /// <summary>
-    /// Displays DSCOVR magnetometer data in table format
+    /// Displays RTSW magnetometer data in table format
     /// </summary>
-    public static void DisplayDscovrMagnetometer(IReadOnlyList<DscovrMagnetometerRecord> data, int limit)
+    public static void DisplayRtswMagnetometer(IReadOnlyList<RtswMagnetometerRecord> data, int limit)
     {
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .Title($"[yellow]DSCOVR Magnetometer Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
+            .Title($"[yellow]RTSW Magnetometer Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
             .AddColumn("[cyan]DateTime[/]")
             .AddColumn("[cyan]Bx (nT)[/]")
             .AddColumn("[cyan]By (nT)[/]")
             .AddColumn("[cyan]Bz (nT)[/]")
             .AddColumn("[cyan]Bt (nT)[/]")
             .AddColumn("[cyan]Lat[/]")
-            .AddColumn("[cyan]Lon[/]");
+            .AddColumn("[cyan]Lon[/]")
+            .AddColumn("[cyan]Active[/]")
+            .AddColumn("[cyan]Source[/]");
 
         foreach (var record in data.TakeLast(limit))
         {
@@ -97,24 +99,28 @@ internal static class OutputFormatter
                 Format(record.Bz),
                 Format(record.Bt),
                 Format(record.Latitude),
-                Format(record.Longitude));
+                Format(record.Longitude),
+                record.Active.ToString(),
+                record.Source);
         }
 
         AnsiConsole.Write(table);
     }
 
     /// <summary>
-    /// Displays DSCOVR solar wind plasma data in table format
+    /// Displays RTSW solar wind plasma data in table format
     /// </summary>
-    public static void DisplayDscovrPlasma(IReadOnlyList<DscovrSolarWindPlasmaRecord> data, int limit)
+    public static void DisplayRtswPlasma(IReadOnlyList<RtswSolarWindPlasmaRecord> data, int limit)
     {
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .Title($"[yellow]DSCOVR Solar Wind Plasma Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
+            .Title($"[yellow]RTSW Solar Wind Plasma Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
             .AddColumn("[cyan]DateTime[/]")
             .AddColumn("[cyan]Proton Density[/]")
             .AddColumn("[cyan]Bulk Speed[/]")
-            .AddColumn("[cyan]Ion Temp[/]");
+            .AddColumn("[cyan]Ion Temp[/]")
+            .AddColumn("[cyan]Active[/]")
+            .AddColumn("[cyan]Source[/]");
 
         foreach (var record in data.TakeLast(limit))
         {
@@ -122,7 +128,9 @@ internal static class OutputFormatter
                 record.DateTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Format(record.ProtonDensity),
                 Format(record.BulkSpeed),
-                Format(record.IonTemperature));
+                Format(record.IonTemperature),
+                record.Active.ToString(),
+                record.Source);
         }
 
         AnsiConsole.Write(table);

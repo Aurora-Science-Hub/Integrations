@@ -10,7 +10,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.NoaaClient.Ace;
 /// </summary>
 public sealed class SolarWindPlasmaDataParserTests
 {
-    [Theory]
+    [Theory(DisplayName = "ACE SWEPAM parser returns expected records for valid payload")]
     [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.NoaaClient/Ace/Samples/AceSwepamSample.txt")]
     public void Parse_WhenTextIsValid_ReturnsRecords(string text)
     {

@@ -1,0 +1,24 @@
+[
+  {
+    "time_tag": "2024-05-19T17:07:00Z",
+    "bx_gsm": -2.15,
+    "by_gsm": 8.51,
+    "bz_gsm": -2.98,
+    "lon_gsm": 104.17,
+    "lat_gsm": -18.76,
+    "bt": 9.27,
+    "active": true,
+    "source": "IMAP"
+  },
+  {
+    "time_tag": "2024-05-19T17:08:00Z",
+    "bx_gsm": null,
+    "by_gsm": 8.31,
+    "bz_gsm": -3.24,
+    "lon_gsm": 105.97,
+    "lat_gsm": -20.54,
+    "bt": 9.23,
+    "active": false,
+    "source": "SOLAR1"
+  }
+]

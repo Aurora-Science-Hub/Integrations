@@ -1,7 +1,7 @@
-namespace AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses;
+namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 
 /// <summary>
-/// 1-minute averaged Real-time Interplanetary Magnetic Field Values (DSCOVR)
+/// 1-minute averaged real-time interplanetary magnetic field values (RTSW).
 /// </summary>
 /// <param name="DateTime">Date and time of record (UTC)</param>
 /// <param name="Bx">IMF GSM x-component</param>
@@ -10,6 +10,8 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Dscovr.Responses;
 /// <param name="Bt">IMF module</param>
 /// <param name="Latitude">Spacecraft latitude</param>
 /// <param name="Longitude">Spacecraft longitude</param>
+/// <param name="Active">Record activity state reported by NOAA</param>
+/// <param name="Source">Record source reported by NOAA</param>
 public record MagnetometerRecord(
     DateTime DateTime,
     float? Bx,
@@ -17,4 +19,6 @@ public record MagnetometerRecord(
     float? Bz,
     float? Bt,
     float? Latitude,
-    float? Longitude);
+    float? Longitude,
+    bool Active,
+    string Source);
