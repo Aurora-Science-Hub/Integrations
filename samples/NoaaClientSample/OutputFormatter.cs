@@ -81,27 +81,29 @@ internal static class OutputFormatter
             .Border(TableBorder.Rounded)
             .Title($"[yellow]RTSW Magnetometer Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
             .AddColumn("[cyan]DateTime[/]")
-            .AddColumn("[cyan]Bx (nT)[/]")
-            .AddColumn("[cyan]By (nT)[/]")
-            .AddColumn("[cyan]Bz (nT)[/]")
+            .AddColumn("[cyan]Bx GSM (nT)[/]")
+            .AddColumn("[cyan]By GSM (nT)[/]")
+            .AddColumn("[cyan]Bz GSM (nT)[/]")
             .AddColumn("[cyan]Bt (nT)[/]")
-            .AddColumn("[cyan]Lat[/]")
-            .AddColumn("[cyan]Lon[/]")
+            .AddColumn("[cyan]Theta GSM[/]")
+            .AddColumn("[cyan]Phi GSM[/]")
             .AddColumn("[cyan]Active[/]")
-            .AddColumn("[cyan]Source[/]");
+            .AddColumn("[cyan]Source[/]")
+            .AddColumn("[cyan]Quality[/]");
 
         foreach (var record in data.TakeLast(limit))
         {
             table.AddRow(
                 record.DateTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                Format(record.Bx),
-                Format(record.By),
-                Format(record.Bz),
+                Format(record.BxGsm),
+                Format(record.ByGsm),
+                Format(record.BzGsm),
                 Format(record.Bt),
-                Format(record.Latitude),
-                Format(record.Longitude),
+                Format(record.ThetaGsm),
+                Format(record.PhiGsm),
                 record.Active.ToString(),
-                record.Source);
+                record.Source,
+                FormatInt(record.OverallQuality));
         }
 
         AnsiConsole.Write(table);
@@ -117,20 +119,22 @@ internal static class OutputFormatter
             .Title($"[yellow]RTSW Solar Wind Plasma Data[/] [dim](showing {Math.Min(limit, data.Count)} of {data.Count})[/]")
             .AddColumn("[cyan]DateTime[/]")
             .AddColumn("[cyan]Proton Density[/]")
-            .AddColumn("[cyan]Bulk Speed[/]")
-            .AddColumn("[cyan]Ion Temp[/]")
+            .AddColumn("[cyan]Proton Speed[/]")
+            .AddColumn("[cyan]Proton Temp[/]")
             .AddColumn("[cyan]Active[/]")
-            .AddColumn("[cyan]Source[/]");
+            .AddColumn("[cyan]Source[/]")
+            .AddColumn("[cyan]Quality[/]");
 
         foreach (var record in data.TakeLast(limit))
         {
             table.AddRow(
                 record.DateTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Format(record.ProtonDensity),
-                Format(record.BulkSpeed),
-                Format(record.IonTemperature),
+                Format(record.ProtonSpeed),
+                Format(record.ProtonTemperature),
                 record.Active.ToString(),
-                record.Source);
+                record.Source,
+                FormatInt(record.OverallQuality));
         }
 
         AnsiConsole.Write(table);
@@ -187,6 +191,8 @@ internal static class OutputFormatter
 
     // Helper methods
     private static string Format(float? value) => value?.ToString("F2") ?? "[dim]N/A[/]";
+
+    private static string FormatInt(int? value) => value?.ToString() ?? "[dim]N/A[/]";
 
     private static string GetActivityLevel(int kpIndex) => kpIndex switch
     {

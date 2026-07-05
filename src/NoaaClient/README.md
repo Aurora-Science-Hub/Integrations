@@ -42,6 +42,15 @@ var magnetometerData = await rtswClient.GetMagnetometerDataAsync(cancellationTok
 var solarWindData = await rtswClient.GetSolarWindPlasmaDataAsync(cancellationToken);
 ```
 
+RTSW response models map the full NOAA `rtsw_mag_1m.json` and `rtsw_wind_1m.json` schema (not legacy DSCOVR field names).
+
+| Magnetometer (`MagnetometerRecord`) | Wind (`SolarWindPlasmaRecord`) |
+| --- | --- |
+| `DateTime`, `Active`, `Source` | `DateTime`, `Active`, `Source` |
+| `Range`, `Scale`, `Sensitivity`, `ManualMode`, `SampleSize` | `ProtonSpeed`, `ProtonTemperature`, `ProtonDensity` |
+| `Bt`, `BxGse`–`PhiGse`, `BxGsm`–`PhiGsm` | `ProtonVxGse`–`ProtonVzGsm`, `ProtonSampleSize` |
+| `MaxTelemetryFlag`, `MaxDataFlag`, `OverallQuality` | `AlphaSpeed`–`AlphaSampleSize`, quality flags (`MaxConvergenceFlag`–`OverallQuality`) |
+
 ### KP-Index Client
 
 ```csharp

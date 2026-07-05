@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **RTSW Client** - NOAA real-time solar wind integration
   - `IRtswClient` with 1-minute magnetometer and plasma feeds
   - Object-array JSON parsers for `rtsw_mag_1m.json` and `rtsw_wind_1m.json`
-  - Response records include `active` and `source` metadata
+  - Response records map the full NOAA RTSW schema (`BxGsm`, `ProtonDensity`, quality flags, etc.), not legacy DSCOVR field names
 
 ### Removed
 
@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed DSCOVR sample app menu entries
 
 ### Changed
+
+#### NoaaClient Package
+- **RTSW response models** (breaking change within unreleased RTSW surface)
+  - Magnetometer and wind records now use live NOAA RTSW property names
+  - Removed misleading aliases (`Latitude`/`Longitude`, `BulkSpeed`/`IonTemperature`)
+  - Optional JSON fields are parsed as nullable; only `time_tag`, `active`, and `source` are required
 
 #### Dependency Injection
 - `AddNoaaClients()` now registers `IRtswClient` instead of `IDscovrClient`

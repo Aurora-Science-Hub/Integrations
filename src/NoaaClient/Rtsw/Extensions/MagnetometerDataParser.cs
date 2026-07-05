@@ -34,14 +34,27 @@ internal static class MagnetometerDataParser
 
             records.Add(new MagnetometerRecord(
                 DateTime: RtswJsonFieldParser.ParseDateTime(item, "time_tag", Context),
-                Bx: RtswJsonFieldParser.ParseNullableFloat(item, "bx_gsm", Context),
-                By: RtswJsonFieldParser.ParseNullableFloat(item, "by_gsm", Context),
-                Bz: RtswJsonFieldParser.ParseNullableFloat(item, "bz_gsm", Context),
-                Bt: RtswJsonFieldParser.ParseNullableFloat(item, "bt", Context),
-                Latitude: RtswJsonFieldParser.ParseNullableFloat(item, "lat_gsm", Context),
-                Longitude: RtswJsonFieldParser.ParseNullableFloat(item, "lon_gsm", Context),
                 Active: RtswJsonFieldParser.ParseBool(item, "active", Context),
-                Source: RtswJsonFieldParser.ParseRequiredString(item, "source", Context)));
+                Source: RtswJsonFieldParser.ParseRequiredString(item, "source", Context),
+                Range: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "range", Context),
+                Scale: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "scale", Context),
+                Sensitivity: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "sensitivity", Context),
+                ManualMode: RtswJsonFieldParser.ParseOptionalNullableBool(item, "manual_mode", Context),
+                SampleSize: RtswJsonFieldParser.ParseOptionalNullableInt(item, "sample_size", Context),
+                Bt: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "bt", Context),
+                BxGse: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "bx_gse", Context),
+                ByGse: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "by_gse", Context),
+                BzGse: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "bz_gse", Context),
+                ThetaGse: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "theta_gse", Context),
+                PhiGse: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "phi_gse", Context),
+                BxGsm: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "bx_gsm", Context),
+                ByGsm: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "by_gsm", Context),
+                BzGsm: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "bz_gsm", Context),
+                ThetaGsm: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "theta_gsm", Context),
+                PhiGsm: RtswJsonFieldParser.ParseOptionalNullableFloat(item, "phi_gsm", Context),
+                MaxTelemetryFlag: RtswJsonFieldParser.ParseOptionalNullableInt(item, "max_telemetry_flag", Context),
+                MaxDataFlag: RtswJsonFieldParser.ParseOptionalNullableInt(item, "max_data_flag", Context),
+                OverallQuality: RtswJsonFieldParser.ParseOptionalNullableInt(item, "overall_quality", Context)));
         }
 
         return records;
