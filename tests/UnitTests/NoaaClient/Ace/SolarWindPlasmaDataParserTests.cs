@@ -1,3 +1,5 @@
+#pragma warning disable CS0618 // ACE parser tests pending removal in issue #3.
+
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 using AuroraScienceHub.Integrations.UnitTests.Utils;

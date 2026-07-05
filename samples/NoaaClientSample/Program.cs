@@ -1,3 +1,5 @@
+#pragma warning disable CS0618 // Legacy ACE sample paths pending removal in issue #3.
+
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
@@ -31,8 +33,8 @@ while (true)
             .Title("[green]Select an option:[/]")
             .PageSize(10)
             .AddChoices(
-                "ACE Magnetometer",
-                "ACE SWEPAM",
+                "ACE Magnetometer (deprecated)",
+                "ACE SWEPAM (deprecated)",
                 "RTSW Magnetometer",
                 "RTSW Solar Wind Plasma",
                 "KP Index 27-Day Forecast",
@@ -56,12 +58,12 @@ while (true)
             {
                 await (choice switch
                 {
-                    "ACE Magnetometer" => FetchAndDisplay(async () =>
+                    "ACE Magnetometer (deprecated)" => FetchAndDisplay(async () =>
                     {
                         var data = await aceClient.GetMagnetometerDataAsync(CancellationToken.None);
                         OutputFormatter.DisplayAceMagnetometer(data, 10);
                     }),
-                    "ACE SWEPAM" => FetchAndDisplay(async () =>
+                    "ACE SWEPAM (deprecated)" => FetchAndDisplay(async () =>
                     {
                         var data = await aceClient.GetSwepamDataAsync(CancellationToken.None);
                         OutputFormatter.DisplayAceSwepam(data, 10);

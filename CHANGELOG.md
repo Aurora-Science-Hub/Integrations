@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### NoaaClient Package
+- **ACE client deprecated** — `IAceClient` and ACE response models marked `[Obsolete]` in favor of `IRtswClient`; removal tracked in [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)
 - **RTSW response models** (breaking change within unreleased RTSW surface)
   - Magnetometer and wind records now use live NOAA RTSW property names
   - Removed misleading aliases (`Latitude`/`Longitude`, `BulkSpeed`/`IonTemperature`)

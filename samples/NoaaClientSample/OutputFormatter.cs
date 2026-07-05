@@ -1,3 +1,5 @@
+#pragma warning disable CS0618 // Legacy ACE sample paths pending removal in issue #3.
+
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex.Responses;
 using Spectre.Console;
 using AceMagnetometerRecord = AuroraScienceHub.Integrations.NoaaClient.Ace.Responses.MagnetometerRecord;

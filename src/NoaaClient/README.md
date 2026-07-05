@@ -8,7 +8,7 @@ Provides unified interfaces for accessing NOAA space weather data including sola
 
 ## Key Features
 
-- **ACE Spacecraft** - Access to Magnetometer and SWEPAM (Solar Wind) data
+- **ACE Spacecraft** - Legacy magnetometer and SWEPAM text feeds (**deprecated**; use RTSW instead — see [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3))
 - **RTSW Feed** - 1-minute real-time magnetometer and solar wind plasma data
 - **KP-Index** - Geomagnetic activity forecasts and nowcast data
 - **Unified Interfaces** - Consistent API across all NOAA data sources
@@ -28,12 +28,18 @@ dotnet add package AuroraScienceHub.Integrations.Noaa
 builder.Services.AddNoaaClients();
 ```
 
-### ACE Client
+### ACE Client (deprecated)
+
+`IAceClient` is obsolete. Prefer `IRtswClient` for magnetometer and solar wind plasma data.
 
 ```csharp
+#pragma warning disable CS0618 // Remove when migrating off IAceClient (issue #3)
 var magnetometerData = await aceClient.GetMagnetometerDataAsync(cancellationToken);
 var solarWindData = await aceClient.GetSwepamDataAsync(cancellationToken);
+#pragma warning restore CS0618
 ```
+
+Migration: use `IRtswClient` and filter by `Active` or `Source == "ACE"` when ACE-specific rows are required.
 
 ### RTSW Client
 
