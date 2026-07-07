@@ -12,7 +12,6 @@
   
   <ItemGroup>
     <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
-    <EmbeddedResource Include="NoaaClient\Dscovr\Samples\**" />
     <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
   </ItemGroup>
 

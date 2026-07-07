@@ -10,7 +10,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.NoaaClient.KpIndex;
 /// </summary>
 public sealed class KpIndex3DayDataParserTests
 {
-    [Theory]
+    [Theory(DisplayName = "KP 3-day parser returns expected forecast records")]
     [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.NoaaClient/KpIndex/Samples/KpIndex3DayForecastSample.json")]
     public void Parse_WhenTextIsValid_ReturnsRecords(string text)
     {

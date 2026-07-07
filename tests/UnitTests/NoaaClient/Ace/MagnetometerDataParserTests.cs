@@ -10,7 +10,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.NoaaClient.Ace;
 /// </summary>
 public sealed class MagnetometerDataParserTests
 {
-    [Theory]
+    [Theory(DisplayName = "ACE magnetometer parser returns expected records for valid payload")]
     [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.NoaaClient/Ace/Samples/AceMagnetometerSample.txt")]
     public void Parse_WhenTextIsValid_ReturnsRecords(string text)
     {

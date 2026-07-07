@@ -10,7 +10,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.NoaaClient.KpIndex;
 /// </summary>
 public sealed class KpIndexNowcastDataParserTests
 {
-    [Theory]
+    [Theory(DisplayName = "KP nowcast parser returns expected records")]
     [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.NoaaClient/KpIndex/Samples/KpIndexNowcastSample.json")]
     public void Parse_WhenTextIsValid_ReturnsRecords(string text)
     {

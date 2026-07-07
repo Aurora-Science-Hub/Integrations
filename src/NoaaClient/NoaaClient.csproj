@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>AuroraScienceHub.Integrations.NoaaClient</AssemblyName>
     <PackageId>AuroraScienceHub.Integrations.NoaaClient</PackageId>
-    <Description>NOAA space weather data integration client for ACE, DSCOVR spacecraft and KP-index data</Description>
+    <Description>NOAA space weather data integration client for ACE, RTSW feeds and KP-index data</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,9 +15,9 @@
 
   <PropertyGroup Label="Package info">
     <PackageDescription>
-      Provides unified HTTP client interfaces for accessing NOAA space weather data including solar wind measurements, magnetometer data, and geomagnetic activity indices from ACE and DSCOVR spacecraft with KP-index forecasts and nowcast data.
+      Provides unified HTTP client interfaces for accessing NOAA space weather data including solar wind measurements, magnetometer data, and geomagnetic activity indices from ACE and RTSW feeds with KP-index forecasts and nowcast data.
     </PackageDescription>
-    <PackageTags>noaa;space-weather;ace;dscovr;kp-index;solar-wind;magnetometer;geomagnetic;aurora;integration</PackageTags>
+    <PackageTags>noaa;space-weather;ace;rtsw;kp-index;solar-wind;magnetometer;geomagnetic;aurora;integration</PackageTags>
   </PropertyGroup>
 
 </Project>

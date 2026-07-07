@@ -1,6 +1,6 @@
 # AuroraScienceHub.Integrations.Noaa
 
-NOAA space weather data integration with support for ACE, DSCOVR spacecraft and KP-index data.
+NOAA space weather data integration with support for ACE, RTSW and KP-index data.
 
 ## Overview
 
@@ -8,8 +8,8 @@ Provides unified interfaces for accessing NOAA space weather data including sola
 
 ## Key Features
 
-- **ACE Spacecraft** - Access to Magnetometer and SWEPAM (Solar Wind) data
-- **DSCOVR Spacecraft** - Magnetometer and Solar Wind Plasma data with multiple time ranges
+- **ACE Spacecraft** - Legacy magnetometer and SWEPAM text feeds (**deprecated**; use RTSW instead — see [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3))
+- **RTSW Feed** - 1-minute real-time magnetometer and solar wind plasma data
 - **KP-Index** - Geomagnetic activity forecasts and nowcast data
 - **Unified Interfaces** - Consistent API across all NOAA data sources
 
@@ -28,20 +28,32 @@ dotnet add package AuroraScienceHub.Integrations.Noaa
 builder.Services.AddNoaaClients();
 ```
 
-### ACE Client
+### ACE Client (deprecated)
+
+`IAceClient` is obsolete. Prefer `IRtswClient` for magnetometer and solar wind plasma data.
 
 ```csharp
 var magnetometerData = await aceClient.GetMagnetometerDataAsync(cancellationToken);
 var solarWindData = await aceClient.GetSwepamDataAsync(cancellationToken);
 ```
 
-### DSCOVR Client
+Migration: use `IRtswClient` and filter by `Active` or `Source == "ACE"` when ACE-specific rows are required.
+
+### RTSW Client
 
 ```csharp
-// Available time ranges: 2H, 1D, 3D, 7D
-var magnetometerData = await dscovrClient.GetMagnetometerData1DAsync(cancellationToken);
-var solarWindData = await dscovrClient.GetSolarWindPlasmaData1DAsync(cancellationToken);
+var magnetometerData = await rtswClient.GetMagnetometerDataAsync(cancellationToken);
+var solarWindData = await rtswClient.GetSolarWindPlasmaDataAsync(cancellationToken);
 ```
+
+RTSW response models map the full NOAA `rtsw_mag_1m.json` and `rtsw_wind_1m.json` schema (not legacy DSCOVR field names).
+
+| Magnetometer (`MagnetometerRecord`) | Wind (`SolarWindPlasmaRecord`) |
+| --- | --- |
+| `DateTime`, `Active`, `Source` | `DateTime`, `Active`, `Source` |
+| `Range`, `Scale`, `Sensitivity`, `ManualMode`, `SampleSize` | `ProtonSpeed`, `ProtonTemperature`, `ProtonDensity` |
+| `Bt`, `BxGse`–`PhiGse`, `BxGsm`–`PhiGsm` | `ProtonVxGse`–`ProtonVzGsm`, `ProtonSampleSize` |
+| `MaxTelemetryFlag`, `MaxDataFlag`, `OverallQuality` | `AlphaSpeed`–`AlphaSampleSize`, quality flags (`MaxConvergenceFlag`–`OverallQuality`) |
 
 ### KP-Index Client
 

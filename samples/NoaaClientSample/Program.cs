@@ -1,7 +1,9 @@
-﻿using AuroraScienceHub.Integrations.NoaaClient;
+#pragma warning disable CS0618 // Sample still demonstrates deprecated IAceClient until issue #3.
+
+using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
-using AuroraScienceHub.Integrations.NoaaClient.Dscovr;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
+using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using AuroraScienceHub.Integrations.Samples.NoaaClientSample;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +18,8 @@ var host = builder.Build();
 
 // Get NOAA clients from DI
 var aceClient = host.Services.GetRequiredService<IAceClient>();
-var dscovrClient = host.Services.GetRequiredService<IDscovrClient>();
 var kpIndexClient = host.Services.GetRequiredService<IKpIndexClient>();
+var rtswClient = host.Services.GetRequiredService<IRtswClient>();
 
 // Display header
 AnsiConsole.Write(new FigletText("NOAA Client").Color(Color.Blue));
@@ -31,10 +33,10 @@ while (true)
             .Title("[green]Select an option:[/]")
             .PageSize(10)
             .AddChoices(
-                "ACE Magnetometer",
-                "ACE SWEPAM",
-                "DSCOVR Magnetometer",
-                "DSCOVR Solar Wind Plasma",
+                "ACE Magnetometer (deprecated)",
+                "ACE SWEPAM (deprecated)",
+                "RTSW Magnetometer",
+                "RTSW Solar Wind Plasma",
                 "KP Index 27-Day Forecast",
                 "KP Index 3-Day Forecast",
                 "KP Index Nowcast",
@@ -56,25 +58,25 @@ while (true)
             {
                 await (choice switch
                 {
-                    "ACE Magnetometer" => FetchAndDisplay(async () =>
+                    "ACE Magnetometer (deprecated)" => FetchAndDisplay(async () =>
                     {
                         var data = await aceClient.GetMagnetometerDataAsync(CancellationToken.None);
                         OutputFormatter.DisplayAceMagnetometer(data, 10);
                     }),
-                    "ACE SWEPAM" => FetchAndDisplay(async () =>
+                    "ACE SWEPAM (deprecated)" => FetchAndDisplay(async () =>
                     {
                         var data = await aceClient.GetSwepamDataAsync(CancellationToken.None);
                         OutputFormatter.DisplayAceSwepam(data, 10);
                     }),
-                    "DSCOVR Magnetometer" => FetchAndDisplay(async () =>
+                    "RTSW Magnetometer" => FetchAndDisplay(async () =>
                     {
-                        var data = await dscovrClient.GetMagnetometerData2HAsync(CancellationToken.None);
-                        OutputFormatter.DisplayDscovrMagnetometer(data, 10);
+                        var data = await rtswClient.GetMagnetometerDataAsync(CancellationToken.None);
+                        OutputFormatter.DisplayRtswMagnetometer(data, 10);
                     }),
-                    "DSCOVR Solar Wind Plasma" => FetchAndDisplay(async () =>
+                    "RTSW Solar Wind Plasma" => FetchAndDisplay(async () =>
                     {
-                        var data = await dscovrClient.GetSolarWindPlasmaData2HAsync(CancellationToken.None);
-                        OutputFormatter.DisplayDscovrPlasma(data, 10);
+                        var data = await rtswClient.GetSolarWindPlasmaDataAsync(CancellationToken.None);
+                        OutputFormatter.DisplayRtswPlasma(data, 10);
                     }),
                     "KP Index 27-Day Forecast" => FetchAndDisplay(async () =>
                     {
@@ -132,15 +134,15 @@ async Task ExecuteAllRequests()
             var data = await aceClient.GetSwepamDataAsync(CancellationToken.None);
             OutputFormatter.DisplayAceSwepam(data, 5);
         }),
-        ("DSCOVR Magnetometer", async () =>
+        ("RTSW Magnetometer", async () =>
         {
-            var data = await dscovrClient.GetMagnetometerData2HAsync(CancellationToken.None);
-            OutputFormatter.DisplayDscovrMagnetometer(data, 5);
+            var data = await rtswClient.GetMagnetometerDataAsync(CancellationToken.None);
+            OutputFormatter.DisplayRtswMagnetometer(data, 5);
         }),
-        ("DSCOVR Solar Wind", async () =>
+        ("RTSW Solar Wind", async () =>
         {
-            var data = await dscovrClient.GetSolarWindPlasmaData2HAsync(CancellationToken.None);
-            OutputFormatter.DisplayDscovrPlasma(data, 5);
+            var data = await rtswClient.GetSolarWindPlasmaDataAsync(CancellationToken.None);
+            OutputFormatter.DisplayRtswPlasma(data, 5);
         }),
         ("KP Index Nowcast", async () =>
         {

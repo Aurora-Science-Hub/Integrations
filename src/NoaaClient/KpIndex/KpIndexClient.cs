@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 
+/// <inheritdoc />
 internal sealed class KpIndexClient : IKpIndexClient
 {
     private readonly HttpClient _client;
