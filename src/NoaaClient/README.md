@@ -1,69 +1,18 @@
-# AuroraScienceHub.Integrations.Noaa
+# AuroraScienceHub.Integrations.NoaaClient
 
-NOAA space weather data integration with support for ACE, RTSW and KP-index data.
+NOAA space weather data integration for RTSW and KP-index feeds.
 
 ## Overview
 
-Provides unified interfaces for accessing NOAA space weather data including solar wind measurements, magnetometer data, and geomagnetic activity indices.
-
-## Key Features
-
-- **ACE Spacecraft** - Legacy magnetometer and SWEPAM text feeds (**deprecated**; use RTSW instead — see [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3))
-- **RTSW Feed** - 1-minute real-time magnetometer and solar wind plasma data
-- **KP-Index** - Geomagnetic activity forecasts and nowcast data
-- **Unified Interfaces** - Consistent API across all NOAA data sources
+Provides HTTP clients for NOAA Space Weather Prediction Center data: real-time solar wind (RTSW) magnetometer and plasma measurements, plus geomagnetic Kp-index nowcast and forecasts.
 
 ## Installation
 
 ```bash
-dotnet add package AuroraScienceHub.Integrations.Noaa
+dotnet add package AuroraScienceHub.Integrations.NoaaClient
 ```
 
-## Usage
-
-### Service Registration
-
-```csharp
-// Configuration
-builder.Services.AddNoaaClients();
-```
-
-### ACE Client (deprecated)
-
-`IAceClient` is obsolete. Prefer `IRtswClient` for magnetometer and solar wind plasma data.
-
-```csharp
-var magnetometerData = await aceClient.GetMagnetometerDataAsync(cancellationToken);
-var solarWindData = await aceClient.GetSwepamDataAsync(cancellationToken);
-```
-
-Migration: use `IRtswClient` and filter by `Active` or `Source == "ACE"` when ACE-specific rows are required.
-
-### RTSW Client
-
-```csharp
-var magnetometerData = await rtswClient.GetMagnetometerDataAsync(cancellationToken);
-var solarWindData = await rtswClient.GetSolarWindPlasmaDataAsync(cancellationToken);
-```
-
-RTSW response models map the full NOAA `rtsw_mag_1m.json` and `rtsw_wind_1m.json` schema (not legacy DSCOVR field names).
-
-| Magnetometer (`MagnetometerRecord`) | Wind (`SolarWindPlasmaRecord`) |
-| --- | --- |
-| `DateTime`, `Active`, `Source` | `DateTime`, `Active`, `Source` |
-| `Range`, `Scale`, `Sensitivity`, `ManualMode`, `SampleSize` | `ProtonSpeed`, `ProtonTemperature`, `ProtonDensity` |
-| `Bt`, `BxGse`–`PhiGse`, `BxGsm`–`PhiGsm` | `ProtonVxGse`–`ProtonVzGsm`, `ProtonSampleSize` |
-| `MaxTelemetryFlag`, `MaxDataFlag`, `OverallQuality` | `AlphaSpeed`–`AlphaSampleSize`, quality flags (`MaxConvergenceFlag`–`OverallQuality`) |
-
-### KP-Index Client
-
-```csharp
-var nowcast = await kpIndexClient.GetKpIndexNowcastAsync(cancellationToken);
-var forecast3Day = await kpIndexClient.GetKpIndex3DayForecastAsync(cancellationToken);
-var forecast27Day = await kpIndexClient.GetKpIndex27DayForecastAsync(cancellationToken);
-```
-
-### Configuration
+## Configuration
 
 ```json
 {
@@ -73,12 +22,38 @@ var forecast27Day = await kpIndexClient.GetKpIndex27DayForecastAsync(cancellatio
 }
 ```
 
+Register clients in DI:
 
-## License
+```csharp
+builder.Services.AddNoaaClients();
+```
 
-See [LICENSE](../../LICENSE) file in the repository root.
+## RTSW Client
 
-## Related Packages
+Primary client for 1-minute magnetometer and solar wind plasma data:
 
-- `AuroraScienceHub.Framework.Http` - HTTP utilities
-- `AuroraScienceHub.Framework.Utilities` - Common utilities
+```csharp
+var magnetometerData = await rtswClient.GetMagnetometerDataAsync(cancellationToken);
+var solarWindData = await rtswClient.GetSolarWindPlasmaDataAsync(cancellationToken);
+```
+
+Response models map the NOAA `rtsw_mag_1m.json` and `rtsw_wind_1m.json` schema, including `Active`, `Source`, GSE/GSM field components, and quality flags.
+
+Filter by `Active == true` for the NOAA-selected primary feed, or by `Source` when a specific instrument row is required.
+
+## KP-Index Client
+
+```csharp
+var nowcast = await kpIndexClient.GetKpIndexNowcastAsync(cancellationToken);
+var forecast3Day = await kpIndexClient.GetKpIndex3DayForecastAsync(cancellationToken);
+var forecast27Day = await kpIndexClient.GetKpIndex27DayForecastAsync(cancellationToken);
+```
+
+## Deprecated API
+
+`IAceClient` is obsolete and scheduled for removal ([#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)). Use `IRtswClient` for magnetometer and solar wind plasma data.
+
+## Links
+
+- Repository: https://github.com/Aurora-Science-Hub/Integrations
+- Changelog: https://github.com/Aurora-Science-Hub/Integrations/blob/main/CHANGELOG.md

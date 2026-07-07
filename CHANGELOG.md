@@ -7,12 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-07
+
+### Fixed
+
+#### NoaaClient Package
+- Removed trailing dot from `IAceClient` obsolete message URL
+- NuGet package README now ships package-local markdown instead of repository HTML landing page
+
+### Changed
+
+#### NoaaClient Package
+- Repository and package docs updated to RTSW-first examples (deprecated ACE usage removed from primary docs)
+- **ACE client deprecated** — only `IAceClient` marked `[Obsolete]`; removal tracked in [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)
+
+## [1.1.0] - 2026-07-07
+
 ### Added
 
 #### NoaaClient Package
 - **RTSW Client** - NOAA real-time solar wind integration
   - `IRtswClient` with 1-minute magnetometer and plasma feeds
-  - Object-array JSON parsers for `rtsw_mag_1m.json` and `rtsw_wind_1m.json`
+  - JSON deserialization for `rtsw_mag_1m.json` and `rtsw_wind_1m.json`
   - Response records map the full NOAA RTSW schema (`BxGsm`, `ProtonDensity`, quality flags, etc.), not legacy DSCOVR field names
 
 ### Removed
@@ -25,11 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### NoaaClient Package
-- **ACE client deprecated** — `IAceClient` and ACE response models marked `[Obsolete]` in favor of `IRtswClient`; removal tracked in [#3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)
-- **RTSW response models** (breaking change within unreleased RTSW surface)
-  - Magnetometer and wind records now use live NOAA RTSW property names
+- **RTSW response models** (breaking change)
+  - Magnetometer and wind records use live NOAA RTSW property names
   - Removed misleading aliases (`Latitude`/`Longitude`, `BulkSpeed`/`IonTemperature`)
-  - Optional JSON fields are parsed as nullable; only `time_tag`, `active`, and `source` are required
 
 #### Dependency Injection
 - `AddNoaaClients()` now registers `IRtswClient` instead of `IDscovrClient`
@@ -76,6 +90,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
+[1.1.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.0...1.1.1
+[1.1.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Aurora-Science-Hub/Integrations/releases/tag/1.0.0
-[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.1...HEAD
 

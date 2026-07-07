@@ -5,7 +5,7 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Ace;
 /// <summary>
 /// ACE Spacecraft client
 /// </summary>
-[Obsolete("Use IRtswClient instead. See https://github.com/Aurora-Science-Hub/Integrations/issues/3.")]
+[Obsolete("Use IRtswClient instead. See https://github.com/Aurora-Science-Hub/Integrations/issues/3")]
 public interface IAceClient
 {
     /// <summary>

@@ -3,7 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="docs/logo/In_white.png">
       <source media="(prefers-color-scheme: light)" srcset="docs/logo/In_black.png">
-      <img src="docs/logo/logo-black.png" style="width:400px;">
+      <img src="docs/logo/In_black.png" alt="Aurora Science Hub Integrations" style="width:400px;">
     </picture>
     <br>
     Aurora Science Hub Integrations
@@ -52,16 +52,17 @@ builder.Services.AddNoaaClients();
 // Inject and use clients
 public class SpaceWeatherService
 {
-    private readonly IAceClient _aceClient;
+    private readonly IRtswClient _rtswClient;
 
-    public SpaceWeatherService(IAceClient aceClient)
+    public SpaceWeatherService(IRtswClient rtswClient)
     {
-        _aceClient = aceClient;
+        _rtswClient = rtswClient;
     }
 
-    public async Task<IReadOnlyCollection<MagnetometerRecord>> GetMagnetometerDataAsync()
+    public async Task<IReadOnlyList<MagnetometerRecord>> GetMagnetometerDataAsync(
+        CancellationToken cancellationToken)
     {
-        return await _aceClient.GetMagnetometerDataAsync();
+        return await _rtswClient.GetMagnetometerDataAsync(cancellationToken);
     }
 }
 ```
@@ -76,9 +77,9 @@ Each package provides HTTP clients for accessing external data sources with stro
 
 | Component           | Description                                                                                                                 |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| **ACE Client**      | Advanced Composition Explorer satellite data - magnetometer and SWEPAM measurements                                         |
-| **RTSW Client**     | NOAA real-time solar wind feeds - 1-minute magnetometer and plasma data with `active` and `source` metadata               |
-| **KP-Index Client** | Geomagnetic activity indices - nowcast and forecast data (3-day and 27-day)                                                 |
+| **RTSW Client**     | NOAA real-time solar wind feeds — 1-minute magnetometer and plasma JSON data with `active` and `source` metadata          |
+| **KP-Index Client** | Geomagnetic activity indices — nowcast and forecast data (3-day and 27-day)                                                 |
+| **ACE Client**      | Legacy text feeds (deprecated; use RTSW instead — see [Integrations #3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)) |
 
 See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.
 
