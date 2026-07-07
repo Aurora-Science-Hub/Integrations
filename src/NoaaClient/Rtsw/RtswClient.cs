@@ -1,4 +1,4 @@
-using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Extensions;
+using AuroraScienceHub.Framework.Http;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 using Microsoft.Extensions.Options;
 
@@ -24,20 +24,20 @@ internal sealed class RtswClient : IRtswClient
     public async Task<IReadOnlyList<MagnetometerRecord>> GetMagnetometerDataAsync(CancellationToken cancellationToken)
     {
         var url = new Uri(_baseUrl, "json/rtsw/rtsw_mag_1m.json");
-        var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
-        var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        var records = await _httpClient
+            .GetFromJsonOrDefaultAsync<List<MagnetometerRecord>>(url, cancellationToken)
+            .ConfigureAwait(false);
 
-        return MagnetometerDataParser.Parse(text);
+        return records ?? [];
     }
 
     public async Task<IReadOnlyList<SolarWindPlasmaRecord>> GetSolarWindPlasmaDataAsync(CancellationToken cancellationToken)
     {
         var url = new Uri(_baseUrl, "json/rtsw/rtsw_wind_1m.json");
-        var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
-        var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        var records = await _httpClient
+            .GetFromJsonOrDefaultAsync<List<SolarWindPlasmaRecord>>(url, cancellationToken)
+            .ConfigureAwait(false);
 
-        return SolarWindPlasmaDataParser.Parse(text);
+        return records ?? [];
     }
 }

@@ -13,7 +13,6 @@
   <ItemGroup>
     <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
     <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
-    <EmbeddedResource Include="NoaaClient\Rtsw\Samples\**" />
   </ItemGroup>
 
 </Project>
