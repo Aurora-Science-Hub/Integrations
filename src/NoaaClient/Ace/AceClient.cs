@@ -1,5 +1,3 @@
-#pragma warning disable CS0618 // Internal ACE implementation pending removal in issue #3.
-
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 using Microsoft.Extensions.Options;
@@ -7,7 +5,9 @@ using Microsoft.Extensions.Options;
 namespace AuroraScienceHub.Integrations.NoaaClient.Ace;
 
 /// <inheritdoc />
+#pragma warning disable CS0618 // Implements obsolete IAceClient until removal in issue #3.
 internal sealed class AceClient : IAceClient
+#pragma warning restore CS0618
 {
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;

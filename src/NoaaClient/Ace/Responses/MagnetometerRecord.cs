@@ -1,5 +1,3 @@
-using AuroraScienceHub.Integrations.NoaaClient.Ace;
-
 namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 
 /// <summary>
@@ -13,7 +11,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 /// <param name="Bt">IMF module</param>
 /// <param name="Latitude">Spacecraft latitude</param>
 /// <param name="Longitude">Spacecraft longitude</param>
-[Obsolete(AceObsoleteMessages.ClientAndModels)]
 public record MagnetometerRecord(
     DateTime DateTime,
     int Status,

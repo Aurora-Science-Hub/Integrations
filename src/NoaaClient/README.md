@@ -33,10 +33,8 @@ builder.Services.AddNoaaClients();
 `IAceClient` is obsolete. Prefer `IRtswClient` for magnetometer and solar wind plasma data.
 
 ```csharp
-#pragma warning disable CS0618 // Remove when migrating off IAceClient (issue #3)
 var magnetometerData = await aceClient.GetMagnetometerDataAsync(cancellationToken);
 var solarWindData = await aceClient.GetSwepamDataAsync(cancellationToken);
-#pragma warning restore CS0618
 ```
 
 Migration: use `IRtswClient` and filter by `Active` or `Source == "ACE"` when ACE-specific rows are required.

@@ -1,5 +1,3 @@
-#pragma warning disable CS0618 // ACE benchmarks pending removal in issue #3.
-
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Extensions;
 using BenchmarkDotNet.Attributes;
 

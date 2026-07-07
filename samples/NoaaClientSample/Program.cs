@@ -1,4 +1,4 @@
-#pragma warning disable CS0618 // Legacy ACE sample paths pending removal in issue #3.
+#pragma warning disable CS0618 // Sample still demonstrates deprecated IAceClient until issue #3.
 
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;

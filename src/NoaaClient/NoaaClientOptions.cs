@@ -8,7 +8,7 @@ public sealed class NoaaClientOptions
     /// <summary>
     /// Configuration option key
     /// </summary>
-    public const string OptionKey = "NoaaClient";
+    public const string OptionKey = "Noaa";
 
     private const string EmptyServerUrlMessage = $"Configuration value '{OptionKey}:{nameof(ServerUrl)}' is not set.";
 

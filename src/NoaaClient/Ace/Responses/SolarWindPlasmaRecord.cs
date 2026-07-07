@@ -1,5 +1,3 @@
-using AuroraScienceHub.Integrations.NoaaClient.Ace;
-
 namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 
 /// <summary>
@@ -10,7 +8,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 /// <param name="ProtonDensity">Solar Wind proton density</param>
 /// <param name="BulkSpeed">Solar Wind plasma speed</param>
 /// <param name="IonTemperature">Solar Wind Ion Temp</param>
-[Obsolete(AceObsoleteMessages.ClientAndModels)]
 public record SolarWindPlasmaRecord(
     DateTime DateTime,
     int Status,

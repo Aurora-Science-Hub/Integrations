@@ -1,5 +1,3 @@
-#pragma warning disable CS0618 // Internal ACE implementation pending removal in issue #3.
-
 using AuroraScienceHub.Framework.Utilities.System;
 using AuroraScienceHub.Integrations.NoaaClient.Ace.Responses;
 using AuroraScienceHub.Integrations.NoaaClient.Utilities;
