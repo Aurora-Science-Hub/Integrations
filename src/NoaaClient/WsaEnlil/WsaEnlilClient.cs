@@ -9,7 +9,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
 {
     private const string ManifestPath = "products/animations/enlil.json";
     private const int FrameDelayMs = 50;
-    private const int DefaultColorCount = 256;
+    private const int WebPQuality = 75;
 
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
@@ -59,15 +59,12 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
                 image.Strip(); // Remove metadata to reduce file size
             }
 
-            // Magick.NET AnimationDelay is in centiseconds
             image.AnimationDelay = (uint)(FrameDelayMs / 10);
-            image.GifDisposeMethod = GifDisposeMethod.Background;
+            image.Quality = WebPQuality;
 
             collection.Add(image);
         }
 
-        collection.Quantize(new QuantizeSettings { Colors = DefaultColorCount });
-
-        return collection.ToByteArray(MagickFormat.Gif);
+        return collection.ToByteArray(MagickFormat.WebP);
     }
 }
