@@ -43,11 +43,11 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
             cancellationToken.ThrowIfCancellationRequested();
 
             var frameUrl = new Uri(_baseUrl, entry.Url).ToString();
-            var frameBytes = await _httpClient
-                .GetByteArrayAsync(frameUrl, cancellationToken)
+            await using var stream = await _httpClient
+                .GetStreamAsync(frameUrl, cancellationToken)
                 .ConfigureAwait(false);
 
-            var image = new MagickImage(frameBytes);
+            var image = new MagickImage(stream);
 
             if (image.Width > maxWidth)
             {
@@ -56,6 +56,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
                     IgnoreAspectRatio = false
                 };
                 image.Resize(geometry);
+                image.Strip(); // Remove metadata to reduce file size
             }
 
             // Magick.NET AnimationDelay is in centiseconds
