@@ -2,6 +2,7 @@
 
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
+using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using AuroraScienceHub.Integrations.Samples.NoaaClientSample;
@@ -20,6 +21,7 @@ var host = builder.Build();
 var aceClient = host.Services.GetRequiredService<IAceClient>();
 var kpIndexClient = host.Services.GetRequiredService<IKpIndexClient>();
 var rtswClient = host.Services.GetRequiredService<IRtswClient>();
+var wsaEnlilClient = host.Services.GetRequiredService<IWsaEnlilClient>();
 
 // Display header
 AnsiConsole.Write(new FigletText("NOAA Client").Color(Color.Blue));
@@ -40,6 +42,8 @@ while (true)
                 "KP Index 27-Day Forecast",
                 "KP Index 3-Day Forecast",
                 "KP Index Nowcast",
+                "WSA-ENLIL Animation",
+                "WSA-ENLIL Animation (small, 320px)",
                 new string('-', 30),
                 "Execute All Requests",
                 "Exit"));
@@ -99,6 +103,18 @@ while (true)
                         var data = await kpIndexClient.GetKpIndexNowcastAsync(CancellationToken.None);
                         OutputFormatter.DisplayKpNowcast(data, 10);
                     }),
+                    "WSA-ENLIL Animation" => FetchAndDisplay(async () =>
+                    {
+                        var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+                            maxWidth: 480, cancellationToken: CancellationToken.None);
+                        await SaveAnimationAsync(gifBytes, "enlil_animation.gif");
+                    }),
+                    "WSA-ENLIL Animation (small, 320px)" => FetchAndDisplay(async () =>
+                    {
+                        var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+                            maxWidth: 320, cancellationToken: CancellationToken.None);
+                        await SaveAnimationAsync(gifBytes, "enlil_animation_small.gif");
+                    }),
                     "Execute All Requests" => ExecuteAllRequests(),
                     _ => Task.CompletedTask
                 });
@@ -148,6 +164,12 @@ async Task ExecuteAllRequests()
         {
             var data = await kpIndexClient.GetKpIndexNowcastAsync(CancellationToken.None);
             OutputFormatter.DisplayKpNowcast(data, 5);
+        }),
+        ("WSA-ENLIL Animation", async () =>
+        {
+            var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+                maxWidth: 480, cancellationToken: CancellationToken.None);
+            await SaveAnimationAsync(gifBytes, "enlil_animation.gif");
         })
     };
 
@@ -184,5 +206,21 @@ static string GetActivityLevel(int kpIndex) => kpIndex switch
     <= 8 => "High",
     _ => "Extreme"
 };
+
+// Saves GIF animation bytes to a temp file and displays the result
+static async Task SaveAnimationAsync(byte[] gifBytes, string fileName)
+{
+    if (gifBytes.Length == 0)
+    {
+        AnsiConsole.MarkupLine("[red]No animation data returned.[/]");
+        return;
+    }
+
+    var outputPath = Path.Combine(Path.GetTempPath(), fileName);
+    await File.WriteAllBytesAsync(outputPath, gifBytes, CancellationToken.None);
+
+    AnsiConsole.MarkupLine($"[green]Animation saved:[/] {outputPath}");
+    AnsiConsole.MarkupLine($"[dim]Size: {gifBytes.Length / 1024} KB | Format: GIF[/]");
+}
 
 

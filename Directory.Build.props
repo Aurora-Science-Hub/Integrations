@@ -10,6 +10,7 @@
     <WarningLevel>9999</WarningLevel>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <NuGetAuditLevel>high</NuGetAuditLevel>
     <NoWarn>$(NoWarn)</NoWarn>
 
     <!-- Pack everything with embedded .pdb -->
@@ -28,7 +29,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageBaseVersion>1.1.1</PackageBaseVersion>
+    <PackageBaseVersion>1.2.0</PackageBaseVersion>
     <MinVerTagPrefix></MinVerTagPrefix>
   </PropertyGroup>
 
