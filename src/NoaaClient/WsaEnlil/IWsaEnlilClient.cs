@@ -17,7 +17,7 @@ public interface IWsaEnlilClient
     /// <returns>A stream containing the MP4 video data. The caller is responsible for disposing this stream.</returns>
     /// <remarks>
     /// The returned stream is a MemoryStream containing the complete MP4 data.
-    /// Typical usage: <c>await using var stream = await GetEnlilAnimationAsync(cancellationToken);</c>
+    /// Typical usage: <c>await using var stream = await GetEnlilAnimationAsync(cancellationToken: cancellationToken);</c>
     /// </remarks>
     Task<Stream> GetEnlilAnimationAsync(
         int maxWidth = 480,
