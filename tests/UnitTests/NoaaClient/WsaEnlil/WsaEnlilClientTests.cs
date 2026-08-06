@@ -45,6 +45,21 @@ public sealed class WsaEnlilClientTests
         result.Length.ShouldBe(0);
     }
 
+    [Theory(DisplayName = "Throws ArgumentOutOfRangeException when maxWidth is zero or negative")]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task GetEnlilAnimationAsync_WhenMaxWidthIsInvalid_ThrowsArgumentOutOfRangeException(int maxWidth)
+    {
+        // Arrange
+        var sut = CreateSut("[]");
+
+        // Act & Assert
+        await Should.ThrowAsync<ArgumentOutOfRangeException>(
+            async () => await sut.GetEnlilAnimationAsync(
+                maxWidth: maxWidth,
+                cancellationToken: TestContext.Current.CancellationToken));
+    }
+
     [Fact(DisplayName = "Throws OperationCanceledException when token is pre-cancelled")]
     public async Task GetEnlilAnimationAsync_WhenTokenIsCancelled_ThrowsOperationCanceledException()
     {
