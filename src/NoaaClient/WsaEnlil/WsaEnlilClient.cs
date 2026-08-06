@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AuroraScienceHub.Framework.Http;
 using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil.Responses;
 using FFMpegCore;
@@ -6,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 
-internal sealed class WsaEnlilClient : IWsaEnlilClient
+internal sealed partial class WsaEnlilClient : IWsaEnlilClient
 {
     private const string ManifestPath = "products/animations/enlil.json";
     private const int Fps = 20;
@@ -18,6 +20,9 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
 
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
+
+    [GeneratedRegex(@"(\d{8}T\d{6})\.jpg$")]
+    private static partial Regex FrameTimestampRegex();
 
     public WsaEnlilClient(
         HttpClient httpClient,
@@ -36,11 +41,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
             throw new ArgumentOutOfRangeException(nameof(maxWidth), "Max width must be greater than zero.");
         }
 
-        var manifestUrl = new Uri(_baseUrl, ManifestPath);
-        var manifest = await _httpClient
-            .GetFromJsonOrDefaultAsync<IReadOnlyCollection<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
-            .ConfigureAwait(false);
-
+        var manifest = await FetchManifestAsync(cancellationToken).ConfigureAwait(false);
         if (manifest is null || manifest.Count == 0)
         {
             return new MemoryStream();
@@ -61,6 +62,37 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
                 catch { /* best-effort cleanup */ }
             }
         }
+    }
+
+    public async Task<DateTime?> GetLastFrameTimeAsync(CancellationToken cancellationToken)
+    {
+        var manifest = await FetchManifestAsync(cancellationToken).ConfigureAwait(false);
+        if (manifest is null || manifest.Count == 0)
+        {
+            return null;
+        }
+
+        var lastUrl = manifest.Last().Url;
+        var match = FrameTimestampRegex().Match(lastUrl);
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        return DateTime.ParseExact(
+            match.Groups[1].Value,
+            "yyyyMMddTHHmmss",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+    }
+
+    private async Task<IReadOnlyCollection<WsaEnlilManifestEntry>?> FetchManifestAsync(
+        CancellationToken cancellationToken)
+    {
+        var manifestUrl = new Uri(_baseUrl, ManifestPath);
+        return await _httpClient
+            .GetFromJsonOrDefaultAsync<IReadOnlyCollection<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
+            .ConfigureAwait(false);
     }
 
     private async Task DownloadFramesAsync(

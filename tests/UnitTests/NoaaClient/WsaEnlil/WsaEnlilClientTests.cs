@@ -60,6 +60,74 @@ public sealed class WsaEnlilClientTests
                 cancellationToken: TestContext.Current.CancellationToken));
     }
 
+    [Fact(DisplayName = "GetLastFrameTime returns null when manifest is empty")]
+    public async Task GetLastFrameTimeAsync_WhenManifestIsEmpty_ReturnsNull()
+    {
+        // Arrange
+        var sut = CreateSut("[]");
+
+        // Act
+        var result = await sut.GetLastFrameTimeAsync(
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldBeNull();
+    }
+
+    [Fact(DisplayName = "GetLastFrameTime returns null when manifest is null")]
+    public async Task GetLastFrameTimeAsync_WhenManifestIsNull_ReturnsNull()
+    {
+        // Arrange
+        var sut = CreateSut("null");
+
+        // Act
+        var result = await sut.GetLastFrameTimeAsync(
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldBeNull();
+    }
+
+    [Fact(DisplayName = "GetLastFrameTime extracts timestamp from last frame URL")]
+    public async Task GetLastFrameTimeAsync_ReturnsTimestampFromLastFrameUrl()
+    {
+        // Arrange
+        var manifestJson = """
+        [
+            {"url":"/images/animations/enlil/frame_20250117T120000.jpg"},
+            {"url":"/images/animations/enlil/frame_20250118T060000.jpg"},
+            {"url":"/images/animations/enlil/frame_20250118T120000.jpg"}
+        ]
+        """;
+        var sut = CreateSut(manifestJson);
+
+        // Act
+        var result = await sut.GetLastFrameTimeAsync(
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldBe(new DateTime(2025, 1, 18, 12, 0, 0, DateTimeKind.Utc));
+    }
+
+    [Fact(DisplayName = "GetLastFrameTime returns null when URL has no timestamp")]
+    public async Task GetLastFrameTimeAsync_WhenUrlHasNoTimestamp_ReturnsNull()
+    {
+        // Arrange
+        var manifestJson = """
+        [
+            {"url":"/images/animations/enlil/no_timestamp_here.jpg"}
+        ]
+        """;
+        var sut = CreateSut(manifestJson);
+
+        // Act
+        var result = await sut.GetLastFrameTimeAsync(
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldBeNull();
+    }
+
     [Fact(DisplayName = "Throws OperationCanceledException when token is pre-cancelled")]
     public async Task GetEnlilAnimationAsync_WhenTokenIsCancelled_ThrowsOperationCanceledException()
     {
