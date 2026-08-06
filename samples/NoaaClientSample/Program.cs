@@ -105,15 +105,15 @@ while (true)
                     }),
                     "WSA-ENLIL Animation" => FetchAndDisplay(async () =>
                     {
-                        var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+                        await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                             maxWidth: 480, cancellationToken: CancellationToken.None);
-                        await SaveAnimationAsync(gifBytes, "enlil_animation.gif");
+                        await SaveAnimationAsync(stream, "enlil_animation.webp");
                     }),
                     "WSA-ENLIL Animation (small, 320px)" => FetchAndDisplay(async () =>
                     {
-                        var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+                        await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                             maxWidth: 320, cancellationToken: CancellationToken.None);
-                        await SaveAnimationAsync(gifBytes, "enlil_animation_small.gif");
+                        await SaveAnimationAsync(stream, "enlil_animation_small.webp");
                     }),
                     "Execute All Requests" => ExecuteAllRequests(),
                     _ => Task.CompletedTask
@@ -167,9 +167,9 @@ async Task ExecuteAllRequests()
         }),
         ("WSA-ENLIL Animation", async () =>
         {
-            var gifBytes = await wsaEnlilClient.GetEnlilAnimationAsync(
+            await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                 maxWidth: 480, cancellationToken: CancellationToken.None);
-            await SaveAnimationAsync(gifBytes, "enlil_animation.gif");
+            await SaveAnimationAsync(stream, "enlil_animation.webp");
         })
     };
 
@@ -207,20 +207,21 @@ static string GetActivityLevel(int kpIndex) => kpIndex switch
     _ => "Extreme"
 };
 
-// Saves GIF animation bytes to a temp file and displays the result
-static async Task SaveAnimationAsync(byte[] gifBytes, string fileName)
+// Saves WebP animation stream to a temp file and displays the result
+static async Task SaveAnimationAsync(Stream stream, string fileName)
 {
-    if (gifBytes.Length == 0)
+    if (stream.Length == 0)
     {
         AnsiConsole.MarkupLine("[red]No animation data returned.[/]");
         return;
     }
 
     var outputPath = Path.Combine(Path.GetTempPath(), fileName);
-    await File.WriteAllBytesAsync(outputPath, gifBytes, CancellationToken.None);
+    await using var fileStream = File.Create(outputPath);
+    await stream.CopyToAsync(fileStream);
 
     AnsiConsole.MarkupLine($"[green]Animation saved:[/] {outputPath}");
-    AnsiConsole.MarkupLine($"[dim]Size: {gifBytes.Length / 1024} KB | Format: GIF[/]");
+    AnsiConsole.MarkupLine($"[dim]Size: {stream.Length / 1024} KB | Format: WebP[/]");
 }
 
 

@@ -22,7 +22,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
         _baseUrl = options.Value.RequiredServerUrl;
     }
 
-    public async Task<byte[]> GetEnlilAnimationAsync(
+    public async Task<Stream> GetEnlilAnimationAsync(
         int maxWidth = 480,
         CancellationToken cancellationToken = default)
     {
@@ -33,7 +33,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
 
         if (manifest is null || manifest.Count == 0)
         {
-            return [];
+            return new MemoryStream();
         }
 
         using var collection = new MagickImageCollection();
@@ -42,7 +42,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var frameUrl = new Uri(_baseUrl, entry.Url).ToString();
+            var frameUrl = new Uri(_baseUrl, entry.Url);
             await using var stream = await _httpClient
                 .GetStreamAsync(frameUrl, cancellationToken)
                 .ConfigureAwait(false);
@@ -65,6 +65,10 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
             collection.Add(image);
         }
 
-        return collection.ToByteArray(MagickFormat.WebP);
+        var memoryStream = new MemoryStream();
+        await collection.WriteAsync(memoryStream, MagickFormat.WebP, cancellationToken);
+        memoryStream.Position = 0;
+
+        return memoryStream;
     }
 }
