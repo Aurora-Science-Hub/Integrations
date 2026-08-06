@@ -207,7 +207,7 @@ static string GetActivityLevel(int kpIndex) => kpIndex switch
     _ => "Extreme"
 };
 
-// Saves WebP animation stream to a temp file and displays the result
+// Saves MP4 animation stream to a temp file and displays the result
 static async Task SaveAnimationAsync(Stream stream, string fileName)
 {
     if (stream.Length == 0)
