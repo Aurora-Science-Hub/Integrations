@@ -10,7 +10,7 @@
     <PackageReference Include="AuroraScienceHub.Framework.Http" />
     <PackageReference Include="AuroraScienceHub.Framework.Utilities" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" />
+    <PackageReference Include="FFMpegCore" />
     <PackageReference Include="Microsoft.Extensions.Http" />
   </ItemGroup>
 

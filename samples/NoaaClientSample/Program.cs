@@ -107,13 +107,13 @@ while (true)
                     {
                         await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                             maxWidth: 480, cancellationToken: CancellationToken.None);
-                        await SaveAnimationAsync(stream, "enlil_animation.webp");
+                        await SaveAnimationAsync(stream, "enlil_animation.mp4");
                     }),
                     "WSA-ENLIL Animation (small, 320px)" => FetchAndDisplay(async () =>
                     {
                         await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                             maxWidth: 320, cancellationToken: CancellationToken.None);
-                        await SaveAnimationAsync(stream, "enlil_animation_small.webp");
+                        await SaveAnimationAsync(stream, "enlil_animation_small.mp4");
                     }),
                     "Execute All Requests" => ExecuteAllRequests(),
                     _ => Task.CompletedTask
@@ -169,7 +169,7 @@ async Task ExecuteAllRequests()
         {
             await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
                 maxWidth: 480, cancellationToken: CancellationToken.None);
-            await SaveAnimationAsync(stream, "enlil_animation.webp");
+            await SaveAnimationAsync(stream, "enlil_animation.mp4");
         })
     };
 
@@ -221,7 +221,7 @@ static async Task SaveAnimationAsync(Stream stream, string fileName)
     await stream.CopyToAsync(fileStream);
 
     AnsiConsole.MarkupLine($"[green]Animation saved:[/] {outputPath}");
-    AnsiConsole.MarkupLine($"[dim]Size: {stream.Length / 1024} KB | Format: WebP[/]");
+    AnsiConsole.MarkupLine($"[dim]Size: {stream.Length / 1024} KB | Format: MP4[/]");
 }
 
 

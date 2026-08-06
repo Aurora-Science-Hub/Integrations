@@ -79,6 +79,7 @@ Each package provides HTTP clients for accessing external data sources with stro
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------|
 | **RTSW Client**     | NOAA real-time solar wind feeds — 1-minute magnetometer and plasma JSON data with `active` and `source` metadata          |
 | **KP-Index Client** | Geomagnetic activity indices — nowcast and forecast data (3-day and 27-day)                                                 |
+| **WSA-ENLIL Client** | Solar wind forecast animation — downloads WSA-ENLIL model frames and encodes them as MP4 (H.264) via FFmpeg                          |
 | **ACE Client**      | Legacy text feeds (deprecated; use RTSW instead — see [Integrations #3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)) |
 
 See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.
@@ -107,6 +108,7 @@ This repository provides production-ready HTTP clients for external space weathe
 
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
 - IDE: [Visual Studio 2025+](https://visualstudio.microsoft.com/), [Rider 2025+](https://www.jetbrains.com/rider/), or [VS Code](https://code.visualstudio.com/)
+- **FFmpeg** — required for WSA-ENLIL animation encoding (see [installation instructions](#ffmpeg-installation))
 
 ### Building from Source
 
@@ -123,6 +125,35 @@ dotnet build
 
 # Run tests
 dotnet test
+```
+
+### FFmpeg Installation
+
+The **WSA-ENLIL animation** feature requires FFmpeg to encode forecast frames into MP4 video. Install it for your platform:
+
+**Windows:**
+```powershell
+winget install ffmpeg
+```
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get install ffmpeg
+```
+
+**Linux (Fedora/RHEL):**
+```bash
+sudo dnf install ffmpeg-free
+```
+
+Verify the installation:
+```bash
+ffmpeg -version
 ```
 
 ## Code Style
