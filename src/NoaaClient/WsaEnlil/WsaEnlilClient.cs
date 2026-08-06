@@ -28,7 +28,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
     {
         var manifestUrl = new Uri(_baseUrl, ManifestPath);
         var manifest = await _httpClient
-            .GetFromJsonOrDefaultAsync<List<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
+            .GetFromJsonOrDefaultAsync<IReadOnlyCollection<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
             .ConfigureAwait(false);
 
         if (manifest is null || manifest.Count == 0)
