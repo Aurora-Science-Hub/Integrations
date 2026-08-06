@@ -9,7 +9,7 @@ namespace AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 internal sealed class WsaEnlilClient : IWsaEnlilClient
 {
     private const string ManifestPath = "products/animations/enlil.json";
-    private const int Fps = 20; // 1000 / FrameDelayMs
+    private const int Fps = 20;
     private const int Crf = 23; // H.264 quality (0 = lossless, 51 = worst)
     private const string TempDirPrefix = "enlil_";
     private const string FrameFileFormat = "frame_{0:D4}.jpg";
@@ -28,9 +28,14 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
     }
 
     public async Task<Stream> GetEnlilAnimationAsync(
-        int maxWidth = 480,
-        CancellationToken cancellationToken = default)
+        int maxWidth,
+        CancellationToken cancellationToken)
     {
+        if (maxWidth <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxWidth), "Max width must be greater than zero.");
+        }
+
         var manifestUrl = new Uri(_baseUrl, ManifestPath);
         var manifest = await _httpClient
             .GetFromJsonOrDefaultAsync<IReadOnlyCollection<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
@@ -86,9 +91,6 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
         int maxWidth,
         CancellationToken cancellationToken)
     {
-        // Guard against known FFMpegCore issue #468: already-cancelled token may be ignored
-        cancellationToken.ThrowIfCancellationRequested();
-
         var outputStream = new MemoryStream(OutputStreamCapacity);
         var inputPattern = Path.Combine(tempDir, FrameSearchPattern);
 
@@ -98,7 +100,7 @@ internal sealed class WsaEnlilClient : IWsaEnlilClient
                     .WithCustomArgument($"-framerate {Fps}"))
             .OutputToPipe(new StreamPipeSink(outputStream),
                 outputOptions => outputOptions
-                    .WithCustomArgument($"-vf scale={maxWidth}:-1")
+                    .WithCustomArgument($"-vf scale={maxWidth}:-2")
                     .WithVideoCodec("libx264")
                     .WithCustomArgument($"-crf {Crf}")
                     .WithCustomArgument("-pix_fmt yuv420p")

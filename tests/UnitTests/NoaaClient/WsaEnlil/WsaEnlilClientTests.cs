@@ -15,7 +15,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.NoaaClient.WsaEnlil;
 /// </remarks>
 public sealed class WsaEnlilClientTests
 {
-    private static readonly Uri BaseUrl = new("https://services.swpc.noaa.gov");
+    private static readonly Uri BaseUrl = new("https://noaa.test");
 
     [Fact(DisplayName = "Returns empty stream when NOAA manifest is an empty JSON array")]
     public async Task GetEnlilAnimationAsync_WhenManifestIsEmpty_ReturnsEmptyStream()
@@ -80,10 +80,10 @@ public sealed class WsaEnlilClientTests
 
         // Act & Assert
         await Should.ThrowAsync<OperationCanceledException>(
-            async () => await sut.GetEnlilAnimationAsync(cancellationToken: cts.Token));
+            async () => await sut.GetEnlilAnimationAsync(maxWidth: 420, cancellationToken: cts.Token));
     }
 
-    private static WsaEnlilClient CreateSut(string manifestJson)
+    private static IWsaEnlilClient CreateSut(string manifestJson)
     {
         var handler = new TestHttpMessageHandler(CreateJsonResponse(manifestJson));
         var httpClient = new HttpClient(handler);
