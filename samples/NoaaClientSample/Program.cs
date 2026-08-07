@@ -2,6 +2,7 @@
 
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
+using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using AuroraScienceHub.Integrations.Samples.NoaaClientSample;
@@ -20,6 +21,7 @@ var host = builder.Build();
 var aceClient = host.Services.GetRequiredService<IAceClient>();
 var kpIndexClient = host.Services.GetRequiredService<IKpIndexClient>();
 var rtswClient = host.Services.GetRequiredService<IRtswClient>();
+var wsaEnlilClient = host.Services.GetRequiredService<IWsaEnlilClient>();
 
 // Display header
 AnsiConsole.Write(new FigletText("NOAA Client").Color(Color.Blue));
@@ -40,6 +42,9 @@ while (true)
                 "KP Index 27-Day Forecast",
                 "KP Index 3-Day Forecast",
                 "KP Index Nowcast",
+                "WSA-ENLIL Animation",
+                "WSA-ENLIL Animation (small, 320px)",
+                "WSA-ENLIL Last Frame Time",
                 new string('-', 30),
                 "Execute All Requests",
                 "Exit"));
@@ -99,6 +104,28 @@ while (true)
                         var data = await kpIndexClient.GetKpIndexNowcastAsync(CancellationToken.None);
                         OutputFormatter.DisplayKpNowcast(data, 10);
                     }),
+                    "WSA-ENLIL Animation" => FetchAndDisplay(async () =>
+                    {
+                        await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
+                            maxWidth: 480, cancellationToken: CancellationToken.None);
+                        await SaveAnimationAsync(stream, "enlil_animation.mp4");
+                    }),
+                    "WSA-ENLIL Animation (small, 320px)" => FetchAndDisplay(async () =>
+                    {
+                        await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
+                            maxWidth: 320, cancellationToken: CancellationToken.None);
+                        await SaveAnimationAsync(stream, "enlil_animation_small.mp4");
+                    }),
+                    "WSA-ENLIL Last Frame Time" => FetchAndDisplay(async () =>
+                    {
+                        var lastFrameTime = await wsaEnlilClient.GetLastFrameTimeAsync(
+                            CancellationToken.None);
+                        if (lastFrameTime is null)
+                            AnsiConsole.MarkupLine("[yellow]No data available.[/]");
+                        else
+                            AnsiConsole.MarkupLine(
+                                $"[green]Last frame time:[/] {lastFrameTime:yyyy-MM-dd HH:mm:ss} UTC");
+                    }),
                     "Execute All Requests" => ExecuteAllRequests(),
                     _ => Task.CompletedTask
                 });
@@ -148,6 +175,12 @@ async Task ExecuteAllRequests()
         {
             var data = await kpIndexClient.GetKpIndexNowcastAsync(CancellationToken.None);
             OutputFormatter.DisplayKpNowcast(data, 5);
+        }),
+        ("WSA-ENLIL Animation", async () =>
+        {
+            await using var stream = await wsaEnlilClient.GetEnlilAnimationAsync(
+                maxWidth: 480, cancellationToken: CancellationToken.None);
+            await SaveAnimationAsync(stream, "enlil_animation.mp4");
         })
     };
 
@@ -184,5 +217,22 @@ static string GetActivityLevel(int kpIndex) => kpIndex switch
     <= 8 => "High",
     _ => "Extreme"
 };
+
+// Saves MP4 animation stream to a temp file and displays the result
+static async Task SaveAnimationAsync(Stream stream, string fileName)
+{
+    if (stream.Length == 0)
+    {
+        AnsiConsole.MarkupLine("[red]No animation data returned.[/]");
+        return;
+    }
+
+    var outputPath = Path.Combine(Path.GetTempPath(), fileName);
+    await using var fileStream = File.Create(outputPath);
+    await stream.CopyToAsync(fileStream);
+
+    AnsiConsole.MarkupLine($"[green]Animation saved:[/] {outputPath}");
+    AnsiConsole.MarkupLine($"[dim]Size: {stream.Length / 1024} KB | Format: MP4[/]");
+}
 
 

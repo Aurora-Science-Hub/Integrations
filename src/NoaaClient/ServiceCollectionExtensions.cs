@@ -1,4 +1,5 @@
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
+using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ public static class ServiceCollectionExtensions
 #pragma warning restore CS0618
         services.AddHttpClient<IKpIndexClient, KpIndexClient>();
         services.AddHttpClient<IRtswClient, RtswClient>();
+        services.AddHttpClient<IWsaEnlilClient, WsaEnlilClient>();
 
         return services;
     }
