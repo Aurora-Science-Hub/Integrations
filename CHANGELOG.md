@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-08-11
+
+### Fixed
+
+#### NoaaClient Package
+- Treat AWS WAF `202` challenges (`x-amzn-waf-action: challenge`) and empty response bodies as failures via `EnsureNoaaSuccessAsync` for all NOAA clients (`Rtsw`, `Ace`, `KpIndex`, `WsaEnlil`)
+- Sanitize bare/quoted `NaN`/`Infinity` literals in RTSW JSON before deserialization (lazy allocation when the payload is clean)
+
+### Changed
+
+#### Dependencies
+- Bump `AuroraScienceHub.Framework.Http` and `AuroraScienceHub.Framework.Utilities` from 10.0.5 to 10.0.7
+
 ## [1.1.1] - 2026-07-07
 
 ### Fixed
