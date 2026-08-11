@@ -58,6 +58,38 @@ public sealed class RtswClientTests
         exception.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
+    [Fact(DisplayName = "GetSolarWindPlasmaData deserializes bare NaN as null")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenBareNaN_DeserializesNullSpeed()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-08-10T09:45:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "proton_speed": NaN,
+                "proton_density": 5.0,
+                "proton_temperature": 100000.0
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].ProtonSpeed.ShouldBeNull();
+        records[0].ProtonDensity.ShouldBe(5f);
+    }
+
     [Fact(DisplayName = "GetMagnetometerData returns records for valid JSON body")]
     public async Task GetMagnetometerDataAsync_WhenValidJson_ReturnsRecords()
     {

@@ -1,9 +1,9 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
 using AuroraScienceHub.Framework.Http;
 using AuroraScienceHub.Framework.Json;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
+using AuroraScienceHub.Integrations.NoaaClient.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -90,9 +90,20 @@ internal sealed class RtswClient : IRtswClient
                 statusCode: response.StatusCode);
         }
 
-        return await response.Content
-            .ReadFromJsonAsync<TResponse>(s_jsonOptions, cancellationToken)
+        var rawBytes = await response.Content
+            .ReadAsByteArrayAsync(cancellationToken)
             .ConfigureAwait(false);
+
+        var sanitized = NoaaJsonSanitizer.Sanitize(rawBytes);
+        if (sanitized.ReplacementCount > 0)
+        {
+            _logger.LogWarning(
+                "NOAA RTSW JSON sanitized {ReplacementCount} non-standard numeric literals to null. Uri={RequestUri}",
+                sanitized.ReplacementCount,
+                requestUri);
+        }
+
+        return JsonSerializer.Deserialize<TResponse>(sanitized.Bytes.Span, s_jsonOptions);
     }
 
     private static string? GetWafAction(HttpResponseMessage response)
