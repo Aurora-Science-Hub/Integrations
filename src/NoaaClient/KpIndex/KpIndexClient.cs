@@ -1,3 +1,4 @@
+using AuroraScienceHub.Integrations.NoaaClient.Http;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex.Extensions;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex.Responses;
 using Microsoft.Extensions.Options;
@@ -41,8 +42,8 @@ internal sealed class KpIndexClient : IKpIndexClient
 
     private async Task<string?> GetStringOrDefaultAsync(Uri url, CancellationToken cancellationToken)
     {
-        var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
+        using var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        await response.EnsureNoaaSuccessAsync(url, cancellationToken).ConfigureAwait(false);
 
         return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }

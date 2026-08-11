@@ -1,6 +1,8 @@
 using System.Globalization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using AuroraScienceHub.Framework.Http;
+using AuroraScienceHub.Framework.Json;
+using AuroraScienceHub.Integrations.NoaaClient.Http;
 using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil.Responses;
 using FFMpegCore;
 using FFMpegCore.Pipes;
@@ -10,6 +12,8 @@ namespace AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 
 internal sealed partial class WsaEnlilClient : IWsaEnlilClient
 {
+    private static readonly JsonSerializerOptions s_jsonOptions = DefaultJsonSerializerOptions.Create();
+
     private const string ManifestPath = "products/animations/enlil.json";
     private const int Fps = 20;
     private const int Crf = 23; // H.264 quality (0 = lossless, 51 = worst)
@@ -90,9 +94,16 @@ internal sealed partial class WsaEnlilClient : IWsaEnlilClient
         CancellationToken cancellationToken)
     {
         var manifestUrl = new Uri(_baseUrl, ManifestPath);
-        return await _httpClient
-            .GetFromJsonOrDefaultAsync<IReadOnlyCollection<WsaEnlilManifestEntry>>(manifestUrl, cancellationToken)
-            .ConfigureAwait(false);
+        using var response = await _httpClient.GetAsync(manifestUrl, cancellationToken).ConfigureAwait(false);
+        await response.EnsureNoaaSuccessAsync(manifestUrl, cancellationToken).ConfigureAwait(false);
+
+        var rawBytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+        if (rawBytes.Length == 0)
+        {
+            return null;
+        }
+
+        return JsonSerializer.Deserialize<IReadOnlyCollection<WsaEnlilManifestEntry>>(rawBytes, s_jsonOptions);
     }
 
     private async Task DownloadFramesAsync(
@@ -106,9 +117,9 @@ internal sealed partial class WsaEnlilClient : IWsaEnlilClient
             cancellationToken.ThrowIfCancellationRequested();
 
             var frameUrl = new Uri(_baseUrl, entry.Url);
-            await using var sourceStream = await _httpClient
-                .GetStreamAsync(frameUrl, cancellationToken)
-                .ConfigureAwait(false);
+            using var response = await _httpClient.GetAsync(frameUrl, cancellationToken).ConfigureAwait(false);
+            await response.EnsureNoaaSuccessAsync(frameUrl, cancellationToken).ConfigureAwait(false);
+            await using var sourceStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
             var framePath = Path.Combine(tempDir, string.Format(FrameFileFormat, index));
             await using var fileStream = File.Create(framePath);
