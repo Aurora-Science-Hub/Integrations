@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Dependencies
 - Bump `AuroraScienceHub.Framework.Http` and `AuroraScienceHub.Framework.Utilities` from 10.0.5 to 10.0.7
+- Bump `Microsoft.Extensions.*` pins (`DependencyInjection.Abstractions`, `Hosting`, `Http`, `Logging.Abstractions`) from 10.0.7 to 10.0.10 (required by Framework 10.0.7)
+- Dual-map `AuroraScienceHub.*` to nuget.org in `NuGet.Config` so stable Framework packages resolve from nuget.org
 
 ## [1.1.1] - 2026-07-07
 
