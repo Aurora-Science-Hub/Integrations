@@ -90,6 +90,26 @@ public sealed class RtswClientTests
         records[0].ProtonDensity.ShouldBe(5f);
     }
 
+    [Fact(DisplayName = "GetSolarWindPlasmaData throws on chunked empty body without Content-Length")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenChunkedEmptyBody_ThrowsHttpRequestException()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new ByteArrayContent(Array.Empty<byte>())
+        };
+        response.Content.Headers.ContentLength = null;
+
+        var sut = CreateSut(response);
+
+        // Act
+        var exception = await Should.ThrowAsync<HttpRequestException>(
+            async () => await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken));
+
+        // Assert
+        exception.Message.ShouldContain("empty");
+    }
+
     [Fact(DisplayName = "GetMagnetometerData returns records for valid JSON body")]
     public async Task GetMagnetometerDataAsync_WhenValidJson_ReturnsRecords()
     {

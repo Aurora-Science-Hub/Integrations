@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 using AuroraScienceHub.Framework.Http;
 using AuroraScienceHub.Framework.Json;
+using AuroraScienceHub.Integrations.NoaaClient.Http;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 using AuroraScienceHub.Integrations.NoaaClient.Utilities;
 using Microsoft.Extensions.Logging;
@@ -12,9 +13,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 /// <inheritdoc />
 internal sealed class RtswClient : IRtswClient
 {
-    private const string WafActionHeaderName = "x-amzn-waf-action";
-    private const string WafChallengeAction = "challenge";
-
     private static readonly JsonSerializerOptions s_jsonOptions = DefaultJsonSerializerOptions.Create();
 
     private readonly HttpClient _httpClient;
@@ -61,7 +59,7 @@ internal sealed class RtswClient : IRtswClient
         Uri requestUri,
         CancellationToken cancellationToken)
     {
-        var wafAction = GetWafAction(response);
+        var wafAction = NoaaHttpResponseExtensions.GetWafAction(response);
         var contentLength = response.Content.Headers.ContentLength;
 
         _logger.LogInformation(
@@ -71,28 +69,18 @@ internal sealed class RtswClient : IRtswClient
             wafAction,
             contentLength);
 
-        if (response.StatusCode == HttpStatusCode.Accepted
-            && string.Equals(wafAction, WafChallengeAction, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new HttpRequestException(
-                $"NOAA RTSW request blocked by AWS WAF challenge (HTTP {(int)response.StatusCode}, {WafActionHeaderName}={wafAction}, Uri={requestUri}).",
-                inner: null,
-                statusCode: response.StatusCode);
-        }
+        await response.EnsureNoaaSuccessAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
-        await response.EnsureSuccess().ConfigureAwait(false);
-
-        if (response.StatusCode == HttpStatusCode.NoContent || contentLength == 0)
+        if (response.StatusCode == HttpStatusCode.NoContent)
         {
-            throw new HttpRequestException(
-                $"NOAA RTSW returned an empty response body (HTTP {(int)response.StatusCode}, ContentLength={contentLength}, Uri={requestUri}).",
-                inner: null,
-                statusCode: response.StatusCode);
+            response.ThrowIfEmptyBody(ReadOnlySpan<byte>.Empty, requestUri);
         }
 
         var rawBytes = await response.Content
             .ReadAsByteArrayAsync(cancellationToken)
             .ConfigureAwait(false);
+
+        response.ThrowIfEmptyBody(rawBytes, requestUri);
 
         var sanitized = NoaaJsonSanitizer.Sanitize(rawBytes);
         if (sanitized.ReplacementCount > 0)
@@ -104,20 +92,5 @@ internal sealed class RtswClient : IRtswClient
         }
 
         return JsonSerializer.Deserialize<TResponse>(sanitized.Bytes.Span, s_jsonOptions);
-    }
-
-    private static string? GetWafAction(HttpResponseMessage response)
-    {
-        if (response.Headers.TryGetValues(WafActionHeaderName, out var values))
-        {
-            return values.FirstOrDefault();
-        }
-
-        if (response.Content.Headers.TryGetValues(WafActionHeaderName, out values))
-        {
-            return values.FirstOrDefault();
-        }
-
-        return null;
     }
 }

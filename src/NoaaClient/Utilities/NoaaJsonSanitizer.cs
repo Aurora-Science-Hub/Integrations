@@ -21,6 +21,11 @@ internal static class NoaaJsonSanitizer
             return new SanitizeResult(source, 0);
         }
 
+        if (!MayContainNonStandardNumericLiteral(span))
+        {
+            return new SanitizeResult(source, 0);
+        }
+
         var output = new byte[span.Length + 64];
         var writeIndex = 0;
         var replacements = 0;
@@ -85,6 +90,19 @@ internal static class NoaaJsonSanitizer
         }
 
         return new SanitizeResult(output.AsMemory(0, writeIndex), replacements);
+    }
+
+    private static bool MayContainNonStandardNumericLiteral(ReadOnlySpan<byte> span)
+    {
+        for (var i = 0; i < span.Length; i++)
+        {
+            if (span[i] is (byte)'N' or (byte)'I')
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool TryReplaceQuotedLiteral(
