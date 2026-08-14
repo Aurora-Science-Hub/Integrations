@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### NoaaClient Package
 - New `NoaaClientOptions.UseProxy` configuration option to route NOAA client requests through a proxy (configured in the `Proxy` section) via `AuroraScienceHub.Framework.Http.Proxy`
 
+### Changed
+
+#### NoaaClient Package
+- **Breaking:** `AddNoaaClients()` now requires an `IConfiguration` argument (`AddNoaaClients(configuration)`); `NoaaClientOptions` and `ProxyOptions` are bound directly from the provided configuration
+
 ## [1.2.2] - 2026-08-11
 
 ### Fixed
