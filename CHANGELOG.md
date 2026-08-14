@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+#### NoaaClient Package
+- New `NoaaClientOptions.UseProxy` configuration option to route NOAA client requests through a proxy (configured in the `Proxy` section) via `AuroraScienceHub.Framework.Http.Proxy`
+
 ## [1.2.2] - 2026-08-11
 
 ### Fixed
