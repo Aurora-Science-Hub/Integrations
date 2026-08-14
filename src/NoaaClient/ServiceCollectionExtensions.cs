@@ -30,9 +30,10 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         services.AddOptions<NoaaClientOptions>()
-            .BindConfiguration(NoaaClientOptions.OptionKey);
+            .Bind(configuration.GetSection(NoaaClientOptions.OptionKey));
 
-        services.AddProxyOptions();
+        services.AddOptions<ProxyOptions>()
+            .Bind(configuration.GetSection(ProxyOptions.OptionKey));
 
         var useProxy = configuration
             .GetSection(NoaaClientOptions.OptionKey)

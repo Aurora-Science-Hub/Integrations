@@ -72,7 +72,6 @@ public sealed class ServiceCollectionExtensionsTests
         Type clientType)
     {
         var services = new ServiceCollection();
-        services.AddSingleton(configuration);
         services.AddNoaaClients(configuration);
 
         using var provider = services.BuildServiceProvider();
