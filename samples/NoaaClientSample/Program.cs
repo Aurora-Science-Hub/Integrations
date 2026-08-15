@@ -14,7 +14,7 @@ using Spectre.Console;
 // Setup DI and configuration
 var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false);
-builder.Services.AddNoaaClients();
+builder.Services.AddNoaaClients(builder.Configuration);
 var host = builder.Build();
 
 // Get NOAA clients from DI

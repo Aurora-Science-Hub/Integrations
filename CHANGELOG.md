@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-15
+
+### Added
+
+#### NoaaClient Package
+- New `NoaaClientOptions.UseProxy` configuration option to route NOAA client requests through a proxy (configured in the `Proxy` section) via `AuroraScienceHub.Framework.Http.Proxy`
+
+### Changed
+
+#### NoaaClient Package
+- **Breaking:** `AddNoaaClients()` now requires an `IConfiguration` argument (`AddNoaaClients(configuration)`); `NoaaClientOptions` and `ProxyOptions` are bound directly from the provided configuration
+
 ## [1.2.2] - 2026-08-11
 
 ### Fixed
@@ -105,8 +117,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
+[1.3.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.2.2...1.3.0
+[1.2.2]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.1...1.2.2
 [1.1.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Aurora-Science-Hub/Integrations/releases/tag/1.0.0
-[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.1...HEAD
+[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.3.0...HEAD
 

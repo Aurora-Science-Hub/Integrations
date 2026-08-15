@@ -18,6 +18,11 @@ public sealed class NoaaClientOptions
     public Uri? ServerUrl { get; set; }
 
     /// <summary>
+    /// Use a proxy
+    /// </summary>
+    public bool UseProxy { get; set; } = false;
+
+    /// <summary>
     /// Gets the required server URL. Throws <see cref="ArgumentNullException"/> if not set.
     /// </summary>
     public Uri RequiredServerUrl => ServerUrl ?? throw new ArgumentNullException(nameof(ServerUrl), EmptyServerUrlMessage);

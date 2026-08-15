@@ -17,15 +17,26 @@ dotnet add package AuroraScienceHub.Integrations.NoaaClient
 ```json
 {
   "Noaa": {
-    "ServerUrl": "https://services.swpc.noaa.gov"
+    "ServerUrl": "https://services.swpc.noaa.gov",
+    "UseProxy": false
+  },
+  "Proxy": {
+    "Address": "http://proxy.example.com:8080",
+    "UserName": "",
+    "Password": ""
   }
 }
 ```
 
+- **Noaa:ServerUrl** — NOAA SWPC base URL (required).
+- **Noaa:UseProxy** — when `true`, client requests are routed through the proxy configured in the `Proxy` section. Default: `false`.
+- **Proxy:Address** — proxy server URI (required when `UseProxy` is enabled; startup fails with `InvalidOperationException` if missing).
+- **Proxy:UserName** / **Proxy:Password** — optional proxy credentials. When omitted, default credentials are used.
+
 Register clients in DI:
 
 ```csharp
-builder.Services.AddNoaaClients();
+builder.Services.AddNoaaClients(builder.Configuration);
 ```
 
 ## RTSW Client

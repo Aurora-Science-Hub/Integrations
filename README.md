@@ -47,7 +47,7 @@ dotnet add package AuroraScienceHub.Integrations.NoaaClient
 
 ```csharp
 // Register services
-builder.Services.AddNoaaClients();
+builder.Services.AddNoaaClients(builder.Configuration);
 
 // Inject and use clients
 public class SpaceWeatherService
