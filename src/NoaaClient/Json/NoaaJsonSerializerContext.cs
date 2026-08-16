@@ -12,4 +12,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Json;
 [JsonSerializable(typeof(List<MagnetometerRecord>))]
 [JsonSerializable(typeof(List<SolarWindPlasmaRecord>))]
 [JsonSerializable(typeof(List<WsaEnlilManifestEntry>))]
-internal sealed partial class NoaaJsonSerializerContext : JsonSerializerContext;
+internal sealed partial class NoaaJsonSerializerContext : JsonSerializerContext
+{
+}
