@@ -1,8 +1,8 @@
 using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using AuroraScienceHub.Framework.Json;
 using AuroraScienceHub.Integrations.NoaaClient.Http;
+using AuroraScienceHub.Integrations.NoaaClient.Json;
 using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil.Responses;
 using FFMpegCore;
 using FFMpegCore.Pipes;
@@ -12,8 +12,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 
 internal sealed partial class WsaEnlilClient : IWsaEnlilClient
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = DefaultJsonSerializerOptions.Create();
-
     private const string ManifestPath = "products/animations/enlil.json";
     private const int Fps = 20;
     private const int Crf = 23; // H.264 quality (0 = lossless, 51 = worst)
@@ -103,7 +101,7 @@ internal sealed partial class WsaEnlilClient : IWsaEnlilClient
             return null;
         }
 
-        return JsonSerializer.Deserialize<IReadOnlyCollection<WsaEnlilManifestEntry>>(rawBytes, s_jsonOptions);
+        return JsonSerializer.Deserialize(rawBytes, NoaaJsonSerializerContext.Default.ListWsaEnlilManifestEntry);
     }
 
     private async Task DownloadFramesAsync(
