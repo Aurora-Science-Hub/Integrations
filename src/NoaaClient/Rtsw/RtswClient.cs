@@ -1,8 +1,9 @@
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using AuroraScienceHub.Framework.Http;
-using AuroraScienceHub.Framework.Json;
 using AuroraScienceHub.Integrations.NoaaClient.Http;
+using AuroraScienceHub.Integrations.NoaaClient.Json;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 using AuroraScienceHub.Integrations.NoaaClient.Utilities;
 using Microsoft.Extensions.Logging;
@@ -13,8 +14,6 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 /// <inheritdoc />
 internal sealed class RtswClient : IRtswClient
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = DefaultJsonSerializerOptions.Create();
-
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
     private readonly ILogger _logger;
@@ -35,28 +34,36 @@ internal sealed class RtswClient : IRtswClient
     public async Task<IReadOnlyList<MagnetometerRecord>> GetMagnetometerDataAsync(CancellationToken cancellationToken)
     {
         var url = new Uri(_baseUrl, "json/rtsw/rtsw_mag_1m.json");
-        return await GetRtswJsonAsync<List<MagnetometerRecord>>(url, cancellationToken).ConfigureAwait(false)
-               ?? [];
+        return await GetRtswJsonAsync(
+                url,
+                NoaaJsonSerializerContext.Default.ListMagnetometerRecord,
+                cancellationToken)
+            .ConfigureAwait(false) ?? [];
     }
 
     public async Task<IReadOnlyList<SolarWindPlasmaRecord>> GetSolarWindPlasmaDataAsync(CancellationToken cancellationToken)
     {
         var url = new Uri(_baseUrl, "json/rtsw/rtsw_wind_1m.json");
-        return await GetRtswJsonAsync<List<SolarWindPlasmaRecord>>(url, cancellationToken).ConfigureAwait(false)
-               ?? [];
+        return await GetRtswJsonAsync(
+                url,
+                NoaaJsonSerializerContext.Default.ListSolarWindPlasmaRecord,
+                cancellationToken)
+            .ConfigureAwait(false) ?? [];
     }
 
     private async Task<TResponse?> GetRtswJsonAsync<TResponse>(
         Uri requestUri,
+        JsonTypeInfo<TResponse> jsonTypeInfo,
         CancellationToken cancellationToken)
     {
         using var response = await _httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
-        return await ReadRtswJsonOrThrowAsync<TResponse>(response, requestUri, cancellationToken).ConfigureAwait(false);
+        return await ReadRtswJsonOrThrowAsync(response, requestUri, jsonTypeInfo, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<TResponse?> ReadRtswJsonOrThrowAsync<TResponse>(
         HttpResponseMessage response,
         Uri requestUri,
+        JsonTypeInfo<TResponse> jsonTypeInfo,
         CancellationToken cancellationToken)
     {
         var wafAction = NoaaHttpResponseExtensions.GetWafAction(response);
@@ -91,6 +98,6 @@ internal sealed class RtswClient : IRtswClient
                 requestUri);
         }
 
-        return JsonSerializer.Deserialize<TResponse>(sanitized.Bytes.Span, s_jsonOptions);
+        return JsonSerializer.Deserialize(sanitized.Bytes.Span, jsonTypeInfo);
     }
 }

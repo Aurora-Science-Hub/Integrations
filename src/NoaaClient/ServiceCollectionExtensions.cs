@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AuroraScienceHub.Framework.Http.Proxy;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
@@ -49,7 +50,11 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    private static void AddNoaaHttpClient<TClient, TImplementation>(
+
+    private static void AddNoaaHttpClient<
+        TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        TImplementation>(
         this IServiceCollection services,
         bool useProxy)
         where TClient : class

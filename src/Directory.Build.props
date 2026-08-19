@@ -4,6 +4,8 @@
 
   <PropertyGroup>
     <IsPackable>True</IsPackable>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <PropertyGroup Label="Package info">
