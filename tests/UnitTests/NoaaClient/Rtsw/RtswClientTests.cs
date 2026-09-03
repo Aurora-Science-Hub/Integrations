@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Net;
+using System.Text.Json;
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -143,9 +145,67 @@ public sealed class RtswClientTests
         records[0].Bt.ShouldBe(5f);
     }
 
+    [Fact(DisplayName = "GetMagnetometerData retries when JSON body is truncated, then succeeds")]
+    public async Task GetMagnetometerDataAsync_WhenTruncatedJsonThenValid_RetriesAndReturns()
+    {
+        // Arrange
+        var truncated = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("""[{"time_tag":"2026-08-10T09:45:00Z","active":true,"source":"SOLAR1","bt":5.0,"bx_gsm":1.0,"by_gsm":2.0,"bz_gsm":3.0}""", System.Text.Encoding.UTF8, "application/json")
+        };
+        var valid = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(
+                """[{"time_tag":"2026-08-10T09:45:00Z","active":true,"source":"SOLAR1","bt":5.0,"bx_gsm":1.0,"by_gsm":2.0,"bz_gsm":3.0}]""",
+                System.Text.Encoding.UTF8,
+                "application/json")
+        };
+
+        var sut = CreateSut([truncated, valid]);
+
+        // Act
+        var records = await sut.GetMagnetometerDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].Source.ShouldBe("SOLAR1");
+    }
+
+    [Fact(DisplayName = "GetSolarWindPlasmaData throws when every JSON attempt is truncated")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenAllAttemptsTruncated_ThrowsJsonException()
+    {
+        // Arrange
+        var truncated = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("""[{"time_tag":"2026-08-10T09:45:00Z","active":true,"source":"SOLAR1","proton_speed":400.0}""", System.Text.Encoding.UTF8, "application/json")
+        };
+        var options = Options.Create(new NoaaClientOptions
+        {
+            ServerUrl = BaseUrl,
+            RtswRetryCount = 2,
+            RtswRetryDelay = TimeSpan.Zero,
+        });
+        var handler = new TestHttpMessageHandler([truncated, truncated]);
+        var httpClient = new HttpClient(handler);
+        var sut = new RtswClient(httpClient, options, NullLogger<RtswClient>.Instance);
+
+        // Act
+        var exception = await Should.ThrowAsync<JsonException>(
+            async () => await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken));
+
+        // Assert
+        exception.Message.ShouldContain("JSON");
+        handler.CallCount.ShouldBe(2);
+    }
+
     private static IRtswClient CreateSut(HttpResponseMessage response)
     {
-        var handler = new TestHttpMessageHandler(response);
+        return CreateSut([response]);
+    }
+
+    private static IRtswClient CreateSut(IReadOnlyList<HttpResponseMessage> responses)
+    {
+        var handler = new TestHttpMessageHandler(responses);
         var httpClient = new HttpClient(handler);
         var options = Options.Create(new NoaaClientOptions { ServerUrl = BaseUrl });
         return new RtswClient(httpClient, options, NullLogger<RtswClient>.Instance);
@@ -153,11 +213,24 @@ public sealed class RtswClientTests
 
     private sealed class TestHttpMessageHandler : HttpMessageHandler
     {
-        private readonly HttpResponseMessage _response;
+        private readonly IReadOnlyList<Func<HttpResponseMessage>> _responseFactories;
+        private int _callCount;
+
+        public int CallCount => _callCount;
 
         public TestHttpMessageHandler(HttpResponseMessage response)
+            : this([() => CloneForDelivery(response)])
         {
-            _response = response;
+        }
+
+        public TestHttpMessageHandler(IReadOnlyList<HttpResponseMessage> responses)
+            : this(responses.Select(r => (Func<HttpResponseMessage>)(() => CloneForDelivery(r))).ToArray())
+        {
+        }
+
+        private TestHttpMessageHandler(IReadOnlyList<Func<HttpResponseMessage>> responseFactories)
+        {
+            _responseFactories = responseFactories;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(
@@ -165,7 +238,31 @@ public sealed class RtswClientTests
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(_response);
+            var index = Math.Min(_callCount, _responseFactories.Count - 1);
+            _callCount++;
+            return Task.FromResult(_responseFactories[index]());
+        }
+
+        // The client disposes each HttpResponseMessage after reading it, so every
+        // delivery must get a fresh instance with the same content.
+        private static HttpResponseMessage CloneForDelivery(HttpResponseMessage source)
+        {
+            var body = source.Content?.ReadAsByteArrayAsync().GetAwaiter().GetResult() ?? [];
+            var clone = new HttpResponseMessage(source.StatusCode)
+            {
+                Content = new ByteArrayContent(body)
+            };
+            if (source.Content?.Headers.ContentType is not null)
+            {
+                clone.Content.Headers.ContentType = source.Content.Headers.ContentType;
+            }
+
+            foreach (var header in source.Headers)
+            {
+                clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
+
+            return clone;
         }
     }
 }

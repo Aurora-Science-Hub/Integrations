@@ -16,6 +16,7 @@ internal sealed class RtswClient : IRtswClient
 {
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
+    private readonly NoaaClientOptions _options;
     private readonly ILogger _logger;
 
     /// <summary>
@@ -27,7 +28,8 @@ internal sealed class RtswClient : IRtswClient
         ILogger<RtswClient> logger)
     {
         _httpClient = httpClient;
-        _baseUrl = options.Value.RequiredServerUrl;
+        _options = options.Value;
+        _baseUrl = _options.RequiredServerUrl;
         _logger = logger;
     }
 
@@ -56,8 +58,36 @@ internal sealed class RtswClient : IRtswClient
         JsonTypeInfo<TResponse> jsonTypeInfo,
         CancellationToken cancellationToken)
     {
-        using var response = await _httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
-        return await ReadRtswJsonOrThrowAsync(response, requestUri, jsonTypeInfo, cancellationToken).ConfigureAwait(false);
+        var attempts = Math.Max(1, _options.RtswRetryCount);
+        JsonException? lastJsonException = null;
+
+        for (var attempt = 1; attempt <= attempts; attempt++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                using var response = await _httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
+                return await ReadRtswJsonOrThrowAsync(response, requestUri, jsonTypeInfo, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (JsonException ex) when (attempt < attempts)
+            {
+                // NOAA occasionally serves a truncated/partial JSON body (connection cut
+                // near EOF). Treat it as retryable: re-download the whole feed.
+                lastJsonException = ex;
+                _logger.LogWarning(
+                    "RTSW JSON parse failed on attempt {Attempt}/{Attempts} for {RequestUri}: {Message}. Retrying.",
+                    attempt,
+                    attempts,
+                    requestUri,
+                    ex.Message);
+                await Task.Delay(_options.RtswRetryDelay, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        throw lastJsonException
+            ?? new JsonException($"RTSW feed {requestUri} could not be parsed after {attempts} attempts.");
     }
 
     private async Task<TResponse?> ReadRtswJsonOrThrowAsync<TResponse>(
