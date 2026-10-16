@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <TargetFrameworks>net11.0</TargetFrameworks>
     <AssemblyName>AuroraScienceHub.Integrations.Samples.NoaaClientSample</AssemblyName>
   </PropertyGroup>
 

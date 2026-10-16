@@ -37,7 +37,7 @@
 
 ## Getting Started
 
-All packages are distributed via NuGet and target **.NET 10.0**. Install individual packages as needed:
+All packages are distributed via NuGet and target **.NET 10.0** and **.NET 11.0**. Install individual packages as needed:
 
 ```bash
 dotnet add package AuroraScienceHub.Integrations.NoaaClient
@@ -91,7 +91,7 @@ This repository provides production-ready HTTP clients for external space weathe
 - **Type-Safe Clients** - Strongly-typed HTTP clients with dependency injection support via `IHttpClientFactory`
 - **Response Models** - Well-defined DTOs for all API responses with validation
 - **Configuration** - Options pattern for configuring API endpoints and behavior
-- **Modern .NET** - Built on .NET 10 with latest C# features and performance optimizations
+- **Modern .NET** - Built on .NET 10 and .NET 11 with latest C# features and performance optimizations
 - **Resilience** - Built-in retry policies and error handling
 - **Testability** - Designed for easy unit testing with interface-based design
 
@@ -106,7 +106,7 @@ This repository provides production-ready HTTP clients for external space weathe
 
 ### Prerequisites
 
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
+- [.NET 11.0 SDK](https://dotnet.microsoft.com/download/dotnet/11.0) or later
 - IDE: [Visual Studio 2025+](https://visualstudio.microsoft.com/), [Rider 2025+](https://www.jetbrains.com/rider/), or [VS Code](https://code.visualstudio.com/)
 - **FFmpeg** — required for WSA-ENLIL animation encoding (see [installation instructions](#ffmpeg-installation))
 
