@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-16
+
+### Added
+
+- `net11.0` target framework (runtime async enabled for `net11.0`)
+
 ## [1.3.0] - 2026-08-15
 
 ### Added
