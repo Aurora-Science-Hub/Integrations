@@ -5,8 +5,8 @@
     <EnablePackageVersionOverride>true</EnablePackageVersionOverride>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AuroraScienceHub.Framework.Http" Version="11.0.0-feature-dotnet-11.175" />
-    <PackageVersion Include="AuroraScienceHub.Framework.Utilities" Version="11.0.0-feature-dotnet-11.175" />
+    <PackageVersion Include="AuroraScienceHub.Framework.Http" Version="11.0.0" />
+    <PackageVersion Include="AuroraScienceHub.Framework.Utilities" Version="11.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="coverlet.MTP" Version="10.1.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis" Version="5.9.0" />
