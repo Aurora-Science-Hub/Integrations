@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+#### DtuSpaceClient Package
+- New `AuroraScienceHub.Integrations.DtuSpaceClient` package for DTU Space data, registered via `AddDtuSpaceClients(configuration)` with `DtuSpaceClientOptions` (`DtuSpace` section, `ServerUrl`, `UseProxy`)
+- `IPcIndexClient.GetPcnAsync(DateOnly, CancellationToken)` — near-real-time 1-minute quick-look Polar Cap North (PCN) index for a UTC day; missing values (`NaN`) map to `null`, unpublished day files (`404`) return an empty list
+- `IPcIndexClient.GetPcnAsync(DateOnly from, DateOnly to, CancellationToken)` — PCN for an inclusive range of UTC days, requested day by day and returned in time order
+- `DtuSpaceClientSample` interactive console application demonstrating the PC-index client
+
 ## [1.5.0] - 2026-10-16
 
 ### Added

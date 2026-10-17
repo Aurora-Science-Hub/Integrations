@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\DtuSpaceClient\DtuSpaceClient.csproj" />
     <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>
   
   <ItemGroup>
+    <EmbeddedResource Include="DtuSpaceClient\PcIndex\Samples\**" />
     <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
     <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
   </ItemGroup>
