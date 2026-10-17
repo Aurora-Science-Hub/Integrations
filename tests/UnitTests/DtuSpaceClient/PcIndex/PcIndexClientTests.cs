@@ -148,6 +148,52 @@ public sealed class PcIndexClientTests
         handler.RequestUris.ShouldBeEmpty();
     }
 
+    [Fact(DisplayName = "GetPcn for a range of the archive depth requests a file per day")]
+    public async Task GetPcnAsync_WhenRangeOfMaxLength_RequestsFilePerDay()
+    {
+        // Arrange
+        var handler = new TestHttpMessageHandler(_ => CreateResponse(HttpStatusCode.NotFound, string.Empty));
+        var sut = CreateSut(handler);
+        var to = new DateOnly(2026, 10, 17);
+
+        // Act
+        await sut.GetPcnAsync(to.AddDays(-30), to, TestContext.Current.CancellationToken);
+
+        // Assert
+        handler.RequestUris.Count.ShouldBe(31);
+    }
+
+    [Fact(DisplayName = "GetPcn for a range throws when the range is longer than the archive depth")]
+    public async Task GetPcnAsync_WhenRangeIsLongerThanMaxLength_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        var handler = new TestHttpMessageHandler(_ => CreateResponse(HttpStatusCode.NotFound, string.Empty));
+        var sut = CreateSut(handler);
+        var to = new DateOnly(2026, 10, 17);
+
+        // Act
+        await Should.ThrowAsync<ArgumentOutOfRangeException>(
+            async () => await sut.GetPcnAsync(to.AddDays(-31), to, TestContext.Current.CancellationToken));
+
+        // Assert
+        handler.RequestUris.ShouldBeEmpty();
+    }
+
+    [Fact(DisplayName = "GetPcn for a range ending on the last representable day does not overflow")]
+    public async Task GetPcnAsync_WhenRangeEndsOnMaxValue_RequestsSingleFile()
+    {
+        // Arrange
+        var handler = new TestHttpMessageHandler(_ => CreateResponse(HttpStatusCode.NotFound, string.Empty));
+        var sut = CreateSut(handler);
+
+        // Act
+        var result = await sut.GetPcnAsync(DateOnly.MaxValue, DateOnly.MaxValue, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldBeEmpty();
+        handler.RequestUris.Count.ShouldBe(1);
+    }
+
     private static IPcIndexClient CreateSut(TestHttpMessageHandler handler)
     {
         var httpClient = new HttpClient(handler);

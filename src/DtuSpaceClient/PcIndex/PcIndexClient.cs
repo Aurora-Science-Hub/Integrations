@@ -12,6 +12,9 @@ internal sealed class PcIndexClient : IPcIndexClient
 {
     private const string PcnQuickLookPath = "WDC/indices/pcn/PCN_quicklook/";
 
+    // DTU Space retains quick-look files for about 31 days, longer ranges would mostly request missing files
+    private const int MaxRangeDays = 31;
+
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
 
@@ -39,16 +42,18 @@ internal sealed class PcIndexClient : IPcIndexClient
         await response.EnsureSuccess().ConfigureAwait(false);
         var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-        return string.IsNullOrWhiteSpace(text) ? [] : PcIndexCsvParser.Parse(text);
+        return PcIndexCsvParser.Parse(text);
     }
 
     public async Task<IReadOnlyList<PcIndexRecord>> GetPcnAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken)
     {
         ArgumentOutOfRangeException.ThrowIfGreaterThan(from, to);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(to.DayNumber - from.DayNumber + 1, MaxRangeDays, nameof(to));
 
         var records = new List<PcIndexRecord>();
-        for (var date = from; date <= to; date = date.AddDays(1))
+        for (var dayNumber = from.DayNumber; dayNumber <= to.DayNumber; dayNumber++)
         {
+            var date = DateOnly.FromDayNumber(dayNumber);
             records.AddRange(await GetPcnAsync(date, cancellationToken).ConfigureAwait(false));
         }
 

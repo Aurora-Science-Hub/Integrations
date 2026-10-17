@@ -55,6 +55,7 @@ var lastDays = await pcIndexClient.GetPcnAsync(today.AddDays(-1), today, cancell
 - Quick-look files are retained by DTU Space for roughly the last 31 days.
 - Missing values are returned as `null`.
 - An empty list is returned when the day file is not published (shortly after 00:00 UTC, for future dates, or for dates outside the quick-look archive).
-- The range overload requests day files sequentially (one request per day), skips unpublished days and returns records in time order; `from` later than `to` throws `ArgumentOutOfRangeException`.
+- The range overload requests day files sequentially (one request per day), skips unpublished days and returns records in time order. The range is limited to 31 days (the quick-look archive depth); `from` later than `to` or a longer range throws `ArgumentOutOfRangeException`.
+- An empty list for a past day inside the archive, or for the current day after about 00:15 UTC, usually means a configuration or server problem (e.g. a wrong `ServerUrl`); treat it as missing data and fall back to another source if you have one.
 
 Data license: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
