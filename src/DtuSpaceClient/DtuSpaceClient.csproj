@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>AuroraScienceHub.Integrations.DtuSpaceClient</AssemblyName>
+    <PackageId>AuroraScienceHub.Integrations.DtuSpaceClient</PackageId>
+    <Description>DTU Space data integration client for the Polar Cap North (PCN) index</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AuroraScienceHub.Framework.Http" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+  </ItemGroup>
+
+  <PropertyGroup Label="Package info">
+    <PackageDescription>
+      Provides HTTP client interfaces for accessing DTU Space (National Space Institute, Technical University of Denmark) data, including the near-real-time 1-minute Polar Cap North (PCN) quick-look index.
+    </PackageDescription>
+    <PackageTags>dtu;dtu-space;pc-index;pcn;polar-cap;space-weather;geomagnetic;aurora;integration</PackageTags>
+  </PropertyGroup>
+
+</Project>

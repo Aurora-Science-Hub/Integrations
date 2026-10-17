@@ -2,9 +2,9 @@
 
 using AuroraScienceHub.Integrations.NoaaClient;
 using AuroraScienceHub.Integrations.NoaaClient.Ace;
-using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 using AuroraScienceHub.Integrations.NoaaClient.KpIndex;
 using AuroraScienceHub.Integrations.NoaaClient.Rtsw;
+using AuroraScienceHub.Integrations.NoaaClient.WsaEnlil;
 using AuroraScienceHub.Integrations.Samples.NoaaClientSample;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,8 +49,15 @@ while (true)
                 "Execute All Requests",
                 "Exit"));
 
-    if (choice == "Exit") break;
-    if (choice.StartsWith("---")) continue;
+    if (choice == "Exit")
+    {
+        break;
+    }
+
+    if (choice.StartsWith("---"))
+    {
+        continue;
+    }
 
     AnsiConsole.WriteLine();
 

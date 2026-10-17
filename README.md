@@ -41,6 +41,7 @@ All packages are distributed via NuGet and target **.NET 10.0** and **.NET 11.0*
 
 ```bash
 dotnet add package AuroraScienceHub.Integrations.NoaaClient
+dotnet add package AuroraScienceHub.Integrations.DtuSpaceClient
 ```
 
 ### Quick Example
@@ -83,6 +84,16 @@ Each package provides HTTP clients for accessing external data sources with stro
 | **ACE Client**      | Legacy text feeds (deprecated; use RTSW instead — see [Integrations #3](https://github.com/Aurora-Science-Hub/Integrations/issues/3)) |
 
 See [detailed documentation](src/NoaaClient/README.md) for usage examples and API reference.
+
+### DTU Space Integrations
+
+**[AuroraScienceHub.Integrations.DtuSpaceClient](src/DtuSpaceClient/)** - DTU Space data access
+
+| Component           | Description                                                                                          |
+|---------------------|------------------------------------------------------------------------------------------------------|
+| **PC-Index Client** | Polar Cap North (PCN) index — near-real-time 1-minute quick-look CSV data (~10 minutes lag)          |
+
+See [detailed documentation](src/DtuSpaceClient/README.md) for usage examples and API reference.
 
 ## Architecture
 

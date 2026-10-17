@@ -51,10 +51,7 @@ public static class ServiceCollectionExtensions
     }
 
 
-    private static void AddNoaaHttpClient<
-        TClient,
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
-        TImplementation>(
+    private static void AddNoaaHttpClient<TClient, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(
         this IServiceCollection services,
         bool useProxy)
         where TClient : class
