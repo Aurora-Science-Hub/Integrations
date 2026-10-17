@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.6.0] - 2026-10-17
+## [1.6.0] - Unreleased
 
 ### Added
 
@@ -20,6 +20,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `net11.0` target framework (runtime async enabled for `net11.0`)
+
+### Changed
+
+#### Dependencies
+- Bump `AuroraScienceHub.Framework.*` to 11.0.0 and `Microsoft.Extensions.*` to 11.0.0-rc.2
+- Tests run on Microsoft.Testing.Platform (xunit.v3, coverlet.MTP)
+- Packages are published to NuGet.org via Trusted Publishing (OIDC)
+
+## [1.4.0] - 2026-08-19
+
+### Added
+
+#### NoaaClient Package
+- NativeAOT compatibility (`IsAotCompatible`): source-generated JSON serialization (`NoaaJsonSerializerContext`) and configuration binding
+
+### Changed
+
+#### Dependencies
+- Bump `AuroraScienceHub.Framework.Http` and `AuroraScienceHub.Framework.Utilities` from 10.0.7 to 10.1.0
+- Bump `Microsoft.Extensions.*` pins from 10.0.10 to 10.0.11
 
 ## [1.3.0] - 2026-08-15
 
@@ -47,6 +67,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump `AuroraScienceHub.Framework.Http` and `AuroraScienceHub.Framework.Utilities` from 10.0.5 to 10.0.7
 - Bump `Microsoft.Extensions.*` pins (`DependencyInjection.Abstractions`, `Hosting`, `Http`, `Logging.Abstractions`) from 10.0.7 to 10.0.10 (required by Framework 10.0.7)
 - Dual-map `AuroraScienceHub.*` to nuget.org in `NuGet.Config` so stable Framework packages resolve from nuget.org
+
+## [1.2.0] - 2026-08-07
+
+### Added
+
+#### NoaaClient Package
+- **WSA-Enlil Client** - NOAA WSA-Enlil solar wind prediction model
+  - `IWsaEnlilClient.GetEnlilAnimationAsync` builds an MP4 animation from the WSA-Enlil frames (via `FFMpegCore`)
+  - `IWsaEnlilClient.GetLastFrameTimeAsync` returns the time of the latest published frame
 
 ## [1.1.1] - 2026-07-07
 
@@ -131,10 +160,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
-[1.3.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.2.2...1.3.0
-[1.2.2]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.1...1.2.2
-[1.1.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.1.0...1.1.1
-[1.1.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.0.0...1.1.0
-[1.0.0]: https://github.com/Aurora-Science-Hub/Integrations/releases/tag/1.0.0
-[Unreleased]: https://github.com/Aurora-Science-Hub/Integrations/compare/1.3.0...HEAD
-
+[1.6.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/847fc10...main
+[1.5.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/847fc10
+[1.4.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/911a114
+[1.3.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/475c9fb
+[1.2.2]: https://github.com/Aurora-Science-Hub/Integrations/commit/ce6d15c
+[1.2.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/0fca66a
+[1.1.1]: https://github.com/Aurora-Science-Hub/Integrations/commit/5c13df0
+[1.1.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/4c2588d
+[1.0.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/dcd15f3
