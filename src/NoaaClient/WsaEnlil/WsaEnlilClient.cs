@@ -60,8 +60,14 @@ internal sealed partial class WsaEnlilClient : IWsaEnlilClient
         {
             if (tempDir is not null)
             {
-                try { Directory.Delete(tempDir, recursive: true); }
-                catch { /* best-effort cleanup */ }
+                try
+                {
+                    Directory.Delete(tempDir, recursive: true);
+                }
+                catch
+                {
+                    // Best-effort cleanup
+                }
             }
         }
     }

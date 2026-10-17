@@ -118,7 +118,7 @@ dotnet restore
 dotnet build                             # Warnings are errors, code style is enforced in build
 dotnet test                              # Microsoft.Testing.Platform runner
 dotnet pack                              # Fails with NU5019 if a package README.md is missing
-dotnet format --verify-no-changes        # Run dotnet format before every commit
+dotnet format --verify-no-changes        # Checked in CI; run dotnet format before every commit
 ```
 
 ### Branches and PRs
@@ -219,8 +219,8 @@ GitHub Actions workflow (`.github/workflows/dotnet.yml`):
 
 | Trigger | Behavior |
 |---------|----------|
-| Push to `main` | Build → Test → Pack → Push stable `X.Y.Z.<run>` to **NuGet.org** (Trusted Publishing via OIDC) |
-| Push to other branches | Build → Test → Pack → Push pre-release `X.Y.Z-<branch>.<run>` to **GitHub Packages** |
+| Push to `main` | Format check → Build → Test → Pack → Push stable `X.Y.Z.<run>` to **NuGet.org** (Trusted Publishing via OIDC) |
+| Push to other branches | Format check → Build → Test → Pack → Push pre-release `X.Y.Z-<branch>.<run>` to **GitHub Packages** |
 | Semver tag (`*.*.*`) | Produces stable `X.Y.Z` packages |
 
 A downstream repository can consume the branch pre-release to verify a change before merge; switch it to the stable version once the PR is merged.

@@ -37,8 +37,15 @@ while (true)
                 "Execute All Requests",
                 "Exit"));
 
-    if (choice == "Exit") break;
-    if (choice.StartsWith("---")) continue;
+    if (choice == "Exit")
+    {
+        break;
+    }
+
+    if (choice.StartsWith("---"))
+    {
+        continue;
+    }
 
     // Input prompts cannot run inside the status spinner, so the range is requested beforehand
     var range = choice == "PCN Index Date Range" ? PromptDateRange() : default;

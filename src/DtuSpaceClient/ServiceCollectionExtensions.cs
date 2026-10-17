@@ -39,10 +39,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    private static void AddDtuSpaceHttpClient<
-        TClient,
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
-        TImplementation>(
+    private static void AddDtuSpaceHttpClient<TClient, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(
         this IServiceCollection services,
         bool useProxy)
         where TClient : class
