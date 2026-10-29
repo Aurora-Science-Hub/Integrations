@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AuroraScienceHub.Integrations.NoaaClient.Json;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 
@@ -49,7 +50,7 @@ public record SolarWindPlasmaRecord(
     [property: JsonPropertyName("proton_vx_gsm")] float? ProtonVxGsm,
     [property: JsonPropertyName("proton_vy_gsm")] float? ProtonVyGsm,
     [property: JsonPropertyName("proton_vz_gsm")] float? ProtonVzGsm,
-    [property: JsonPropertyName("proton_sample_size")] int? ProtonSampleSize,
+    [property: JsonPropertyName("proton_sample_size"), JsonConverter(typeof(FlexibleNullableInt32Converter))] int? ProtonSampleSize,
     [property: JsonPropertyName("alpha_speed")] float? AlphaSpeed,
     [property: JsonPropertyName("alpha_temperature")] float? AlphaTemperature,
     [property: JsonPropertyName("alpha_density")] float? AlphaDensity,
@@ -59,7 +60,7 @@ public record SolarWindPlasmaRecord(
     [property: JsonPropertyName("alpha_vx_gsm")] float? AlphaVxGsm,
     [property: JsonPropertyName("alpha_vy_gsm")] float? AlphaVyGsm,
     [property: JsonPropertyName("alpha_vz_gsm")] float? AlphaVzGsm,
-    [property: JsonPropertyName("alpha_sample_size")] int? AlphaSampleSize,
+    [property: JsonPropertyName("alpha_sample_size"), JsonConverter(typeof(FlexibleNullableInt32Converter))] int? AlphaSampleSize,
     [property: JsonPropertyName("max_convergence_flag")] int? MaxConvergenceFlag,
     [property: JsonPropertyName("max_data_flag")] int? MaxDataFlag,
     [property: JsonPropertyName("max_error_count_flag")] int? MaxErrorCountFlag,

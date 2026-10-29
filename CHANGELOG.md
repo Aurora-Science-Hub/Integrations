@@ -41,6 +41,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump `AuroraScienceHub.Framework.Http` and `AuroraScienceHub.Framework.Utilities` from 10.0.7 to 10.1.0
 - Bump `Microsoft.Extensions.*` pins from 10.0.10 to 10.0.11
 
+### Fixed
+
+#### NoaaClient Package
+- RTSW: accept fractional numeric values (for example `60.0`) for `sample_size`, `proton_sample_size` and `alpha_sample_size` instead of failing the whole feed import with a `JsonException` (SWeather-core#281)
+
 ## [1.3.0] - 2026-08-15
 
 ### Added
