@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -6,10 +5,10 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Json;
 
 /// <summary>
 /// Reads a nullable <see cref="int"/> from JSON numbers that may carry a fractional part
-/// (for example <c>60.0</c>) or from numeric strings. NOAA occasionally encodes the RTSW
-/// <c>sample_size</c> fields this way, which the built-in Int32 converter rejects.
-/// Non-integral, out-of-range or unparsable numeric values are read as <see langword="null"/>
-/// so that a single metadata field does not abort the whole feed import.
+/// (for example <c>60.0</c>). NOAA encodes the RTSW <c>sample_size</c> fields this way,
+/// which the built-in Int32 converter rejects.
+/// Non-integral and out-of-range numbers are read as <see langword="null"/>
+/// so that a single metadata field does not abort the whole feed import
 /// </summary>
 internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
 {
@@ -28,22 +27,6 @@ internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
 
                 return reader.TryGetDouble(out var doubleValue)
                     ? ToInt32OrNull(doubleValue)
-                    : null;
-
-            case JsonTokenType.String:
-                var raw = reader.GetString();
-                if (string.IsNullOrWhiteSpace(raw))
-                {
-                    return null;
-                }
-
-                if (int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedInt))
-                {
-                    return parsedInt;
-                }
-
-                return double.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedDouble)
-                    ? ToInt32OrNull(parsedDouble)
                     : null;
 
             default:
