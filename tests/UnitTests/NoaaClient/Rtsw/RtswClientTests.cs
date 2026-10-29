@@ -203,6 +203,126 @@ public sealed class RtswClientTests
         records[0].ProtonSampleSize.ShouldBe(1);
     }
 
+    [Fact(DisplayName = "GetMagnetometerData reads a non-integral sample_size as null")]
+    public async Task GetMagnetometerDataAsync_WhenNonIntegralSampleSize_DeserializesNull()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:28:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "sample_size": 60.5,
+                "bt": 3.18
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetMagnetometerDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].SampleSize.ShouldBeNull();
+    }
+
+    [Fact(DisplayName = "GetMagnetometerData reads an out-of-range sample_size as null")]
+    public async Task GetMagnetometerDataAsync_WhenSampleSizeOutOfRange_DeserializesNull()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:28:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "sample_size": 3e9,
+                "bt": 3.18
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetMagnetometerDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].SampleSize.ShouldBeNull();
+    }
+
+    [Fact(DisplayName = "GetSolarWindPlasmaData accepts a numeric-string proton_sample_size")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenSampleSizeIsNumericString_DeserializesValue()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:27:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "proton_sample_size": "60",
+                "proton_speed": 344.8
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].ProtonSampleSize.ShouldBe(60);
+    }
+
+    [Fact(DisplayName = "GetSolarWindPlasmaData accepts fractional alpha_sample_size (2.0)")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenFractionalAlphaSampleSize_DeserializesValue()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:27:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "alpha_sample_size": 2.0,
+                "alpha_speed": 320.1
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].AlphaSampleSize.ShouldBe(2);
+    }
+
     private static IRtswClient CreateSut(HttpResponseMessage response)
     {
         var handler = new TestHttpMessageHandler(response);

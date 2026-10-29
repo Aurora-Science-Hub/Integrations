@@ -8,8 +8,8 @@ namespace AuroraScienceHub.Integrations.NoaaClient.Json;
 /// Reads a nullable <see cref="int"/> from JSON numbers that may carry a fractional part
 /// (for example <c>60.0</c>) or from numeric strings. NOAA occasionally encodes the RTSW
 /// <c>sample_size</c> fields this way, which the built-in Int32 converter rejects.
-/// Non-integral or out-of-range values are read as <see langword="null"/> so that a single
-/// metadata field cannot fail the whole feed import.
+/// Non-integral, out-of-range or unparsable numeric values are read as <see langword="null"/>
+/// so that a single metadata field does not abort the whole feed import.
 /// </summary>
 internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
 {
@@ -26,8 +26,8 @@ internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
                     return intValue;
                 }
 
-                return reader.TryGetDouble(out var doubleValue) && IsInInt32Range(doubleValue)
-                    ? (int)Math.Round(doubleValue, MidpointRounding.AwayFromZero)
+                return reader.TryGetDouble(out var doubleValue)
+                    ? ToInt32OrNull(doubleValue)
                     : null;
 
             case JsonTokenType.String:
@@ -43,8 +43,7 @@ internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
                 }
 
                 return double.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedDouble)
-                       && IsInInt32Range(parsedDouble)
-                    ? (int)Math.Round(parsedDouble, MidpointRounding.AwayFromZero)
+                    ? ToInt32OrNull(parsedDouble)
                     : null;
 
             default:
@@ -64,6 +63,11 @@ internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
             writer.WriteNullValue();
         }
     }
+
+    private static int? ToInt32OrNull(double value)
+        => IsInInt32Range(value) && value == Math.Truncate(value)
+            ? (int)value
+            : null;
 
     private static bool IsInInt32Range(double value)
         => !double.IsNaN(value)
