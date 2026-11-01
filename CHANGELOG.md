@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - Unreleased
+
+### Fixed
+
+#### NoaaClient Package
+- RTSW: accept fractional numeric values (for example `60.0`) for `sample_size`, `proton_sample_size` and `alpha_sample_size` instead of failing the whole feed import with a `JsonException` (SWeather-core#281)
+- RTSW: a non-integral or out-of-range value in these fields (for example `60.5`) is now read as `null` without a log entry, so `null` can mean either a missing value or a malformed one
+
 ## [1.6.0] - 2026-10-17
 
 ### Added
@@ -160,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
-[1.6.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/847fc10...main
+[1.6.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/96afa44...main
+[1.6.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/847fc10...96afa44
 [1.5.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/847fc10
 [1.4.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/911a114
 [1.3.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/475c9fb

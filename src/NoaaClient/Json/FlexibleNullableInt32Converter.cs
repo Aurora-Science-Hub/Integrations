@@ -1,0 +1,60 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace AuroraScienceHub.Integrations.NoaaClient.Json;
+
+/// <summary>
+/// Reads a nullable <see cref="int"/> from JSON numbers that may carry a fractional part
+/// (for example <c>60.0</c>). NOAA encodes the RTSW <c>sample_size</c> fields this way,
+/// which the built-in Int32 converter rejects.
+/// Non-integral and out-of-range numbers are read as <see langword="null"/>
+/// so that a single metadata field does not abort the whole feed import
+/// </summary>
+internal sealed class FlexibleNullableInt32Converter : JsonConverter<int?>
+{
+    public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        switch (reader.TokenType)
+        {
+            case JsonTokenType.Null:
+                return null;
+
+            case JsonTokenType.Number:
+                if (reader.TryGetInt32(out var intValue))
+                {
+                    return intValue;
+                }
+
+                return reader.TryGetDouble(out var doubleValue)
+                    ? ToInt32OrNull(doubleValue)
+                    : null;
+
+            default:
+                throw new JsonException(
+                    $"Unexpected token '{reader.TokenType}' when reading a nullable Int32 value.");
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)
+    {
+        if (value.HasValue)
+        {
+            writer.WriteNumberValue(value.Value);
+        }
+        else
+        {
+            writer.WriteNullValue();
+        }
+    }
+
+    private static int? ToInt32OrNull(double value)
+        => IsInInt32Range(value) && value == Math.Truncate(value)
+            ? (int)value
+            : null;
+
+    private static bool IsInInt32Range(double value)
+        => !double.IsNaN(value)
+           && !double.IsInfinity(value)
+           && value >= int.MinValue
+           && value <= int.MaxValue;
+}

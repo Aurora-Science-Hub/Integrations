@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AuroraScienceHub.Integrations.NoaaClient.Json;
 
 namespace AuroraScienceHub.Integrations.NoaaClient.Rtsw.Responses;
 
@@ -35,7 +36,7 @@ public record MagnetometerRecord(
     [property: JsonPropertyName("scale")] float? Scale,
     [property: JsonPropertyName("sensitivity")] float? Sensitivity,
     [property: JsonPropertyName("manual_mode")] bool? ManualMode,
-    [property: JsonPropertyName("sample_size")] int? SampleSize,
+    [property: JsonPropertyName("sample_size"), JsonConverter(typeof(FlexibleNullableInt32Converter))] int? SampleSize,
     [property: JsonPropertyName("bt")] float? Bt,
     [property: JsonPropertyName("bx_gse")] float? BxGse,
     [property: JsonPropertyName("by_gse")] float? ByGse,

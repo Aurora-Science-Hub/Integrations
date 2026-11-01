@@ -143,6 +143,69 @@ public sealed class RtswClientTests
         records[0].Bt.ShouldBe(5f);
     }
 
+    [Fact(DisplayName = "GetMagnetometerData accepts fractional sample_size (60.0)")]
+    public async Task GetMagnetometerDataAsync_WhenFractionalSampleSize_DeserializesValue()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:28:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "sample_size": 60.0,
+                "bt": 3.18
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetMagnetometerDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].SampleSize.ShouldBe(60);
+    }
+
+    [Fact(DisplayName = "GetSolarWindPlasmaData accepts fractional proton and alpha sample sizes")]
+    public async Task GetSolarWindPlasmaDataAsync_WhenFractionalSampleSizes_DeserializesValues()
+    {
+        // Arrange
+        var json = """
+            [
+              {
+                "time_tag": "2026-10-29T15:27:00Z",
+                "active": true,
+                "source": "SOLAR1",
+                "proton_sample_size": 1.0,
+                "proton_speed": 344.8,
+                "alpha_sample_size": 2.0,
+                "alpha_speed": 320.1
+              }
+            ]
+            """;
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+
+        var sut = CreateSut(response);
+
+        // Act
+        var records = await sut.GetSolarWindPlasmaDataAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        records.Count.ShouldBe(1);
+        records[0].ProtonSampleSize.ShouldBe(1);
+        records[0].AlphaSampleSize.ShouldBe(2);
+    }
+
     private static IRtswClient CreateSut(HttpResponseMessage response)
     {
         var handler = new TestHttpMessageHandler(response);
