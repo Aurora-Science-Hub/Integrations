@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.6.1] - Unreleased
+## [1.7.0] - Unreleased
+
+### Added
+
+#### KyotoClient Package
+- New `AuroraScienceHub.Integrations.KyotoClient` package for WDC Kyoto real-time hourly Dst data, with configurable server and proxy via `AddKyotoClients(configuration)`
+- `IDstIndexClient.GetDstAsync` for a UTC day or inclusive day range, requesting each month once and mapping `9999` to `null`
+- Fixed-width WDC parsing with century and base-value support, real-payload tests, package documentation and an interactive sample (SWeather-core#293)
+
+## [1.6.1] - 2026-11-04
 
 ### Fixed
 
@@ -168,7 +177,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
-[1.6.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/96afa44...main
+[1.7.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/15c222b...main
+[1.6.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/96afa44...15c222b
 [1.6.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/847fc10...96afa44
 [1.5.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/847fc10
 [1.4.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/911a114

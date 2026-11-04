@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\KyotoClient\KyotoClient.csproj" />
     <ProjectReference Include="..\..\src\DtuSpaceClient\DtuSpaceClient.csproj" />
     <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>
   
   <ItemGroup>
+    <EmbeddedResource Include="KyotoClient\DstIndex\Samples\**" />
     <EmbeddedResource Include="DtuSpaceClient\PcIndex\Samples\**" />
     <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />
     <EmbeddedResource Include="NoaaClient\KpIndex\Samples\**" />
