@@ -35,6 +35,8 @@ var range = await client.GetDstAsync(
 
 ## Data semantics
 
+The [dated WDC format snapshot](References/DstRecordFormat-2026-11-04.md) records the provider's layout as retrieved on 2026-11-04.
+
 - Values are preliminary real-time (quick-look) Dst in nT. They can change as WDC revises the raw data. Publication latency varies.
 - `DateTime` is UTC and marks the start of the hourly interval. The file's first hourly value maps to `00:00`, the last to `23:00`.
 - The [WDC format](https://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html) contains a base in hundreds of nT, 24 hourly values, and a daily mean. The client adds the base to each present value and ignores the mean.

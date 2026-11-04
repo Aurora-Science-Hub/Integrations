@@ -1,4 +1,5 @@
 using System.Net;
+using System.Reflection;
 using AuroraScienceHub.Integrations.WdcClient;
 using AuroraScienceHub.Integrations.WdcClient.DstIndex;
 using Microsoft.Extensions.Configuration;
@@ -32,16 +33,18 @@ public sealed class ServiceCollectionExtensionsTests
         var client = provider.GetRequiredService<IDstIndexClient>();
         var options = provider.GetRequiredService<IOptions<WdcClientOptions>>().Value;
         var handler = provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(nameof(IDstIndexClient));
-        while (handler is DelegatingHandler delegating)
-        {
-            handler = delegating.InnerHandler ?? throw new InvalidOperationException("Inner handler is missing.");
-        }
+        var primaryHandler = UnwrapPrimaryHandler(handler);
 
         // Assert
         client.ShouldNotBeNull();
         options.RequiredServerUrl.ShouldBe(new Uri("https://wdc.test/"));
         options.UseProxy.ShouldBe(useProxy);
-        var proxy = (handler as HttpClientHandler)?.Proxy ?? (handler as SocketsHttpHandler)?.Proxy;
+        var proxy = primaryHandler switch
+        {
+            HttpClientHandler httpClientHandler => httpClientHandler.Proxy,
+            SocketsHttpHandler socketsHttpHandler => socketsHttpHandler.Proxy,
+            _ => throw new InvalidOperationException($"Unexpected primary handler type {primaryHandler.GetType().Name}.")
+        };
         var address = proxy?.GetProxy(new Uri("https://wdc.test/"));
         address.ShouldBe(useProxy ? new Uri("http://proxy.test:8080") : null);
         var credentials = proxy?.Credentials?.GetCredential(new Uri("http://proxy.test:8080"), "Basic");
@@ -83,4 +86,20 @@ public sealed class ServiceCollectionExtensionsTests
         // Assert
         exception.Message.ShouldContain("Wdc:ServerUrl");
     }
+
+    private static HttpMessageHandler UnwrapPrimaryHandler(HttpMessageHandler handler)
+    {
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+        while (handler is not HttpClientHandler and not SocketsHttpHandler)
+        {
+            var innerHandlerProperty = handler.GetType().GetProperty("InnerHandler", flags)
+                ?? throw new InvalidOperationException($"Cannot unwrap message handler of type {handler.GetType().Name}.");
+            handler = innerHandlerProperty.GetValue(handler) as HttpMessageHandler
+                ?? throw new InvalidOperationException($"Inner handler is missing on {handler.GetType().Name}.");
+        }
+
+        return handler;
+    }
+
 }

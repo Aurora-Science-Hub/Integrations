@@ -7,6 +7,7 @@ namespace AuroraScienceHub.Integrations.WdcClient.DstIndex.Extensions;
 /// Parser for fixed-width WDC Dst records
 /// </summary>
 /// <seealso href="https://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html">WDC Dst record format</seealso>
+/// <seealso href="../../References/DstRecordFormat-2026-11-04.md">Local format snapshot, retrieved on 2026-11-04</seealso>
 internal static class DstIndexWdcParser
 {
     private const int HourlyValuesOffset = 20;
@@ -28,6 +29,7 @@ internal static class DstIndexWdcParser
 
             for (var hour = 0; hour < hoursPerDay; hour++)
             {
+                // Each hour occupies four consecutive characters after the 20-character header (WDC columns 21-116).
                 var valueField = line.Slice(HourlyValuesOffset + hour * valueWidth, valueWidth);
                 if (!TryParseInt(valueField, out var value))
                 {
@@ -49,8 +51,8 @@ internal static class DstIndexWdcParser
         out int baseValue)
     {
         var baseValueField = 16..HourlyValuesOffset;
-        date = default;
-        baseValue = default;
+        date = DateTime.MinValue;
+        baseValue = 0;
         if (!IsDstRecord(line))
         {
             return false;
@@ -84,7 +86,7 @@ internal static class DstIndexWdcParser
         var dayField = 8..10;
         var centuryField = 14..16;
 
-        date = default;
+        date = DateTime.MinValue;
         if (!TryParseInt(line[yearField], out var year)
             || !TryParseInt(line[monthField], out var month)
             || !TryParseInt(line[dayField], out var day))

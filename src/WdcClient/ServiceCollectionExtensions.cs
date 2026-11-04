@@ -18,13 +18,15 @@ public static class ServiceCollectionExtensions
     /// <returns>The service collection</returns>
     public static IServiceCollection AddWdcClients(this IServiceCollection services, IConfiguration configuration)
     {
+        var wdcSection = configuration.GetSection(WdcClientOptions.OptionKey);
         services.AddOptions<WdcClientOptions>()
-            .Bind(configuration.GetSection(WdcClientOptions.OptionKey));
+            .Bind(wdcSection);
         services.AddOptions<ProxyOptions>()
             .Bind(configuration.GetSection(ProxyOptions.OptionKey));
 
+        var useProxy = wdcSection.GetValue<bool>(nameof(WdcClientOptions.UseProxy));
         var builder = services.AddHttpClient<IDstIndexClient, DstIndexClient>();
-        if (configuration.GetSection(WdcClientOptions.OptionKey).GetValue<bool>(nameof(WdcClientOptions.UseProxy)))
+        if (useProxy)
         {
             builder.ConfigurePrimaryHttpProxyMessageHandler();
         }

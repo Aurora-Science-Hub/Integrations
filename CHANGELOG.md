@@ -10,11 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### WdcClient Package
-- **Breaking:** rename the branch prerelease `KyotoClient` package, options, registration and sample to `WdcClient`; the configuration section is now `Wdc`
-- New `AuroraScienceHub.Integrations.WdcClient` package for World Data Center for Geomagnetism, Kyoto real-time hourly Dst data, with configurable server and proxy via `AddWdcClients(configuration)`
-- `IDstIndexClient.GetDstAsync` for a UTC day or inclusive day range, requesting each month once and mapping `9999` to `null`
-- Limit Dst range requests to two calendar months to bound requests to the quick-look archive
-- Fixed-width WDC parsing with century and base-value support, real-payload tests, package documentation and an interactive sample (SWeather-core#293)
+- New `AuroraScienceHub.Integrations.WdcClient` package for real-time hourly Dst data from World Data Center for Geomagnetism, Kyoto.
 
 ## [1.6.1] - 2026-11-04
 
