@@ -5,167 +5,103 @@ using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
-// Setup DI and configuration
 var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false);
+// The interactive console owns rendering, including request failures.
+builder.Logging.ClearProviders();
 builder.Services.AddWdcClients(builder.Configuration);
-var host = builder.Build();
-
-// Get World Data Center for Geomagnetism, Kyoto clients from DI
-var dstIndexClient = host.Services.GetRequiredService<IDstIndexClient>();
+using var host = builder.Build();
+var client = host.Services.GetRequiredService<IDstIndexClient>();
 var timeProvider = TimeProvider.System;
 
-// Display header
 AnsiConsole.Write(new FigletText("WDC").Color(Color.Blue));
-AnsiConsole.MarkupLine("[dim]Interactive sample application for World Data Center for Geomagnetism, Kyoto clients[/]\n");
+AnsiConsole.MarkupLine("[dim]World Data Center for Geomagnetism, Kyoto: real-time hourly Dst[/]");
 
-// Interactive menu loop
 while (true)
 {
-    var choice = AnsiConsole.Prompt(
-        new SelectionPrompt<string>()
-            .Title("[green]Select an option:[/]")
-            .PageSize(10)
-            .AddChoices(
-                "Dst Index Today",
-                "Dst Index Yesterday",
-                "Dst Index Last 24 Hours",
-                "Dst Index Date Range",
-                new string('-', 30),
-                "Execute All Requests",
-                "Exit"));
-
+    var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+        .Title("[green]Select an option:[/]")
+        .AddChoices("Dst Index Today", "Dst Index Yesterday", "Dst Index Last 24 Hours",
+            "Dst Index Date Range", "Execute All Requests", "Exit"));
     if (choice == "Exit")
     {
         break;
     }
 
-    if (choice.StartsWith("---"))
-    {
-        continue;
-    }
-
-    // Input prompts cannot run inside the status spinner, so the range is requested beforehand
-    var range = choice == "Dst Index Date Range" ? PromptDateRange() : default;
-
-    AnsiConsole.WriteLine();
-
+    var now = timeProvider.GetUtcNow().UtcDateTime;
+    var today = DateOnly.FromDateTime(now);
     try
     {
-        await AnsiConsole.Status()
-            .Spinner(Spinner.Known.Dots)
-            .SpinnerStyle(Style.Parse("green"))
-            .StartAsync("Fetching data...", async ctx =>
-            {
-                await (choice switch
-                {
-                    "Dst Index Today" => FetchAndDisplay(async () =>
-                    {
-                        var data = await dstIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
-                        OutputFormatter.DisplayDstIndex("Dst Index Today", data, 10);
-                    }),
-                    "Dst Index Yesterday" => FetchAndDisplay(async () =>
-                    {
-                        var data = await dstIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
-                        OutputFormatter.DisplayDstIndex("Dst Index Yesterday", data, 10);
-                    }),
-                    "Dst Index Last 24 Hours" => FetchAndDisplay(async () =>
-                    {
-                        var data = await GetDstLast24HoursAsync();
-                        OutputFormatter.DisplayDstIndex("Dst Index Last 24 Hours", data, 10);
-                    }),
-                    "Dst Index Date Range" => FetchAndDisplay(async () =>
-                    {
-                        var data = await dstIndexClient.GetDstAsync(range.From, range.To, CancellationToken.None);
-                        OutputFormatter.DisplayDstIndex($"Dst Index {range.From:yyyy-MM-dd} – {range.To:yyyy-MM-dd}", data, 10);
-                    }),
-                    "Execute All Requests" => ExecuteAllRequests(),
-                    _ => Task.CompletedTask
-                });
-            });
+        switch (choice)
+        {
+            case "Dst Index Today":
+                await DisplayDayAsync(choice, today, CancellationToken.None);
+                break;
+            case "Dst Index Yesterday":
+                await DisplayDayAsync(choice, today.AddDays(-1), CancellationToken.None);
+                break;
+            case "Dst Index Last 24 Hours":
+                await DisplayLast24HoursAsync(now, CancellationToken.None);
+                break;
+            case "Dst Index Date Range":
+                var range = PromptDateRange(today);
+                AnsiConsole.MarkupLine("[dim]Fetching data...[/]");
+                var data = await client.GetDstAsync(range.From, range.To, CancellationToken.None);
+                Display($"Dst Index {range.From:yyyy-MM-dd} – {range.To:yyyy-MM-dd}", data);
+                break;
+            case "Execute All Requests":
+                await DisplayDayAsync("Dst Index Today", today, CancellationToken.None);
+                await DisplayDayAsync("Dst Index Yesterday", today.AddDays(-1), CancellationToken.None);
+                await DisplayLast24HoursAsync(now, CancellationToken.None);
+                break;
+        }
     }
-    catch (Exception ex)
+    catch (Exception exception)
     {
-        AnsiConsole.MarkupLine($"[red]Error: {ex.Message.EscapeMarkup()}[/]");
+        AnsiConsole.MarkupLine($"[red]Error: {exception.Message.EscapeMarkup()}[/]");
     }
 
-    AnsiConsole.WriteLine();
     AnsiConsole.MarkupLine("[dim]Press any key to continue...[/]");
     Console.ReadKey(true);
     AnsiConsole.Clear();
 }
 
-AnsiConsole.MarkupLine("[blue]Goodbye![/]");
-return 0;
-
-async Task ExecuteAllRequests()
+async Task DisplayDayAsync(
+    string title,
+    DateOnly date,
+    CancellationToken cancellationToken)
 {
-    AnsiConsole.MarkupLine("[yellow]Executing all World Data Center for Geomagnetism, Kyoto requests...[/]\n");
-
-    var tasks = new (string name, Func<Task> action)[]
-    {
-        ("Dst Index Today", async () =>
-        {
-            var data = await dstIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
-            OutputFormatter.DisplayDstIndex("Dst Index Today", data, 5);
-        }),
-        ("Dst Index Yesterday", async () =>
-        {
-            var data = await dstIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
-            OutputFormatter.DisplayDstIndex("Dst Index Yesterday", data, 5);
-        }),
-        ("Dst Index Last 24 Hours", async () =>
-        {
-            var data = await GetDstLast24HoursAsync();
-            OutputFormatter.DisplayDstIndex("Dst Index Last 24 Hours", data, 5);
-        })
-    };
-
-    await AnsiConsole.Progress()
-        .AutoClear(false)
-        .Columns(
-            new TaskDescriptionColumn(),
-            new ProgressBarColumn(),
-            new PercentageColumn(),
-            new SpinnerColumn())
-        .StartAsync(async ctx =>
-        {
-            for (int i = 0; i < tasks.Length; i++)
-            {
-                var progressTask = ctx.AddTask($"[green]{tasks[i].name}[/]");
-                await tasks[i].action();
-                progressTask.Increment(100);
-                AnsiConsole.WriteLine();
-            }
-        });
-
-    AnsiConsole.MarkupLine("\n[green]✓ All requests completed successfully![/]");
+    AnsiConsole.MarkupLine("[dim]Fetching data...[/]");
+    var data = await client.GetDstAsync(date, cancellationToken);
+    Display(title, data);
 }
 
-// The last 24 hours span two UTC days, so intersecting month files are requested and trimmed to the window
-async Task<IReadOnlyList<DstIndexRecord>> GetDstLast24HoursAsync()
+async Task DisplayLast24HoursAsync(DateTime now, CancellationToken cancellationToken)
 {
-    var now = timeProvider.GetUtcNow().UtcDateTime;
     var today = DateOnly.FromDateTime(now);
-    var data = await dstIndexClient.GetDstAsync(today.AddDays(-1), today, CancellationToken.None);
-    return data.Where(r => r.DateTime > now.AddHours(-24) && r.DateTime <= now).ToList();
+    AnsiConsole.MarkupLine("[dim]Fetching data...[/]");
+    var data = await client.GetDstAsync(today.AddDays(-1), today, cancellationToken);
+    Display("Dst Index Last 24 Hours", data.Where(record => record.DateTime > now.AddHours(-24)).ToList());
 }
 
-DateOnly GetUtcToday() => DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime);
+void Display(string title, IReadOnlyList<DstIndexRecord> records)
+    => OutputFormatter.DisplayDstIndex(title, SampleData.GetElapsedHours(records, timeProvider.GetUtcNow().UtcDateTime), 10);
 
-(DateOnly From, DateOnly To) PromptDateRange()
+(DateOnly From, DateOnly To) PromptDateRange(DateOnly today)
 {
-    var today = GetUtcToday();
-    var from = AnsiConsole.Prompt(
-        new TextPrompt<DateOnly>("[green]From (UTC, yyyy-MM-dd):[/]")
-            .DefaultValue(today.AddDays(-2)));
-    var to = AnsiConsole.Prompt(
-        new TextPrompt<DateOnly>("[green]To (UTC, yyyy-MM-dd):[/]")
-            .DefaultValue(today));
+    var earliest = SampleData.GetEarliestDate(today);
+    var message = $"Available real-time dates: {earliest:yyyy-MM-dd} through {today:yyyy-MM-dd} UTC.";
+    AnsiConsole.MarkupLine($"[dim]{message} Historical dates require WDC provisional/final products.[/]");
+    var from = AnsiConsole.Prompt(new TextPrompt<DateOnly>("[green]From (UTC, yyyy-MM-dd):[/]")
+        .DefaultValue(today.AddDays(-2))
+        .Validate(date => SampleData.IsSupportedRange(date, date, today)
+            ? ValidationResult.Success() : ValidationResult.Error(message)));
+    var to = AnsiConsole.Prompt(new TextPrompt<DateOnly>("[green]To (UTC, yyyy-MM-dd):[/]")
+        .DefaultValue(today)
+        .Validate(date => SampleData.IsSupportedRange(from, date, today)
+            ? ValidationResult.Success() : ValidationResult.Error($"{message} To must be on or after From.")));
     return (from, to);
 }
-
-// Helper to fetch and display data
-static async Task FetchAndDisplay(Func<Task> action) => await action();

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WdcClient\WdcClient.csproj" />
+    <ProjectReference Include="..\..\samples\WdcClientSample\WdcClientSample.csproj" />
     <ProjectReference Include="..\..\src\DtuSpaceClient\DtuSpaceClient.csproj" />
     <ProjectReference Include="..\..\src\NoaaClient\NoaaClient.csproj" />
   </ItemGroup>

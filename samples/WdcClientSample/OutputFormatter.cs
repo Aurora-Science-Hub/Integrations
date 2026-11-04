@@ -4,7 +4,7 @@ using Spectre.Console;
 namespace AuroraScienceHub.Integrations.Samples.WdcClientSample;
 
 /// <summary>
-/// Formats World Data Center for Geomagnetism, WDC data for console output using Spectre.Console
+/// Formats World Data Center for Geomagnetism, Kyoto data for console output using Spectre.Console
 /// </summary>
 internal static class OutputFormatter
 {
@@ -41,9 +41,10 @@ internal static class OutputFormatter
         var values = data.Where(r => r.Value.HasValue).Select(r => r.Value.GetValueOrDefault()).ToList();
         var missingCount = data.Count - values.Count;
 
+        var latest = data.LastOrDefault(record => record.Value.HasValue);
         var summary = values.Count == 0
             ? "[dim]all values are missing[/]"
-            : $"min [cyan]{values.Min():F0}[/] | max [cyan]{values.Max():F0}[/] | latest [cyan]{Format(data.LastOrDefault(r => r.Value.HasValue)?.Value)}[/]";
+            : $"min [cyan]{values.Min():F0}[/] | max [cyan]{values.Max():F0}[/] | latest [cyan]{Format(latest?.Value)}[/] at {latest?.DateTime:yyyy-MM-dd HH:mm} UTC";
 
         AnsiConsole.MarkupLine(
             $"[dim]Period:[/] {data[0].DateTime:yyyy-MM-dd HH:mm} – {data[^1].DateTime:yyyy-MM-dd HH:mm} UTC | {summary} | missing [cyan]{missingCount}[/]");
