@@ -190,6 +190,9 @@ Packages are `IsAotCompatible` (set in `src/Directory.Build.props`), and AOT/tri
 Follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/):
 
 - The version in progress is a section `## [X.Y.Z] - Unreleased`, where `X.Y.Z` equals `PackageBaseVersion`. Add every user-visible change to it under `Added` / `Changed` / `Fixed` / `Removed`, grouped by package (`#### <Source>Client Package`, `#### Dependencies`).
+- Describe the final user-visible difference from the last release, not the history of commits or review iterations.
+- For a new unreleased package or feature, summarize the final addition once under `Added`. Do not list its in-PR renames, refactors, formatting, tests or review fixes as separate release changes.
+- Use **Breaking:** for compatibility changes to a previously released public API. Renaming an API introduced in the same unreleased PR is part of its final `Added` entry, even if CI has published branch prerelease builds.
 - Replace `Unreleased` with the release date (`YYYY-MM-DD`) when the PR is merged to `main`.
 - The repository has no release tags; the link at the bottom of the file points to the merge commit of each version (`compare/<previous merge commit>...main` for the version in progress).
 

@@ -42,6 +42,7 @@ All packages are distributed via NuGet and target **.NET 10.0** and **.NET 11.0*
 ```bash
 dotnet add package AuroraScienceHub.Integrations.NoaaClient
 dotnet add package AuroraScienceHub.Integrations.DtuSpaceClient
+dotnet add package AuroraScienceHub.Integrations.WdcClient
 ```
 
 ### Quick Example
@@ -94,6 +95,12 @@ See [detailed documentation](src/NoaaClient/README.md) for usage examples and AP
 | **PC-Index Client** | Polar Cap North (PCN) index — near-real-time 1-minute quick-look CSV data (~10 minutes lag)          |
 
 See [detailed documentation](src/DtuSpaceClient/README.md) for usage examples and API reference.
+
+### World Data Center for Geomagnetism, Kyoto Integrations
+
+**[AuroraScienceHub.Integrations.WdcClient](src/WdcClient/)** reads the real-time hourly Dst index in nT.
+The client supports a UTC day or an inclusive range and maps missing values to `null`.
+See the [package documentation](src/WdcClient/README.md) for configuration, time semantics and data usage rules.
 
 ## Architecture
 
