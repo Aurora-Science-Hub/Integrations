@@ -1,4 +1,4 @@
-namespace AuroraScienceHub.Integrations.KyotoClient.DstIndex.Responses;
+namespace AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 
 /// <summary>
 /// Real-time hourly Dst index from WDC Kyoto

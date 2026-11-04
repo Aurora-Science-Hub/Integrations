@@ -1,9 +1,9 @@
 using AuroraScienceHub.Framework.Http.Proxy;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AuroraScienceHub.Integrations.KyotoClient;
+namespace AuroraScienceHub.Integrations.WdcClient;
 
 /// <summary>
 /// Registration of Kyoto clients
@@ -11,20 +11,20 @@ namespace AuroraScienceHub.Integrations.KyotoClient;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers Kyoto clients and binds the Kyoto and Proxy configuration sections
+    /// Registers Kyoto clients and binds the Wdc and Proxy configuration sections
     /// </summary>
     /// <param name="services">Service collection</param>
     /// <param name="configuration">Application configuration</param>
     /// <returns>The service collection</returns>
-    public static IServiceCollection AddKyotoClients(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddWdcClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<KyotoClientOptions>()
-            .Bind(configuration.GetSection(KyotoClientOptions.OptionKey));
+        services.AddOptions<WdcClientOptions>()
+            .Bind(configuration.GetSection(WdcClientOptions.OptionKey));
         services.AddOptions<ProxyOptions>()
             .Bind(configuration.GetSection(ProxyOptions.OptionKey));
 
         var builder = services.AddHttpClient<IDstIndexClient, DstIndexClient>();
-        if (configuration.GetSection(KyotoClientOptions.OptionKey).GetValue<bool>(nameof(KyotoClientOptions.UseProxy)))
+        if (configuration.GetSection(WdcClientOptions.OptionKey).GetValue<bool>(nameof(WdcClientOptions.UseProxy)))
         {
             builder.ConfigurePrimaryHttpProxyMessageHandler();
         }

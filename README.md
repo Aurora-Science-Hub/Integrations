@@ -42,7 +42,7 @@ All packages are distributed via NuGet and target **.NET 10.0** and **.NET 11.0*
 ```bash
 dotnet add package AuroraScienceHub.Integrations.NoaaClient
 dotnet add package AuroraScienceHub.Integrations.DtuSpaceClient
-dotnet add package AuroraScienceHub.Integrations.KyotoClient
+dotnet add package AuroraScienceHub.Integrations.WdcClient
 ```
 
 ### Quick Example
@@ -98,9 +98,9 @@ See [detailed documentation](src/DtuSpaceClient/README.md) for usage examples an
 
 ### WDC Kyoto Integrations
 
-**[AuroraScienceHub.Integrations.KyotoClient](src/KyotoClient/)** reads the real-time hourly Dst index in nT.
+**[AuroraScienceHub.Integrations.WdcClient](src/WdcClient/)** reads the real-time hourly Dst index in nT.
 The client supports a UTC day or an inclusive range and maps missing values to `null`.
-See the [package documentation](src/KyotoClient/README.md) for configuration, time semantics and data usage rules.
+See the [package documentation](src/WdcClient/README.md) for configuration, time semantics and data usage rules.
 
 ## Architecture
 

@@ -3,7 +3,7 @@
 Interactive Spectre.Console application for real-time hourly Dst data.
 
 ```bash
-cd samples/KyotoClientSample
+cd samples/WdcClientSample
 dotnet run
 ```
 
@@ -12,4 +12,4 @@ Select **Execute All Requests** to run the preset requests.
 Edit `appsettings.json` to configure the Kyoto server and optional proxy.
 Missing values appear as `N/A`. Future hours in the day file can also appear as missing.
 
-See the [package README](../../src/KyotoClient/README.md) for time semantics and Kyoto data usage rules.
+See the [package README](../../src/WdcClient/README.md) for time semantics and Kyoto data usage rules.

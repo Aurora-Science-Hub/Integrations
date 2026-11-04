@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net11.0</TargetFrameworks>
-    <AssemblyName>AuroraScienceHub.Integrations.Samples.KyotoClientSample</AssemblyName>
+    <AssemblyName>AuroraScienceHub.Integrations.Samples.WdcClientSample</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\KyotoClient\KyotoClient.csproj" />
+    <ProjectReference Include="..\..\src\WdcClient\WdcClient.csproj" />
   </ItemGroup>
 
 </Project>

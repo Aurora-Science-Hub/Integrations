@@ -1,14 +1,14 @@
-namespace AuroraScienceHub.Integrations.KyotoClient;
+namespace AuroraScienceHub.Integrations.WdcClient;
 
 /// <summary>
 /// Configuration for World Data Center for Geomagnetism, Kyoto clients
 /// </summary>
-public sealed class KyotoClientOptions
+public sealed class WdcClientOptions
 {
     /// <summary>
     /// Configuration section name
     /// </summary>
-    public const string OptionKey = "Kyoto";
+    public const string OptionKey = "Wdc";
 
     /// <summary>
     /// Kyoto server URL

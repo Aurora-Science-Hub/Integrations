@@ -1,25 +1,25 @@
 using System.Net;
-using AuroraScienceHub.Integrations.KyotoClient;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex;
+using AuroraScienceHub.Integrations.WdcClient;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 
-namespace AuroraScienceHub.Integrations.UnitTests.KyotoClient;
+namespace AuroraScienceHub.Integrations.UnitTests.WdcClient;
 
 public sealed class ServiceCollectionExtensionsTests
 {
     [Theory(DisplayName = "Kyoto registration binds options, resolves the client and configures the proxy")]
     [InlineData(false)]
     [InlineData(true)]
-    public void AddKyotoClients_WhenConfigured_ResolvesClientAndProxy(bool useProxy)
+    public void AddWdcClients_WhenConfigured_ResolvesClientAndProxy(bool useProxy)
     {
         // Arrange
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Kyoto:ServerUrl"] = "https://kyoto.test/",
-            ["Kyoto:UseProxy"] = useProxy.ToString(),
+            ["Wdc:ServerUrl"] = "https://kyoto.test/",
+            ["Wdc:UseProxy"] = useProxy.ToString(),
             ["Proxy:Address"] = "http://proxy.test:8080",
             ["Proxy:UserName"] = "user",
             ["Proxy:Password"] = "password"
@@ -27,10 +27,10 @@ public sealed class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         // Act
-        services.AddKyotoClients(configuration);
+        services.AddWdcClients(configuration);
         using var provider = services.BuildServiceProvider();
         var client = provider.GetRequiredService<IDstIndexClient>();
-        var options = provider.GetRequiredService<IOptions<KyotoClientOptions>>().Value;
+        var options = provider.GetRequiredService<IOptions<WdcClientOptions>>().Value;
         var handler = provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(nameof(IDstIndexClient));
         while (handler is DelegatingHandler delegating)
         {
@@ -51,16 +51,36 @@ public sealed class ServiceCollectionExtensionsTests
         password.ShouldBe(useProxy ? "password" : null);
     }
 
+    [Fact(DisplayName = "WDC proxy configuration fails fast when the proxy address is missing")]
+    public void AddWdcClients_WhenProxyAddressMissing_Throws()
+    {
+        // Arrange
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["Wdc:ServerUrl"] = "https://kyoto.test/",
+            ["Wdc:UseProxy"] = "true"
+        }).Build();
+        var services = new ServiceCollection();
+        services.AddWdcClients(configuration);
+        using var provider = services.BuildServiceProvider();
+
+        // Act
+        var exception = Should.Throw<InvalidOperationException>(() => provider.GetRequiredService<IDstIndexClient>());
+
+        // Assert
+        exception.Message.ShouldContain("Proxy");
+    }
+
     [Fact(DisplayName = "Kyoto options report a missing server URL")]
     public void RequiredServerUrl_WhenMissing_ThrowsDescriptiveException()
     {
         // Arrange
-        var options = new KyotoClientOptions();
+        var options = new WdcClientOptions();
 
         // Act
         var exception = Should.Throw<ArgumentNullException>(() => options.RequiredServerUrl);
 
         // Assert
-        exception.Message.ShouldContain("Kyoto:ServerUrl");
+        exception.Message.ShouldContain("Wdc:ServerUrl");
     }
 }

@@ -1,7 +1,7 @@
 using System.Globalization;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex.Responses;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 
-namespace AuroraScienceHub.Integrations.KyotoClient.DstIndex.Extensions;
+namespace AuroraScienceHub.Integrations.WdcClient.DstIndex.Extensions;
 
 internal static class DstIndexWdcParser
 {

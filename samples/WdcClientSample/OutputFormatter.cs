@@ -1,7 +1,7 @@
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex.Responses;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 using Spectre.Console;
 
-namespace AuroraScienceHub.Integrations.Samples.KyotoClientSample;
+namespace AuroraScienceHub.Integrations.Samples.WdcClientSample;
 
 /// <summary>
 /// Formats WDC Kyoto data for console output using Spectre.Console

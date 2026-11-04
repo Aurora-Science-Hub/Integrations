@@ -1,6 +1,6 @@
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex.Responses;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 
-namespace AuroraScienceHub.Integrations.KyotoClient.DstIndex;
+namespace AuroraScienceHub.Integrations.WdcClient.DstIndex;
 
 /// <summary>
 /// World Data Center for Geomagnetism, Kyoto real-time Dst client
@@ -29,8 +29,11 @@ public interface IDstIndexClient
     /// <param name="to">Last UTC day, inclusive</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Records in the range, with missing values mapped to null and absent months skipped</returns>
-    /// <remarks>Each month file is requested once, sequentially, regardless of the number of requested days</remarks>
-    /// <exception cref="ArgumentOutOfRangeException">From is later than to</exception>
+    /// <remarks>
+    /// The range may intersect at most two calendar months, matching the current and previous real-time months.
+    /// Each month file is requested once, sequentially, regardless of the number of requested days
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">From is later than to, or the range intersects more than two calendar months</exception>
     Task<IReadOnlyList<DstIndexRecord>> GetDstAsync(
         DateOnly from,
         DateOnly to,

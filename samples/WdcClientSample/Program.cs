@@ -1,7 +1,7 @@
-using AuroraScienceHub.Integrations.KyotoClient;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex.Responses;
-using AuroraScienceHub.Integrations.Samples.KyotoClientSample;
+using AuroraScienceHub.Integrations.Samples.WdcClientSample;
+using AuroraScienceHub.Integrations.WdcClient;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,11 +10,11 @@ using Spectre.Console;
 // Setup DI and configuration
 var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false);
-builder.Services.AddKyotoClients(builder.Configuration);
+builder.Services.AddWdcClients(builder.Configuration);
 var host = builder.Build();
 
 // Get WDC Kyoto clients from DI
-var pcIndexClient = host.Services.GetRequiredService<IDstIndexClient>();
+var dstIndexClient = host.Services.GetRequiredService<IDstIndexClient>();
 var timeProvider = TimeProvider.System;
 
 // Display header
@@ -63,12 +63,12 @@ while (true)
                 {
                     "Dst Index Today" => FetchAndDisplay(async () =>
                     {
-                        var data = await pcIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
+                        var data = await dstIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
                         OutputFormatter.DisplayDstIndex("Dst Index Today", data, 10);
                     }),
                     "Dst Index Yesterday" => FetchAndDisplay(async () =>
                     {
-                        var data = await pcIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
+                        var data = await dstIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
                         OutputFormatter.DisplayDstIndex("Dst Index Yesterday", data, 10);
                     }),
                     "Dst Index Last 24 Hours" => FetchAndDisplay(async () =>
@@ -78,7 +78,7 @@ while (true)
                     }),
                     "Dst Index Date Range" => FetchAndDisplay(async () =>
                     {
-                        var data = await pcIndexClient.GetDstAsync(range.From, range.To, CancellationToken.None);
+                        var data = await dstIndexClient.GetDstAsync(range.From, range.To, CancellationToken.None);
                         OutputFormatter.DisplayDstIndex($"Dst Index {range.From:yyyy-MM-dd} – {range.To:yyyy-MM-dd}", data, 10);
                     }),
                     "Execute All Requests" => ExecuteAllRequests(),
@@ -108,12 +108,12 @@ async Task ExecuteAllRequests()
     {
         ("Dst Index Today", async () =>
         {
-            var data = await pcIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
+            var data = await dstIndexClient.GetDstAsync(GetUtcToday(), CancellationToken.None);
             OutputFormatter.DisplayDstIndex("Dst Index Today", data, 5);
         }),
         ("Dst Index Yesterday", async () =>
         {
-            var data = await pcIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
+            var data = await dstIndexClient.GetDstAsync(GetUtcToday().AddDays(-1), CancellationToken.None);
             OutputFormatter.DisplayDstIndex("Dst Index Yesterday", data, 5);
         }),
         ("Dst Index Last 24 Hours", async () =>
@@ -149,7 +149,7 @@ async Task<IReadOnlyList<DstIndexRecord>> GetDstLast24HoursAsync()
 {
     var now = timeProvider.GetUtcNow().UtcDateTime;
     var today = DateOnly.FromDateTime(now);
-    var data = await pcIndexClient.GetDstAsync(today.AddDays(-1), today, CancellationToken.None);
+    var data = await dstIndexClient.GetDstAsync(today.AddDays(-1), today, CancellationToken.None);
     return data.Where(r => r.DateTime > now.AddHours(-24) && r.DateTime <= now).ToList();
 }
 

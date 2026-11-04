@@ -1,13 +1,13 @@
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex.Extensions;
 using AuroraScienceHub.Integrations.UnitTests.Utils;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex.Extensions;
 using Shouldly;
 
-namespace AuroraScienceHub.Integrations.UnitTests.KyotoClient.DstIndex;
+namespace AuroraScienceHub.Integrations.UnitTests.WdcClient.DstIndex;
 
 public sealed class DstIndexWdcParserTests
 {
     [Theory(DisplayName = "Dst parser reads real Kyoto fixed-width data and ignores the daily mean and footer")]
-    [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.KyotoClient/DstIndex/Samples/DstRealtimeSample.txt")]
+    [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.WdcClient/DstIndex/Samples/DstRealtimeSample.txt")]
     public void Parse_WhenRealPayload_ReturnsHourlyUtcRecords(string text)
     {
         // Arrange / Act

@@ -1,10 +1,10 @@
 using System.Net;
-using AuroraScienceHub.Integrations.KyotoClient;
-using AuroraScienceHub.Integrations.KyotoClient.DstIndex;
+using AuroraScienceHub.Integrations.WdcClient;
+using AuroraScienceHub.Integrations.WdcClient.DstIndex;
 using Microsoft.Extensions.Options;
 using Shouldly;
 
-namespace AuroraScienceHub.Integrations.UnitTests.KyotoClient.DstIndex;
+namespace AuroraScienceHub.Integrations.UnitTests.WdcClient.DstIndex;
 
 public sealed class DstIndexClientTests
 {
@@ -148,8 +148,46 @@ public sealed class DstIndexClientTests
         handler.Requests.Count.ShouldBe(1);
     }
 
+    [Fact(DisplayName = "Dst rejects ranges spanning more than two calendar months before sending requests")]
+    public async Task GetDstAsync_WhenRangeExceedsTwoMonths_ThrowsBeforeRequest()
+    {
+        // Arrange
+        using var handler = new TestHandler(_ => Response(HttpStatusCode.NotFound, ""));
+        using var http = new HttpClient(handler);
+        var sut = CreateSut(http);
+
+        // Act
+        await Should.ThrowAsync<ArgumentOutOfRangeException>(() => sut.GetDstAsync(
+            new DateOnly(2026, 9, 30),
+            new DateOnly(2026, 11, 1),
+            TestContext.Current.CancellationToken));
+
+        // Assert
+        handler.Requests.ShouldBeEmpty();
+    }
+
+    [Fact(DisplayName = "Dst requests a month once for a multi-day range within that month")]
+    public async Task GetDstAsync_WhenRangeInOneMonth_RequestsFileOnce()
+    {
+        // Arrange
+        using var handler = new TestHandler(_ => Response(HttpStatusCode.OK,
+            Day("2611", "01") + "\n" + Day("2611", "02")));
+        using var http = new HttpClient(handler);
+        var sut = CreateSut(http);
+
+        // Act
+        var result = await sut.GetDstAsync(
+            new DateOnly(2026, 11, 1),
+            new DateOnly(2026, 11, 2),
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        handler.Requests.Count.ShouldBe(1);
+        result.Count.ShouldBe(48);
+    }
+
     private static IDstIndexClient CreateSut(HttpClient http)
-        => new DstIndexClient(http, Options.Create(new KyotoClientOptions { ServerUrl = new Uri("https://kyoto.test/") }));
+        => new DstIndexClient(http, Options.Create(new WdcClientOptions { ServerUrl = new Uri("https://kyoto.test/") }));
 
     private static string Day(string yearMonth, string day)
         => "DST" + yearMonth + "*" + day + "RRX020   0" + string.Concat(Enumerable.Repeat("  -1", 25));
