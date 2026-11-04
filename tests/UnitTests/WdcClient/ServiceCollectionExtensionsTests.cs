@@ -10,7 +10,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.WdcClient;
 
 public sealed class ServiceCollectionExtensionsTests
 {
-    [Theory(DisplayName = "Kyoto registration binds options, resolves the client and configures the proxy")]
+    [Theory(DisplayName = "WDC registration binds options, resolves the client and configures the proxy")]
     [InlineData(false)]
     [InlineData(true)]
     public void AddWdcClients_WhenConfigured_ResolvesClientAndProxy(bool useProxy)
@@ -18,7 +18,7 @@ public sealed class ServiceCollectionExtensionsTests
         // Arrange
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Wdc:ServerUrl"] = "https://kyoto.test/",
+            ["Wdc:ServerUrl"] = "https://wdc.test/",
             ["Wdc:UseProxy"] = useProxy.ToString(),
             ["Proxy:Address"] = "http://proxy.test:8080",
             ["Proxy:UserName"] = "user",
@@ -39,10 +39,10 @@ public sealed class ServiceCollectionExtensionsTests
 
         // Assert
         client.ShouldNotBeNull();
-        options.RequiredServerUrl.ShouldBe(new Uri("https://kyoto.test/"));
+        options.RequiredServerUrl.ShouldBe(new Uri("https://wdc.test/"));
         options.UseProxy.ShouldBe(useProxy);
         var proxy = (handler as HttpClientHandler)?.Proxy ?? (handler as SocketsHttpHandler)?.Proxy;
-        var address = proxy?.GetProxy(new Uri("https://kyoto.test/"));
+        var address = proxy?.GetProxy(new Uri("https://wdc.test/"));
         address.ShouldBe(useProxy ? new Uri("http://proxy.test:8080") : null);
         var credentials = proxy?.Credentials?.GetCredential(new Uri("http://proxy.test:8080"), "Basic");
         var userName = credentials?.UserName;
@@ -57,7 +57,7 @@ public sealed class ServiceCollectionExtensionsTests
         // Arrange
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Wdc:ServerUrl"] = "https://kyoto.test/",
+            ["Wdc:ServerUrl"] = "https://wdc.test/",
             ["Wdc:UseProxy"] = "true"
         }).Build();
         var services = new ServiceCollection();
@@ -71,7 +71,7 @@ public sealed class ServiceCollectionExtensionsTests
         exception.Message.ShouldContain("Proxy");
     }
 
-    [Fact(DisplayName = "Kyoto options report a missing server URL")]
+    [Fact(DisplayName = "WDC options report a missing server URL")]
     public void RequiredServerUrl_WhenMissing_ThrowsDescriptiveException()
     {
         // Arrange

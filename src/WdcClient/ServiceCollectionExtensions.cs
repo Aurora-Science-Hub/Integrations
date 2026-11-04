@@ -6,12 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AuroraScienceHub.Integrations.WdcClient;
 
 /// <summary>
-/// Registration of Kyoto clients
+/// Registration of World Data Center for Geomagnetism clients
 /// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers Kyoto clients and binds the Wdc and Proxy configuration sections
+    /// Registers World Data Center for Geomagnetism clients and binds the Wdc and Proxy configuration sections
     /// </summary>
     /// <param name="services">Service collection</param>
     /// <param name="configuration">Application configuration</param>

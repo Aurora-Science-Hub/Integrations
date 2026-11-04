@@ -13,13 +13,13 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 builder.Services.AddWdcClients(builder.Configuration);
 var host = builder.Build();
 
-// Get WDC Kyoto clients from DI
+// Get World Data Center for Geomagnetism, Kyoto clients from DI
 var dstIndexClient = host.Services.GetRequiredService<IDstIndexClient>();
 var timeProvider = TimeProvider.System;
 
 // Display header
-AnsiConsole.Write(new FigletText("WDC Kyoto").Color(Color.Blue));
-AnsiConsole.MarkupLine("[dim]Interactive sample application for WDC Kyoto clients[/]\n");
+AnsiConsole.Write(new FigletText("WDC").Color(Color.Blue));
+AnsiConsole.MarkupLine("[dim]Interactive sample application for World Data Center for Geomagnetism, Kyoto clients[/]\n");
 
 // Interactive menu loop
 while (true)
@@ -102,7 +102,7 @@ return 0;
 
 async Task ExecuteAllRequests()
 {
-    AnsiConsole.MarkupLine("[yellow]Executing all WDC Kyoto requests...[/]\n");
+    AnsiConsole.MarkupLine("[yellow]Executing all World Data Center for Geomagnetism, Kyoto requests...[/]\n");
 
     var tasks = new (string name, Func<Task> action)[]
     {

@@ -11,7 +11,7 @@ public sealed class WdcClientOptions
     public const string OptionKey = "Wdc";
 
     /// <summary>
-    /// Kyoto server URL
+    /// WDC server URL
     /// </summary>
     public Uri? ServerUrl { get; set; }
 

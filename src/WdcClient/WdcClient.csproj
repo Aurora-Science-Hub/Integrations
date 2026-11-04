@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>AuroraScienceHub.Integrations.WdcClient</AssemblyName>
     <PackageId>AuroraScienceHub.Integrations.WdcClient</PackageId>
-    <Description>WDC Kyoto real-time hourly Dst index client</Description>
+    <Description>World Data Center for Geomagnetism, Kyoto real-time hourly Dst index client</Description>
     <PackageDescription>HTTP client for World Data Center for Geomagnetism, Kyoto real-time hourly Dst data</PackageDescription>
     <PackageTags>kyoto;wdc;dst;space-weather;geomagnetic;aurora;integration</PackageTags>
   </PropertyGroup>

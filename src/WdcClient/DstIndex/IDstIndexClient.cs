@@ -6,7 +6,7 @@ namespace AuroraScienceHub.Integrations.WdcClient.DstIndex;
 /// World Data Center for Geomagnetism, Kyoto real-time Dst client
 /// </summary>
 /// <remarks>
-/// Quick-look values are preliminary and can change. Kyoto does not guarantee publication latency.
+/// Quick-look values are preliminary and can change. WDC does not guarantee publication latency.
 /// Only months available in the real-time archive are requested, without fallback to provisional or final data
 /// </remarks>
 public interface IDstIndexClient

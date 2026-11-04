@@ -6,7 +6,7 @@ namespace AuroraScienceHub.Integrations.UnitTests.WdcClient.DstIndex;
 
 public sealed class DstIndexWdcParserTests
 {
-    [Theory(DisplayName = "Dst parser reads real Kyoto fixed-width data and ignores the daily mean and footer")]
+    [Theory(DisplayName = "Dst parser reads real WDC fixed-width data and ignores the daily mean and footer")]
     [EmbeddedResourceData("AuroraScienceHub.Integrations.UnitTests.WdcClient/DstIndex/Samples/DstRealtimeSample.txt")]
     public void Parse_WhenRealPayload_ReturnsHourlyUtcRecords(string text)
     {

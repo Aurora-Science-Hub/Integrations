@@ -4,7 +4,7 @@ using Spectre.Console;
 namespace AuroraScienceHub.Integrations.Samples.WdcClientSample;
 
 /// <summary>
-/// Formats WDC Kyoto data for console output using Spectre.Console
+/// Formats World Data Center for Geomagnetism, WDC data for console output using Spectre.Console
 /// </summary>
 internal static class OutputFormatter
 {

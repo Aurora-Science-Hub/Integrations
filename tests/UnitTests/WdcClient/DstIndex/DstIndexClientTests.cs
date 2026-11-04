@@ -20,7 +20,7 @@ public sealed class DstIndexClientTests
         var result = await sut.GetDstAsync(new DateOnly(2026, 11, 2), TestContext.Current.CancellationToken);
 
         // Assert
-        handler.Requests.ShouldBe([new Uri("https://kyoto.test/dst_realtime/202611/dst2611.for.request")]);
+        handler.Requests.ShouldBe([new Uri("https://wdc.test/dst_realtime/202611/dst2611.for.request")]);
         result.Count.ShouldBe(24);
         result.ShouldAllBe(record => record.DateTime.Day == 2 && record.Value == -1);
     }
@@ -41,8 +41,8 @@ public sealed class DstIndexClientTests
 
         // Assert
         handler.Requests.ShouldBe([
-            new Uri("https://kyoto.test/dst_realtime/202612/dst2612.for.request"),
-            new Uri("https://kyoto.test/dst_realtime/202701/dst2701.for.request")]);
+            new Uri("https://wdc.test/dst_realtime/202612/dst2612.for.request"),
+            new Uri("https://wdc.test/dst_realtime/202701/dst2701.for.request")]);
         result.Count.ShouldBe(48);
         result[0].DateTime.ShouldBe(new DateTime(2026, 12, 31, 0, 0, 0, DateTimeKind.Utc));
         result[^1].DateTime.ShouldBe(new DateTime(2027, 1, 1, 23, 0, 0, DateTimeKind.Utc));
@@ -187,7 +187,7 @@ public sealed class DstIndexClientTests
     }
 
     private static IDstIndexClient CreateSut(HttpClient http)
-        => new DstIndexClient(http, Options.Create(new WdcClientOptions { ServerUrl = new Uri("https://kyoto.test/") }));
+        => new DstIndexClient(http, Options.Create(new WdcClientOptions { ServerUrl = new Uri("https://wdc.test/") }));
 
     private static string Day(string yearMonth, string day)
         => "DST" + yearMonth + "*" + day + "RRX020   0" + string.Concat(Enumerable.Repeat("  -1", 25));

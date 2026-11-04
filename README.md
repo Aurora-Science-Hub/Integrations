@@ -96,7 +96,7 @@ See [detailed documentation](src/NoaaClient/README.md) for usage examples and AP
 
 See [detailed documentation](src/DtuSpaceClient/README.md) for usage examples and API reference.
 
-### WDC Kyoto Integrations
+### World Data Center for Geomagnetism, Kyoto Integrations
 
 **[AuroraScienceHub.Integrations.WdcClient](src/WdcClient/)** reads the real-time hourly Dst index in nT.
 The client supports a UTC day or an inclusive range and maps missing values to `null`.
