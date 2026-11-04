@@ -12,7 +12,6 @@ internal sealed class DstIndexClient : IDstIndexClient
 {
     private const int MaxRangeMonths = 2;
     private const int MonthsPerYear = 12;
-    private const string RealtimePath = "dst_realtime/";
     private readonly HttpClient _httpClient;
     private readonly Uri _baseUrl;
 
@@ -39,7 +38,7 @@ internal sealed class DstIndexClient : IDstIndexClient
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var path = string.Create(CultureInfo.InvariantCulture, $"{RealtimePath}{month:yyyyMM}/dst{month:yyMM}.for.request");
+            var path = string.Create(CultureInfo.InvariantCulture, $"dst_realtime/{month:yyyyMM}/dst{month:yyMM}.for.request");
             using var response = await _httpClient.GetAsync(new Uri(_baseUrl, path), cancellationToken).ConfigureAwait(false);
             if (response.StatusCode != HttpStatusCode.NotFound)
             {
