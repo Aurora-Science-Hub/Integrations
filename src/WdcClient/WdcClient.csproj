@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="References/DstRecordFormat-2026-11-04.md" />
-    <None Include="References/DstRecordFormat-2026-11-04.md" Pack="true" PackagePath="References/" />
+    <None Remove="References/DstRecordFormat.md" />
+    <None Include="References/DstRecordFormat.md" Pack="true" PackagePath="References/" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace AuroraScienceHub.Integrations.WdcClient.DstIndex.Extensions;
 /// Parser for fixed-width WDC Dst records
 /// </summary>
 /// <seealso href="https://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html">WDC Dst record format</seealso>
-/// <seealso href="../../References/DstRecordFormat-2026-11-04.md">Local format snapshot, retrieved on 2026-11-04</seealso>
+/// <seealso href="../../References/DstRecordFormat.md">Local format snapshot, retrieved on 2026-11-04</seealso>
 internal static class DstIndexWdcParser
 {
     private const int HourlyValuesOffset = 20;
