@@ -3,30 +3,21 @@ using AuroraScienceHub.Integrations.WdcClient.DstIndex.Responses;
 
 namespace AuroraScienceHub.Integrations.WdcClient.DstIndex.Extensions;
 
+/// <summary>
+/// Parser for fixed-width WDC Dst records
+/// </summary>
+/// <seealso href="https://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html">WDC Dst record format</seealso>
 internal static class DstIndexWdcParser
 {
-    private const int RecordLength = 120;
-    private const string IndexName = "DST";
-    private const int IndexMarkerOffset = 7;
-    private const char IndexMarker = '*';
-    private const int ValueTypeOffset = 12;
-    private const char ValueType = 'X';
     private const int HourlyValuesOffset = 20;
-    private const int ValueWidth = 4;
-    private const int HoursPerDay = 24;
-    private const int MissingValue = 9999;
-    private const int BaseValueScale = 100;
-    private const int LegacyCentury = 19;
-    private const int YearsPerCentury = 100;
-
-    private static readonly Range s_yearField = 3..5;
-    private static readonly Range s_monthField = 5..7;
-    private static readonly Range s_dayField = 8..10;
-    private static readonly Range s_centuryField = 14..16;
-    private static readonly Range s_baseValueField = 16..20;
 
     public static IReadOnlyList<DstIndexRecord> Parse(string text)
     {
+        const int valueWidth = 4;
+        const int hoursPerDay = 24;
+        const int missingValue = 9999;
+        const int baseValueScale = 100;
+
         var records = new List<DstIndexRecord>();
         foreach (var line in text.AsSpan().EnumerateLines())
         {
@@ -35,15 +26,15 @@ internal static class DstIndexWdcParser
                 continue;
             }
 
-            for (var hour = 0; hour < HoursPerDay; hour++)
+            for (var hour = 0; hour < hoursPerDay; hour++)
             {
-                var valueField = line.Slice(HourlyValuesOffset + hour * ValueWidth, ValueWidth);
+                var valueField = line.Slice(HourlyValuesOffset + hour * valueWidth, valueWidth);
                 if (!TryParseInt(valueField, out var value))
                 {
                     continue;
                 }
 
-                int? dst = value == MissingValue ? null : baseValue * BaseValueScale + value;
+                int? dst = value == missingValue ? null : baseValue * baseValueScale + value;
                 records.Add(new DstIndexRecord(date.AddHours(hour), dst));
             }
         }
@@ -57,6 +48,7 @@ internal static class DstIndexWdcParser
         out DateTime date,
         out int baseValue)
     {
+        var baseValueField = 16..HourlyValuesOffset;
         date = default;
         baseValue = default;
         if (!IsDstRecord(line))
@@ -65,34 +57,50 @@ internal static class DstIndexWdcParser
         }
 
         return TryParseDate(line, out date)
-            && TryParseInt(line[s_baseValueField], out baseValue);
+            && TryParseInt(line[baseValueField], out baseValue);
     }
 
     private static bool IsDstRecord(ReadOnlySpan<char> line)
-        => line.Length >= RecordLength
-           && line.StartsWith(IndexName, StringComparison.Ordinal)
-           && line[IndexMarkerOffset] == IndexMarker
-           && line[ValueTypeOffset] == ValueType;
+    {
+        const int recordLength = 120;
+        const string indexName = "DST";
+        const int indexMarkerOffset = 7;
+        const char indexMarker = '*';
+        const int valueTypeOffset = 12;
+        const char valueType = 'X';
+
+        return line.Length >= recordLength
+            && line.StartsWith(indexName, StringComparison.Ordinal)
+            && line[indexMarkerOffset] == indexMarker
+            && line[valueTypeOffset] == valueType;
+    }
 
     private static bool TryParseDate(ReadOnlySpan<char> line, out DateTime date)
     {
+        const int legacyCentury = 19;
+        const int yearsPerCentury = 100;
+        var yearField = 3..5;
+        var monthField = 5..7;
+        var dayField = 8..10;
+        var centuryField = 14..16;
+
         date = default;
-        if (!TryParseInt(line[s_yearField], out var year)
-            || !TryParseInt(line[s_monthField], out var month)
-            || !TryParseInt(line[s_dayField], out var day))
+        if (!TryParseInt(line[yearField], out var year)
+            || !TryParseInt(line[monthField], out var month)
+            || !TryParseInt(line[dayField], out var day))
         {
             return false;
         }
 
-        var centuryField = line[s_centuryField];
-        var century = LegacyCentury;
-        if (!centuryField.IsWhiteSpace()
-            && !TryParseInt(centuryField, out century))
+        var centuryValue = line[centuryField];
+        var century = legacyCentury;
+        if (!centuryValue.IsWhiteSpace()
+            && !TryParseInt(centuryValue, out century))
         {
             return false;
         }
 
-        year += century * YearsPerCentury;
+        year += century * yearsPerCentury;
         if (year < DateTime.MinValue.Year
             || year > DateTime.MaxValue.Year
             || month is < 1 or > 12
