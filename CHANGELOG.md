@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - Unreleased
+
+### Added
+
+#### FmiClient Package
+- New `AuroraScienceHub.Integrations.FmiClient` package for FMI EURISGIC real-time IU and IL electrojet indices, retrieved together with one request.
+- `FmiClientSample` interactive console application demonstrating the EURISGIC client.
+
 ## [1.7.0] - 2026-11-04
 
 ### Added
@@ -175,7 +183,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded debug symbols in NuGet packages
 - GitHub Actions CI/CD pipeline for build and test
 
-[1.7.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/15c222b...main
+[1.8.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/a7e45d3...main
+[1.7.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/15c222b...a7e45d3
 [1.6.1]: https://github.com/Aurora-Science-Hub/Integrations/compare/96afa44...15c222b
 [1.6.0]: https://github.com/Aurora-Science-Hub/Integrations/compare/847fc10...96afa44
 [1.5.0]: https://github.com/Aurora-Science-Hub/Integrations/commit/847fc10

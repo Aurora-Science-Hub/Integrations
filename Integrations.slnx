@@ -17,6 +17,7 @@
   <Folder Name="/samples/">
     <Project Path="samples/DtuSpaceClientSample/DtuSpaceClientSample.csproj" />
     <Project Path="samples/WdcClientSample/WdcClientSample.csproj" />
+    <Project Path="samples/FmiClientSample/FmiClientSample.csproj" />
     <Project Path="samples/NoaaClientSample/NoaaClientSample.csproj" />
   </Folder>
   <Folder Name="/Solution items/">
@@ -35,6 +36,7 @@
     <File Path="src\Directory.Build.props" />
     <Project Path="src\DtuSpaceClient\DtuSpaceClient.csproj" />
     <Project Path="src/WdcClient/WdcClient.csproj" />
+    <Project Path="src/FmiClient/FmiClient.csproj" />
     <Project Path="src\NoaaClient\NoaaClient.csproj" />
   </Folder>
   <Folder Name="/tests/">

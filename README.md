@@ -43,6 +43,7 @@ All packages are distributed via NuGet and target **.NET 10.0** and **.NET 11.0*
 dotnet add package AuroraScienceHub.Integrations.NoaaClient
 dotnet add package AuroraScienceHub.Integrations.DtuSpaceClient
 dotnet add package AuroraScienceHub.Integrations.WdcClient
+dotnet add package AuroraScienceHub.Integrations.FmiClient
 ```
 
 ### Quick Example
@@ -101,6 +102,12 @@ See [detailed documentation](src/DtuSpaceClient/README.md) for usage examples an
 **[AuroraScienceHub.Integrations.WdcClient](src/WdcClient/)** reads the real-time hourly Dst index in nT.
 The client supports a UTC day or an inclusive range and maps missing values to `null`.
 See the [package documentation](src/WdcClient/README.md) for configuration, time semantics and data usage rules.
+
+### Finnish Meteorological Institute Integrations
+
+**[AuroraScienceHub.Integrations.FmiClient](src/FmiClient/)** reads the EURISGIC real-time IU and IL electrojet indices in nT.
+One request returns both indices for the latest 24 hours together with UTC timestamps and magnetometer station counts.
+See the [package documentation](src/FmiClient/README.md) for configuration, data semantics and usage rules.
 
 ## Architecture
 
