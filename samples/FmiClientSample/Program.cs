@@ -22,7 +22,7 @@ while (true)
 {
     var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
         .Title("[green]Select an option:[/]")
-        .AddChoices("IU/IL Latest 24 Hours", "Execute All Requests", "Exit"));
+        .AddChoices("IU/IL Latest 24 Hours", "Exit"));
     if (choice == "Exit")
     {
         break;
