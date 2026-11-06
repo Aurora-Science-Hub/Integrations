@@ -1,14 +1,14 @@
 using System.Net;
 using AuroraScienceHub.Integrations.FmiClient;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet;
 using Microsoft.Extensions.Options;
 using Shouldly;
 
-namespace AuroraScienceHub.Integrations.UnitTests.FmiClient.Eurisgic;
+namespace AuroraScienceHub.Integrations.UnitTests.FmiClient.FmiElectrojet;
 
-public sealed class EurisgicClientTests
+public sealed class FmiElectrojetClientTests
 {
-    [Fact(DisplayName = "EURISGIC request retrieves IU and IL together from the real-time file")]
+    [Fact(DisplayName = "FMI electrojet request retrieves IU and IL together from the real-time file")]
     public async Task GetIndicesAsync_WhenSuccess_RequestsFileAndReturnsBothIndices()
     {
         // Arrange
@@ -30,7 +30,7 @@ public sealed class EurisgicClientTests
         result[1].Il.ShouldBe(-7.2f);
     }
 
-    [Fact(DisplayName = "EURISGIC returns no records for an empty response")]
+    [Fact(DisplayName = "FMI electrojet returns no records for an empty response")]
     public async Task GetIndicesAsync_WhenEmptyBody_ReturnsEmpty()
     {
         // Arrange
@@ -45,7 +45,7 @@ public sealed class EurisgicClientTests
         result.ShouldBeEmpty();
     }
 
-    [Theory(DisplayName = "EURISGIC throws for missing files and HTTP errors")]
+    [Theory(DisplayName = "FMI electrojet throws for missing files and HTTP errors")]
     [InlineData(HttpStatusCode.NotFound)]
     [InlineData(HttpStatusCode.InternalServerError)]
     public async Task GetIndicesAsync_WhenHttpError_Throws(HttpStatusCode status)
@@ -63,8 +63,8 @@ public sealed class EurisgicClientTests
         exception.StatusCode.ShouldBe(status);
     }
 
-    private static IEurisgicClient CreateSut(HttpClient http)
-        => new EurisgicClient(http, Options.Create(new FmiClientOptions { ServerUrl = new Uri("https://fmi.test/") }));
+    private static IFmiElectrojetClient CreateSut(HttpClient http)
+        => new FmiElectrojetClient(http, Options.Create(new FmiClientOptions { ServerUrl = new Uri("https://fmi.test/") }));
 
     private static HttpResponseMessage Response(HttpStatusCode status, string content)
         => new(status) { Content = new StringContent(content) };

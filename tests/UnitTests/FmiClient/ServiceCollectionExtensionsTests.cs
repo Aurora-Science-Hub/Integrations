@@ -1,7 +1,7 @@
 using System.Net;
 using System.Reflection;
 using AuroraScienceHub.Integrations.FmiClient;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -30,9 +30,9 @@ public sealed class ServiceCollectionExtensionsTests
         // Act
         services.AddFmiClients(configuration);
         using var provider = services.BuildServiceProvider();
-        var client = provider.GetRequiredService<IEurisgicClient>();
+        var client = provider.GetRequiredService<IFmiElectrojetClient>();
         var options = provider.GetRequiredService<IOptions<FmiClientOptions>>().Value;
-        var handler = provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(nameof(IEurisgicClient));
+        var handler = provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(nameof(IFmiElectrojetClient));
         var primaryHandler = UnwrapPrimaryHandler(handler);
 
         // Assert
@@ -68,7 +68,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var provider = services.BuildServiceProvider();
 
         // Act
-        var exception = Should.Throw<InvalidOperationException>(() => provider.GetRequiredService<IEurisgicClient>());
+        var exception = Should.Throw<InvalidOperationException>(() => provider.GetRequiredService<IFmiElectrojetClient>());
 
         // Assert
         exception.Message.ShouldContain("Proxy");

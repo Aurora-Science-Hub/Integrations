@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using AuroraScienceHub.Framework.Http.Proxy;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
             .Bind(configuration.GetSection(ProxyOptions.OptionKey));
 
         var useProxy = fmiSection.GetValue<bool>(nameof(FmiClientOptions.UseProxy));
-        services.AddFmiHttpClient<IEurisgicClient, EurisgicClient>(useProxy);
+        services.AddFmiHttpClient<IFmiElectrojetClient, FmiElectrojetClient>(useProxy);
 
         return services;
     }

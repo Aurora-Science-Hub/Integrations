@@ -16,7 +16,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="FmiClient\Eurisgic\Samples\**" />
+    <EmbeddedResource Include="FmiClient\FmiElectrojet\Samples\**" />
     <EmbeddedResource Include="WdcClient\DstIndex\Samples\**" />
     <EmbeddedResource Include="DtuSpaceClient\PcIndex\Samples\**" />
     <EmbeddedResource Include="NoaaClient\Ace\Samples\**" />

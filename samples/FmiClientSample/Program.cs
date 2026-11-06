@@ -1,5 +1,5 @@
 using AuroraScienceHub.Integrations.FmiClient;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet;
 using AuroraScienceHub.Integrations.Samples.FmiClientSample;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,16 +13,16 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 builder.Logging.ClearProviders();
 builder.Services.AddFmiClients(builder.Configuration);
 using var host = builder.Build();
-var client = host.Services.GetRequiredService<IEurisgicClient>();
+var client = host.Services.GetRequiredService<IFmiElectrojetClient>();
 
 AnsiConsole.Write(new FigletText("FMI").Color(Color.Blue));
-AnsiConsole.MarkupLine("[dim]Finnish Meteorological Institute: EURISGIC real-time IU and IL indices[/]");
+AnsiConsole.MarkupLine("[dim]Finnish Meteorological Institute: real-time IU and IL electrojet indices[/]");
 
 while (true)
 {
     var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
         .Title("[green]Select an option:[/]")
-        .AddChoices("EURISGIC Latest 24 Hours", "Execute All Requests", "Exit"));
+        .AddChoices("IU/IL Latest 24 Hours", "Execute All Requests", "Exit"));
     if (choice == "Exit")
     {
         break;
@@ -32,7 +32,7 @@ while (true)
     {
         AnsiConsole.MarkupLine("[dim]Fetching data...[/]");
         var data = await client.GetIndicesAsync(CancellationToken.None);
-        OutputFormatter.DisplayIndices("EURISGIC Latest 24 Hours", data, 10);
+        OutputFormatter.DisplayIndices("IU/IL Latest 24 Hours", data, 10);
     }
     catch (Exception exception)
     {

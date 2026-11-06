@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### FmiClient Package
-- New `AuroraScienceHub.Integrations.FmiClient` package for FMI EURISGIC real-time IU and IL electrojet indices, retrieved together with one request.
-- `FmiClientSample` interactive console application demonstrating the EURISGIC client.
+- New `AuroraScienceHub.Integrations.FmiClient` package for the FMI real-time IU and IL electrojet (EURISGIC) indices, retrieved together with one request.
+- `FmiClientSample` interactive console application demonstrating the electrojet client.
 
 ## [1.7.0] - 2026-11-04
 

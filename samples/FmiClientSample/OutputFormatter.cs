@@ -1,17 +1,17 @@
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic.Responses;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet.Responses;
 using Spectre.Console;
 
 namespace AuroraScienceHub.Integrations.Samples.FmiClientSample;
 
 /// <summary>
-/// Formats FMI EURISGIC data for console output using Spectre.Console
+/// Formats FMI electrojet data for console output using Spectre.Console
 /// </summary>
 internal static class OutputFormatter
 {
     /// <summary>
     /// Displays IU and IL indices in table format
     /// </summary>
-    public static void DisplayIndices(string title, IReadOnlyList<EurisgicRecord> data, int limit)
+    public static void DisplayIndices(string title, IReadOnlyList<FmiElectrojetRecord> data, int limit)
     {
         if (data.Count == 0)
         {

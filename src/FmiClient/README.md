@@ -1,6 +1,6 @@
-# Finnish Meteorological Institute EURISGIC client
+# Finnish Meteorological Institute electrojet client
 
-`AuroraScienceHub.Integrations.FmiClient` reads real-time IU and IL electrojet indices from the Finnish Meteorological Institute (FMI) EURISGIC service.
+`AuroraScienceHub.Integrations.FmiClient` reads the real-time IU and IL electrojet indices from the [Finnish Meteorological Institute](https://space.fmi.fi/) EURISGIC service.
 
 ```bash
 dotnet add package AuroraScienceHub.Integrations.FmiClient
@@ -21,11 +21,11 @@ Set `UseProxy` to `true` to use the framework's `Proxy` section (`Address`, `Use
 
 ```csharp
 using AuroraScienceHub.Integrations.FmiClient;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet;
 
 builder.Services.AddFmiClients(builder.Configuration);
 
-// Inject IEurisgicClient into the consumer.
+// Inject IFmiElectrojetClient into the consumer.
 var records = await client.GetIndicesAsync(cancellationToken);
 ```
 

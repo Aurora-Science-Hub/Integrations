@@ -1,18 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using AuroraScienceHub.Integrations.FmiClient.Eurisgic.Responses;
+using AuroraScienceHub.Integrations.FmiClient.FmiElectrojet.Responses;
 
-namespace AuroraScienceHub.Integrations.FmiClient.Eurisgic.Extensions;
+namespace AuroraScienceHub.Integrations.FmiClient.FmiElectrojet.Extensions;
 
 // EURISGIC data example:
 // 2026 11 04 15 15 00     -4.2     -8.0  10
-internal static class EurisgicTextParser
+internal static class FmiElectrojetTextParser
 {
     private const int FieldCount = 9;
 
-    public static IReadOnlyList<EurisgicRecord> Parse(string text)
+    public static IReadOnlyList<FmiElectrojetRecord> Parse(string text)
     {
-        var records = new List<EurisgicRecord>();
+        var records = new List<FmiElectrojetRecord>();
         foreach (var line in text.AsSpan().EnumerateLines())
         {
             if (TryParseLine(line, out var record))
@@ -24,7 +24,7 @@ internal static class EurisgicTextParser
         return records;
     }
 
-    private static bool TryParseLine(ReadOnlySpan<char> line, [NotNullWhen(true)] out EurisgicRecord? record)
+    private static bool TryParseLine(ReadOnlySpan<char> line, [NotNullWhen(true)] out FmiElectrojetRecord? record)
     {
         record = null;
         var content = line.Trim();
@@ -53,7 +53,7 @@ internal static class EurisgicTextParser
             return false;
         }
 
-        record = new EurisgicRecord(
+        record = new FmiElectrojetRecord(
             timestamp,
             float.IsNaN(iu) ? null : iu,
             float.IsNaN(il) ? null : il,

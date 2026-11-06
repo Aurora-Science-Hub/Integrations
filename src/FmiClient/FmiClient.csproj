@@ -2,8 +2,8 @@
   <PropertyGroup>
     <AssemblyName>AuroraScienceHub.Integrations.FmiClient</AssemblyName>
     <PackageId>AuroraScienceHub.Integrations.FmiClient</PackageId>
-    <Description>Finnish Meteorological Institute EURISGIC real-time electrojet indices client</Description>
-    <PackageDescription>HTTP client for FMI EURISGIC real-time IU and IL electrojet indices</PackageDescription>
+    <Description>Finnish Meteorological Institute real-time electrojet indices client</Description>
+    <PackageDescription>HTTP client for FMI real-time IU and IL electrojet indices</PackageDescription>
     <PackageTags>fmi;eurisgic;iu;il;electrojet;space-weather;geomagnetic;aurora;integration</PackageTags>
   </PropertyGroup>
   <ItemGroup>

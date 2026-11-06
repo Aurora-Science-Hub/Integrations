@@ -105,7 +105,7 @@ See the [package documentation](src/WdcClient/README.md) for configuration, time
 
 ### Finnish Meteorological Institute Integrations
 
-**[AuroraScienceHub.Integrations.FmiClient](src/FmiClient/)** reads the EURISGIC real-time IU and IL electrojet indices in nT.
+**[AuroraScienceHub.Integrations.FmiClient](src/FmiClient/)** reads the FMI real-time IU and IL electrojet indices in nT.
 One request returns both indices for the latest 24 hours together with UTC timestamps and magnetometer station counts.
 See the [package documentation](src/FmiClient/README.md) for configuration, data semantics and usage rules.
 
