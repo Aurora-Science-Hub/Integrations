@@ -1,0 +1,28 @@
+% Preliminary IMAGE electrojet indicators of the latest 24 hours.
+% year month day hour minute second (time in UT); IU IL [nT]; number of magnetometer stations
+
+% Magnetometer data used from the following stations (latitude,longitude):
+% KEV (69.76,27.01)
+% KIL (69.02,20.79)
+% IVA (68.56,27.29)
+% MUO (68.02,23.53)
+% PEL (66.90,24.08)
+% RAN (65.90,26.41)
+% OUJ (64.52,27.23)
+% MEK (62.77,30.97)
+% HAN (62.25,26.60)
+% TAR (58.26,26.46)
+
+% There is no manual check of the data quality.
+% These results are based on FMI magnetometer data.
+% Licence: Creative Commons Attribution 4.0 International licence (CC BY 4.0)
+% https://creativecommons.org/licenses/by/4.0/deed.en
+
+2026 11 04 15 15 00     -4.2     -8.0  10
+2026 11 04 15 16 00     -4.3     -7.2  10
+2026 11 04 15 17 00     -4.1     -6.6  10
+2026 11 04 15 18 00     -3.1     -6.9  10
+2026 11 04 15 19 00     -3.4     -6.4  10
+2026 11 04 15 20 00     -3.3     -6.1  10
+2026 11 04 15 21 00     -2.1     -6.7  10
+2026 11 04 15 21 60     -1.4     -7.3  10
