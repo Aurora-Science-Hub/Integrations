@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.8.0] - Unreleased
+## [1.9.0] - Unreleased
+
+### Changed
+
+- Packages build against the stable .NET 11 release: the SDK in `global.json` is `11.0.100`
+  without `allowPrerelease`, and the Microsoft packages move from `11.0.0-rc.2.26504.105`
+  to `11.0.0`
+- The `NU5104` suppression is removed: the packages no longer carry prerelease dependencies
 
 ### Added
 
